@@ -19,6 +19,9 @@ src/
 │   └── spots/
 │       ├── ui/
 │       └── index.ts
+│   └── spot-details/
+│       ├── ui/
+│       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
 │   └── site-header/
 │       ├── ui/

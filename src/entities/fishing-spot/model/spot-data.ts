@@ -92,3 +92,7 @@ export const fishingSpots: readonly FishingSpot[] = [
 ];
 
 export const featuredFishingSpots = fishingSpots.slice(0, 3);
+
+export function getFishingSpotBySlug(slug: string) {
+  return fishingSpots.find((spot) => spot.slug === slug);
+}

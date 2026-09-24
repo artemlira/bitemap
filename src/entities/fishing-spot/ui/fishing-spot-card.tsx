@@ -1,12 +1,14 @@
+import Link from "next/link";
 import type { FishingSpot } from "../model/types";
 import styles from "./fishing-spot-card.module.scss";
 
 type FishingSpotCardProps = {
   spot: FishingSpot;
+  href?: string;
 };
 
-export function FishingSpotCard({ spot }: FishingSpotCardProps) {
-  return (
+export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
+  const content = (
     <article className={styles.card}>
       <div className={styles.visual} data-tone={spot.tone} aria-hidden="true">
         <span>{spot.waterType}</span>
@@ -23,5 +25,15 @@ export function FishingSpotCard({ spot }: FishingSpotCardProps) {
         </div>
       </div>
     </article>
+  );
+
+  if (!href) {
+    return content;
+  }
+
+  return (
+    <Link className={styles.link} href={href}>
+      {content}
+    </Link>
   );
 }

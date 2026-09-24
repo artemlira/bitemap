@@ -28,7 +28,7 @@ export function SpotsPage() {
 
         <div className={styles.grid}>
           {fishingSpots.map((spot) => (
-            <FishingSpotCard key={spot.id} spot={spot} />
+            <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
           ))}
         </div>
       </section>

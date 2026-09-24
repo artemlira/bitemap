@@ -48,7 +48,7 @@ export function HomePage() {
 
         <div className={styles.spotGrid}>
           {featuredFishingSpots.map((spot) => (
-            <FishingSpotCard key={spot.id} spot={spot} />
+            <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
           ))}
         </div>
       </section>
