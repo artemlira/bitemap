@@ -2,7 +2,12 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type { FishingSpot } from "@/entities/fishing-spot";
-import type { SpotFilterName, SpotFilterOptions, SpotFilters } from "./types";
+import { useRouter } from "next/navigation";
+import type {
+  SpotFilterName,
+  SpotFilterOptions,
+  SpotFilters,
+} from "./types";
 
 const initialFilters: SpotFilters = {
   region: "",
@@ -22,10 +27,45 @@ function getFilterOptions(spots: readonly FishingSpot[]): SpotFilterOptions {
   };
 }
 
-export function useSpotFilters(spots: readonly FishingSpot[]) {
-  const [filters, setFilters] = useState<SpotFilters>(initialFilters);
+function isFilterOption(
+  value: string,
+  options: readonly string[],
+): value is (typeof options)[number] {
+  return value === "" || options.includes(value);
+}
+
+function normalizeFilters(filters: SpotFilters, options: SpotFilterOptions): SpotFilters {
+  return {
+    region: isFilterOption(filters.region, options.region) ? filters.region : "",
+    waterType: isFilterOption(filters.waterType, options.waterType) ? filters.waterType : "",
+    fish: isFilterOption(filters.fish, options.fish) ? filters.fish : "",
+  };
+}
+
+function createFiltersUrl(filters: SpotFilters) {
+  const searchParams = new URLSearchParams();
+
+  for (const [name, value] of Object.entries(filters)) {
+    if (value) {
+      searchParams.set(name, value);
+    }
+  }
+
+  const query = searchParams.toString();
+
+  return query ? `/spots?${query}` : "/spots";
+}
+
+export function useSpotFilters(
+  spots: readonly FishingSpot[],
+  initialFilterValues: SpotFilters = initialFilters,
+) {
+  const router = useRouter();
 
   const options = useMemo(() => getFilterOptions(spots), [spots]);
+  const [filters, setFilters] = useState<SpotFilters>(() =>
+    normalizeFilters(initialFilterValues, options),
+  );
 
   const filteredSpots = useMemo(
     () =>
@@ -38,13 +78,24 @@ export function useSpotFilters(spots: readonly FishingSpot[]) {
     [filters, spots],
   );
 
-  const setFilter = useCallback((name: SpotFilterName, value: string) => {
-    setFilters((currentFilters) => ({ ...currentFilters, [name]: value }));
-  }, []);
+  const updateFilters = useCallback(
+    (nextFilters: SpotFilters) => {
+      setFilters(nextFilters);
+      router.replace(createFiltersUrl(nextFilters), { scroll: false });
+    },
+    [router],
+  );
+
+  const setFilter = useCallback(
+    (name: SpotFilterName, value: string) => {
+      updateFilters({ ...filters, [name]: value });
+    },
+    [filters, updateFilters],
+  );
 
   const resetFilters = useCallback(() => {
-    setFilters(initialFilters);
-  }, []);
+    updateFilters(initialFilters);
+  }, [updateFilters]);
 
   const hasActiveFilters = Object.values(filters).some(Boolean);
 

@@ -1,11 +1,15 @@
 "use client";
 
 import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
-import { SpotFilterBar, useSpotFilters } from "@/features/filter-spots";
+import { SpotFilterBar, useSpotFilters, type SpotFilters } from "@/features/filter-spots";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./spots-page.module.scss";
 
-export function SpotsPage() {
+type SpotsPageProps = {
+  initialFilters: SpotFilters;
+};
+
+export function SpotsPage({ initialFilters }: SpotsPageProps) {
   const {
     filters,
     filteredSpots,
@@ -13,7 +17,7 @@ export function SpotsPage() {
     options,
     resetFilters,
     setFilter,
-  } = useSpotFilters(fishingSpots);
+  } = useSpotFilters(fishingSpots, initialFilters);
 
   return (
     <main className={styles.page}>
