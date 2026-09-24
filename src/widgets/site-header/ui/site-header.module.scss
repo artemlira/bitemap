@@ -77,12 +77,21 @@
 }
 
 .signOutButton {
+  min-height: 2.35rem;
+  padding-inline: $space-12;
+  border: 1px solid rgb(255 253 248 / 68%);
+  border-radius: $radius-full;
+  background: rgb(255 253 248 / 12%);
   color: #fffdf8;
   font-size: 0.875rem;
   font-weight: 750;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
 
   @include hover {
-    color: var(--color-sun);
+    border-color: var(--color-sun);
+    background: var(--color-sun);
+    color: var(--color-forest);
+    transform: translateY(-1px);
   }
 }
 
