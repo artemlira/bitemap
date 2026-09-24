@@ -5,8 +5,8 @@ import { useTheme } from "@/shared/lib/theme";
 import styles from "./site-header.module.scss";
 
 const navigation = [
-  { href: "#popular-spots", label: "Водойми" },
-  { href: "#how-it-works", label: "Як це працює" },
+  { href: "/spots", label: "Водойми" },
+  { href: "/#how-it-works", label: "Як це працює" },
 ];
 
 export function SiteHeader() {
@@ -20,9 +20,9 @@ export function SiteHeader() {
 
       <nav className={styles.navigation} aria-label="Основна навігація">
         {navigation.map((item) => (
-          <a key={item.href} href={item.href}>
+          <Link key={item.href} href={item.href}>
             {item.label}
-          </a>
+          </Link>
         ))}
       </nav>
 

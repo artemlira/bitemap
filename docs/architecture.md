@@ -13,7 +13,10 @@ src/
 │   ├── layout.tsx
 │   └── page.tsx             # тонкий адаптер маршруту → views/home
 ├── views/                   # FSD Pages layer: екрани продукту
-│   └── home/
+│   ├── home/
+│       ├── ui/
+│       └── index.ts
+│   └── spots/
 │       ├── ui/
 │       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
@@ -22,6 +25,10 @@ src/
 │       └── index.ts
 ├── features/                # дії користувача: favorite-spot, add-catch, sign-in
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
+│   └── fishing-spot/
+│       ├── model/
+│       ├── ui/
+│       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── lib/theme/
     │   ├── theme-provider.tsx
@@ -33,8 +40,10 @@ src/
 `src/pages`, оскільки Next.js сприймає саме `src/pages` як окремий Pages Router,
 що конфліктує з App Router. Семантика FSD при цьому не змінюється.
 
-Папки `features` і `entities` ще не створено навмисно: FSD радить додавати
-шари лише тоді, коли для них уже є реальна відповідальність.
+`entities/fishing-spot` — перша доменна сутність: вона містить типи, MVP-дані
+та перевикористовувану картку водойми. Папка `features` ще не створена
+навмисно: FSD радить додавати шари лише тоді, коли для них уже є реальна
+відповідальність.
 
 ## Правила
 

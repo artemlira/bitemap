@@ -1,12 +1,7 @@
 import Link from "next/link";
+import { FishingSpotCard, featuredFishingSpots } from "@/entities/fishing-spot";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./home-page.module.scss";
-
-const featuredSpots = [
-  { name: "Озеро Блакитне", region: "Київська область", fish: "Короп · щука · окунь" },
-  { name: "Дністровські затоки", region: "Одеська область", fish: "Судак · лящ · сом" },
-  { name: "Річка Ворскла", region: "Полтавська область", fish: "Голавль · окунь · щука" },
-];
 
 export function HomePage() {
   return (
@@ -25,7 +20,7 @@ export function HomePage() {
             моменти риболовлі.
           </p>
           <div className={styles.actions}>
-            <Link className={styles.primaryAction} href="#popular-spots">
+            <Link className={styles.primaryAction} href="/spots">
               Знайти водойму
               <span aria-hidden="true">↗</span>
             </Link>
@@ -52,20 +47,8 @@ export function HomePage() {
         </div>
 
         <div className={styles.spotGrid}>
-          {featuredSpots.map((spot, index) => (
-            <article className={styles.spotCard} key={spot.name}>
-              <div
-                className={`${styles.spotVisual} ${styles[`spotVisual${index + 1}`]}`}
-                aria-hidden="true"
-              >
-                <span>{String(index + 1).padStart(2, "0")}</span>
-              </div>
-              <div className={styles.spotContent}>
-                <p>{spot.region}</p>
-                <h3>{spot.name}</h3>
-                <span>{spot.fish}</span>
-              </div>
-            </article>
+          {featuredFishingSpots.map((spot) => (
+            <FishingSpotCard key={spot.id} spot={spot} />
           ))}
         </div>
       </section>
