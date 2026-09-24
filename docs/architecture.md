@@ -25,6 +25,12 @@ src/
 │   └── favorites/
 │       ├── ui/
 │       └── index.ts
+│   ├── my-spots/
+│   │   ├── ui/
+│   │   └── index.ts
+│   └── user-spot-form/
+│       ├── ui/
+│       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
 │   └── site-header/
 │       ├── ui/
@@ -43,6 +49,11 @@ src/
 │       ├── model/
 │       ├── ui/
 │       └── index.ts
+│   └── manage-user-spot/
+│       ├── api/
+│       ├── model/
+│       ├── ui/
+│       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
 │   ├── fishing-spot/
 │       ├── model/
@@ -51,6 +62,10 @@ src/
 │   └── user/
 │       ├── api/
 │       ├── model/
+│       └── index.ts
+│   └── user-spot/
+│       ├── model/
+│       ├── ui/
 │       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── api/firebase/
@@ -72,7 +87,10 @@ src/
 `features/favorite-spot` — дію зі збереження та live-читання обраних водойм.
 `views/favorites` відображає персональну добірку. Глобальний клієнтський стан
 авторизації розташовано у `shared/lib/auth`; `entities/user` синхронізує
-приватний профіль з Firestore. Firebase SDK ізольовано в `shared/api/firebase`.
+приватний профіль з Firestore. `entities/user-spot` містить доменну модель і
+картку приватної водойми, а `features/manage-user-spot` — створення,
+редагування та live-читання лише власних документів. Firebase SDK ізольовано в
+`shared/api/firebase`.
 
 ## Правила
 

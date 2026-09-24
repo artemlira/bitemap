@@ -14,7 +14,9 @@ export function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const userName = user?.displayName ?? user?.email?.split("@")[0];
-  const navigationItems = user ? [...navigation, { href: "/favorites", label: "Мої водойми" }] : navigation;
+  const navigationItems = user
+    ? [...navigation, { href: "/favorites", label: "Збережене" }, { href: "/my-spots", label: "Мої водойми" }]
+    : navigation;
 
   return (
     <header className={styles.header}>

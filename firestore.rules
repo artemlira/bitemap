@@ -2,8 +2,12 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
     function isOwner(userId) {
-      return request.auth != null && request.auth.uid == userId;
+      return isSignedIn() && request.auth.uid == userId;
     }
 
     match /users/{userId} {
@@ -13,6 +17,18 @@ service cloud.firestore {
       match /favorites/{spotId} {
         allow read, write: if isOwner(userId);
       }
+    }
+
+    match /user-spots/{spotId} {
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid;
+      allow get, list: if isSignedIn()
+        && resource.data.ownerId == request.auth.uid;
+      allow update: if isSignedIn()
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if isSignedIn()
+        && resource.data.ownerId == request.auth.uid;
     }
   }
 }
