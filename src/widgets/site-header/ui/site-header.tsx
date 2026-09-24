@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/features/authentication";
+import { useAuth } from "@/shared/lib/auth";
 import { useTheme } from "@/shared/lib/theme";
 import styles from "./site-header.module.scss";
 

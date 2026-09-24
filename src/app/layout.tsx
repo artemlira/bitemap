@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { AuthProvider } from "@/features/authentication";
+import { AuthProvider } from "@/shared/lib/auth";
 import { ThemeProvider } from "@/shared/lib/theme";
 import "@/app/styles/main.scss";
 

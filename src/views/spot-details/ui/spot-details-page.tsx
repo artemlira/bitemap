@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { FishingSpot } from "@/entities/fishing-spot";
+import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./spot-details-page.module.scss";
 
@@ -27,6 +28,7 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
               <h1>{spot.name}</h1>
               <p className={styles.region}>{spot.region}</p>
               <p className={styles.description}>{spot.description}</p>
+              <FavoriteSpotButton spot={spot} />
             </div>
             <div className={styles.waterVisual} data-tone={spot.tone} aria-hidden="true">
               <span />

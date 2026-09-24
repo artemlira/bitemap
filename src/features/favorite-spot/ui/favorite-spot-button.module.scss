@@ -1,0 +1,67 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.wrapper {
+  display: grid;
+  gap: $space-8;
+  margin-top: $space-24;
+}
+
+.button,
+.signInLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-8;
+  width: fit-content;
+  min-height: 3.25rem;
+  padding-inline: $space-20;
+  border: 1px solid rgb(255 253 248 / 62%);
+  border-radius: $radius-full;
+  background: rgb(255 253 248 / 10%);
+  color: #fffdf8;
+  font-size: 0.9rem;
+  font-weight: 800;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.button {
+  @include hover {
+    border-color: var(--color-sun);
+    background: var(--color-sun);
+    color: var(--color-forest);
+    transform: translateY(-2px);
+  }
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.button span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.signInLink {
+  @include hover {
+    border-color: #fffdf8;
+    background: rgb(255 253 248 / 20%);
+  }
+}
+
+.loadingLabel {
+  display: inline-block;
+  margin-top: $space-24;
+  color: rgb(255 253 248 / 72%);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.wrapper p {
+  margin: 0;
+  color: #ffd6cf;
+  font-size: 0.8rem;
+  font-weight: 650;
+}

@@ -36,6 +36,9 @@ src/
 │       ├── model/
 │       ├── ui/
 │       └── index.ts
+│   └── favorite-spot/
+│       ├── ui/
+│       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
 │   ├── fishing-spot/
 │       ├── model/
@@ -47,6 +50,7 @@ src/
 │       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── api/firebase/
+    ├── lib/auth/
     ├── lib/theme/
     │   ├── theme-provider.tsx
     │   └── index.ts
@@ -60,9 +64,10 @@ src/
 `entities/fishing-spot` містить типи, MVP-дані та перевикористовувану картку
 водойми. `features/filter-spots` інкапсулює стан і UI взаємодії з фільтрами
 каталогу, а також синхронізує активні фільтри з query-параметрами URL.
-`features/authentication` містить email/password і Google-сценарії, а також
-глобальний клієнтський стан авторизації. `entities/user` синхронізує приватний
-профіль з Firestore. Firebase SDK ізольовано в `shared/api/firebase`.
+`features/authentication` містить email/password і Google-сценарії,
+`features/favorite-spot` — дію зі збереження водойми. Глобальний клієнтський
+стан авторизації розташовано у `shared/lib/auth`; `entities/user` синхронізує
+приватний профіль з Firestore. Firebase SDK ізольовано в `shared/api/firebase`.
 
 ## Правила
 
