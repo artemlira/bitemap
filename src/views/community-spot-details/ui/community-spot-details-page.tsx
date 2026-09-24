@@ -39,7 +39,9 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
               <h1>{spot.name}</h1>
               <p className={styles.region}>{spot.settlement ? `${spot.region} · ${spot.settlement}` : spot.region}</p>
               <p className={styles.description}>{spot.description}</p>
-              <ShareUserSpotButton spotId={spot.id} spotName={spot.name} />
+              <div className={styles.shareAction}>
+                <ShareUserSpotButton spotId={spot.id} spotName={spot.name} />
+              </div>
             </div>
             <div className={styles.visual} data-tone={spot.tone} aria-hidden="true"><span /><span /><span /></div>
           </div>
