@@ -66,6 +66,26 @@
   font-weight: 750;
 }
 
+.userName {
+  max-width: 9rem;
+  overflow: hidden;
+  color: rgb(255 253 248 / 78%);
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signOutButton {
+  color: #fffdf8;
+  font-size: 0.875rem;
+  font-weight: 750;
+
+  @include hover {
+    color: var(--color-sun);
+  }
+}
+
 @include media-max(tablet) {
   .navigation {
     display: none;
@@ -77,7 +97,9 @@
     padding-top: $space-16;
   }
 
-  .loginLink {
+  .loginLink,
+  .userName,
+  .signOutButton {
     display: none;
   }
 }

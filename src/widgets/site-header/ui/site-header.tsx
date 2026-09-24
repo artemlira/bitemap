@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/features/authentication";
 import { useTheme } from "@/shared/lib/theme";
 import styles from "./site-header.module.scss";
 
@@ -11,6 +12,8 @@ const navigation = [
 
 export function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
+  const userName = user?.displayName ?? user?.email?.split("@")[0];
 
   return (
     <header className={styles.header}>
@@ -27,9 +30,18 @@ export function SiteHeader() {
       </nav>
 
       <div className={styles.controls}>
-        <Link className={styles.loginLink} href="/login">
-          Увійти
-        </Link>
+        {user ? (
+          <>
+            <span className={styles.userName}>{userName}</span>
+            <button className={styles.signOutButton} type="button" onClick={() => void signOut()}>
+              Вийти
+            </button>
+          </>
+        ) : (
+          <Link className={styles.loginLink} href="/login">
+            Увійти
+          </Link>
+        )}
         <button
           className={styles.themeButton}
           type="button"

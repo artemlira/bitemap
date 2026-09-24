@@ -1,1 +1,6 @@
-export { FirebaseConfigurationError, getFirebaseAuth } from "./client";
+export {
+  FirebaseConfigurationError,
+  getFirebaseAuth,
+  getFirebaseFirestore,
+  hasFirebaseConfiguration,
+} from "./client";

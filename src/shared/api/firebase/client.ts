@@ -1,5 +1,6 @@
-import { getApp, getApps, initializeApp, type FirebaseOptions } from "firebase/app";
+import { getApp, getApps, initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,16 +20,22 @@ export class FirebaseConfigurationError extends Error {
   }
 }
 
-function hasFirebaseConfiguration() {
+export function hasFirebaseConfiguration() {
   return requiredConfigKeys.every((key) => Boolean(firebaseConfig[key]));
 }
 
-export function getFirebaseAuth() {
+export function getFirebaseApp(): FirebaseApp {
   if (!hasFirebaseConfiguration()) {
     throw new FirebaseConfigurationError();
   }
 
-  const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  return getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+}
 
-  return getAuth(app);
+export function getFirebaseAuth() {
+  return getAuth(getFirebaseApp());
+}
+
+export function getFirebaseFirestore() {
+  return getFirestore(getFirebaseApp());
 }

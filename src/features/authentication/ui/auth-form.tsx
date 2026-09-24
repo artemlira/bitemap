@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import {
+  authenticateWithGoogle,
   authenticateWithEmailPassword,
   getAuthErrorMessage,
   type AuthMode,
@@ -24,10 +25,11 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [errors, setErrors] = useState<AuthFormErrors>({});
   const [submissionError, setSubmissionError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionMethod, setSubmissionMethod] = useState<"email" | "google" | null>(null);
 
   const isRegistration = mode === "register";
   const submitLabel = isRegistration ? "Створити акаунт" : "Увійти";
+  const isSubmitting = submissionMethod !== null;
 
   function updateValue(name: keyof AuthFormValues, value: string) {
     setValues((currentValues) => ({ ...currentValues, [name]: value }));
@@ -45,7 +47,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
-    setIsSubmitting(true);
+    setSubmissionMethod("email");
 
     try {
       const credential = await authenticateWithEmailPassword({
@@ -62,7 +64,23 @@ export function AuthForm({ mode }: AuthFormProps) {
     } catch (error) {
       setSubmissionError(getAuthErrorMessage(error));
     } finally {
-      setIsSubmitting(false);
+      setSubmissionMethod(null);
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setSubmissionError("");
+    setSuccessMessage("");
+    setSubmissionMethod("google");
+
+    try {
+      const credential = await authenticateWithGoogle();
+
+      setSuccessMessage(`Ти увійшов як ${credential.user.email ?? "користувач"}.`);
+    } catch (error) {
+      setSubmissionError(getAuthErrorMessage(error));
+    } finally {
+      setSubmissionMethod(null);
     }
   }
 
@@ -137,7 +155,19 @@ export function AuthForm({ mode }: AuthFormProps) {
       ) : null}
 
       <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Зачекай…" : submitLabel}
+        {submissionMethod === "email" ? "Зачекай…" : submitLabel}
+      </button>
+
+      <p className={styles.divider}>або</p>
+
+      <button
+        className={styles.googleButton}
+        type="button"
+        disabled={isSubmitting}
+        onClick={handleGoogleSignIn}
+      >
+        <span aria-hidden="true">G</span>
+        {submissionMethod === "google" ? "Відкриваємо Google…" : "Продовжити з Google"}
       </button>
     </form>
   );
