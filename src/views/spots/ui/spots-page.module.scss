@@ -82,6 +82,46 @@
   margin-top: $space-32;
 }
 
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: $space-12;
+  margin-top: $space-32;
+  padding: clamp($space-32, 7vw, $space-64);
+  border: 1px dashed var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+}
+
+.empty h3 {
+  font-size: 1.5rem;
+  letter-spacing: -0.05em;
+}
+
+.empty p {
+  max-width: 460px;
+  color: var(--color-muted);
+}
+
+.empty button {
+  min-height: 3rem;
+  margin-top: $space-8;
+  padding-inline: $space-20;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-weight: 750;
+
+  &:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @include hover {
+    background: var(--color-water-deep);
+  }
+}
+
 @include media-max(tablet) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

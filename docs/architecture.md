@@ -14,11 +14,11 @@ src/
 │   └── page.tsx             # тонкий адаптер маршруту → views/home
 ├── views/                   # FSD Pages layer: екрани продукту
 │   ├── home/
-│       ├── ui/
-│       └── index.ts
-│   └── spots/
-│       ├── ui/
-│       └── index.ts
+│   │   ├── ui/
+│   │   └── index.ts
+│   ├── spots/
+│   │   ├── ui/
+│   │   └── index.ts
 │   └── spot-details/
 │       ├── ui/
 │       └── index.ts
@@ -27,6 +27,10 @@ src/
 │       ├── ui/
 │       └── index.ts
 ├── features/                # дії користувача: favorite-spot, add-catch, sign-in
+│   └── filter-spots/
+│       ├── model/
+│       ├── ui/
+│       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
 │   └── fishing-spot/
 │       ├── model/
@@ -43,14 +47,13 @@ src/
 `src/pages`, оскільки Next.js сприймає саме `src/pages` як окремий Pages Router,
 що конфліктує з App Router. Семантика FSD при цьому не змінюється.
 
-`entities/fishing-spot` — перша доменна сутність: вона містить типи, MVP-дані
-та перевикористовувану картку водойми. Папка `features` ще не створена
-навмисно: FSD радить додавати шари лише тоді, коли для них уже є реальна
-відповідальність.
+`entities/fishing-spot` містить типи, MVP-дані та перевикористовувану картку
+водойми. `features/filter-spots` інкапсулює стан і UI взаємодії з фільтрами
+каталогу.
 
 ## Правила
 
-1. Залежності спрямовані лише вниз: `app → pages → widgets → features → entities → shared`.
+1. Залежності спрямовані лише вниз: `app → views (FSD Pages) → widgets → features → entities → shared`.
    Slice не імпортує інший slice того самого шару.
 2. Кожен slice має публічний API — файл `index.ts`. Зовнішній код імпортує
    тільки його: `@/widgets/site-header`, а не `@/widgets/site-header/ui/site-header`.

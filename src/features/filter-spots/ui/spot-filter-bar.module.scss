@@ -1,0 +1,85 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: $space-12;
+  margin-top: $space-32;
+  padding: $space-16;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.field {
+  display: grid;
+  gap: $space-8;
+  min-width: 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.field select {
+  width: 100%;
+  min-height: 3rem;
+  padding-inline: $space-12;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-full;
+  outline: none;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.field select:focus-visible,
+.reset:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.reset {
+  min-height: 3rem;
+  padding-inline: $space-20;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-size: 0.875rem;
+  font-weight: 750;
+  transition: background 180ms ease, transform 180ms ease;
+
+  @include hover {
+    background: var(--color-water-deep);
+    transform: translateY(-1px);
+  }
+}
+
+.reset:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@include media-max(tablet) {
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reset {
+    grid-column: 1 / -1;
+  }
+}
+
+@include media-max(phone) {
+  .filters {
+    grid-template-columns: 1fr;
+    padding: $space-12;
+  }
+}

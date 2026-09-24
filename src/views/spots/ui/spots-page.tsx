@@ -1,8 +1,20 @@
+"use client";
+
 import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
+import { SpotFilterBar, useSpotFilters } from "@/features/filter-spots";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./spots-page.module.scss";
 
 export function SpotsPage() {
+  const {
+    filters,
+    filteredSpots,
+    hasActiveFilters,
+    options,
+    resetFilters,
+    setFilter,
+  } = useSpotFilters(fishingSpots);
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -11,8 +23,8 @@ export function SpotsPage() {
           <p className={styles.eyebrow}>Каталог водойм</p>
           <h1>Місця, куди хочеться вирушити ще до світанку.</h1>
           <p>
-            Зберігаємо стартову добірку локацій для MVP. Згодом тут з’являться карта,
-            фільтри, актуальна погода та відгуки спільноти.
+            Знаходь локації за регіоном, типом водойми або рибою. Карта, погода й відгуки
+            спільноти з’являться після підключення бекенду.
           </p>
         </div>
       </section>
@@ -23,14 +35,34 @@ export function SpotsPage() {
             <p className={styles.sectionLabel}>Обери напрямок</p>
             <h2 id="spots-title">Усі водойми</h2>
           </div>
-          <p className={styles.counter}>{fishingSpots.length} локацій у каталозі</p>
+          <p className={styles.counter} aria-live="polite">
+            Локацій: {filteredSpots.length}
+          </p>
         </div>
 
-        <div className={styles.grid}>
-          {fishingSpots.map((spot) => (
+        <SpotFilterBar
+          filters={filters}
+          hasActiveFilters={hasActiveFilters}
+          options={options}
+          onChange={setFilter}
+          onReset={resetFilters}
+        />
+
+        {filteredSpots.length > 0 ? (
+          <div className={styles.grid}>
+            {filteredSpots.map((spot) => (
             <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.empty}>
+            <h3>Нічого не знайшли</h3>
+            <p>Спробуй інше поєднання фільтрів або скинь поточний вибір.</p>
+            <button type="button" onClick={resetFilters}>
+              Скинути фільтри
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );
