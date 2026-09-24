@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { UserSpotFormValues } from "@/entities/user-spot";
 import { useAuth } from "@/shared/lib/auth";
 import { createUserSpot, updateUserSpot } from "../api/user-spots";
+import { getCommunities, getSettlements, regions } from "../model/location-options";
 import { validateUserSpot, type UserSpotFormErrors } from "../model/validation";
 import styles from "./user-spot-form.module.scss";
 
@@ -21,7 +22,13 @@ const defaultValues: UserSpotFormValues = {
   fish: "",
   name: "",
   region: "",
+  regionId: "",
+  community: "",
+  communityId: "",
+  settlement: "",
+  settlementId: "",
   tone: "lagoon",
+  visibility: "private",
   waterType: "",
 };
 
@@ -40,9 +47,47 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
   const [submissionError, setSubmissionError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = mode === "edit";
+  const communities = values.regionId ? getCommunities(values.regionId) : [];
+  const settlements = values.communityId ? getSettlements(values.communityId) : [];
 
   function updateValue(name: keyof UserSpotFormValues, value: string) {
     setValues((currentValues) => ({ ...currentValues, [name]: value }));
+  }
+
+  function updateRegion(regionId: string) {
+    const region = regions.find((item) => item.id === regionId);
+
+    setValues((currentValues) => ({
+      ...currentValues,
+      community: "",
+      communityId: "",
+      region: region?.name ?? "",
+      regionId,
+      settlement: "",
+      settlementId: "",
+    }));
+  }
+
+  function updateCommunity(communityId: string) {
+    const community = communities.find((item) => item.id === communityId);
+
+    setValues((currentValues) => ({
+      ...currentValues,
+      community: community?.nameFull ?? "",
+      communityId,
+      settlement: "",
+      settlementId: "",
+    }));
+  }
+
+  function updateSettlement(settlementId: string) {
+    const settlement = settlements.find((item) => item.id === settlementId);
+
+    setValues((currentValues) => ({
+      ...currentValues,
+      settlement: settlement?.nameFull ?? "",
+      settlementId,
+    }));
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -102,15 +147,62 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-region">
-          <span>Область або населений пункт</span>
-          <input
+          <span>Область</span>
+          <select
             id="user-spot-region"
-            value={values.region}
-            onChange={(event) => updateValue("region", event.target.value)}
+            value={values.regionId}
+            onChange={(event) => updateRegion(event.target.value)}
             aria-invalid={Boolean(errors.region) || undefined}
             aria-describedby={errors.region ? "user-spot-region-error" : undefined}
-          />
+          >
+            <option value="">Обери область</option>
+            {regions.map((region) => (
+              <option key={region.id} value={region.id}>
+                {region.nameFull}
+              </option>
+            ))}
+          </select>
           {errors.region ? <small id="user-spot-region-error">{errors.region}</small> : null}
+        </label>
+
+        <label className={styles.field} htmlFor="user-spot-community">
+          <span>Громада або місто</span>
+          <select
+            id="user-spot-community"
+            value={values.communityId}
+            onChange={(event) => updateCommunity(event.target.value)}
+            disabled={!values.regionId}
+            aria-invalid={Boolean(errors.community) || undefined}
+            aria-describedby={errors.community ? "user-spot-community-error" : undefined}
+          >
+            <option value="">{values.regionId ? "Обери громаду" : "Спочатку обери область"}</option>
+            {communities.map((community) => (
+              <option key={community.id} value={community.id}>
+                {community.nameFull}
+              </option>
+            ))}
+          </select>
+          {errors.community ? <small id="user-spot-community-error">{errors.community}</small> : null}
+        </label>
+
+        <label className={styles.field} htmlFor="user-spot-settlement">
+          <span>Населений пункт</span>
+          <select
+            id="user-spot-settlement"
+            value={values.settlementId}
+            onChange={(event) => updateSettlement(event.target.value)}
+            disabled={!values.communityId}
+            aria-invalid={Boolean(errors.settlement) || undefined}
+            aria-describedby={errors.settlement ? "user-spot-settlement-error" : undefined}
+          >
+            <option value="">{values.communityId ? "Обери населений пункт" : "Спочатку обери громаду"}</option>
+            {settlements.map((settlement) => (
+              <option key={settlement.id} value={settlement.id}>
+                {settlement.nameFull}
+              </option>
+            ))}
+          </select>
+          {errors.settlement ? <small id="user-spot-settlement-error">{errors.settlement}</small> : null}
         </label>
 
         <label className={styles.field} htmlFor="user-spot-water-type">
@@ -164,6 +256,18 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
                 {tone.label}
               </option>
             ))}
+          </select>
+        </label>
+
+        <label className={styles.field} htmlFor="user-spot-visibility">
+          <span>Видимість</span>
+          <select
+            id="user-spot-visibility"
+            value={values.visibility}
+            onChange={(event) => updateValue("visibility", event.target.value)}
+          >
+            <option value="private">Приватна — лише для мене</option>
+            <option value="published">Опублікувати для спільноти</option>
           </select>
         </label>
       </div>

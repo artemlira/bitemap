@@ -18,7 +18,13 @@ function toFormValues(spot: UserSpot): UserSpotFormValues {
     fish: spot.fish.join(", "),
     name: spot.name,
     region: spot.region,
+    regionId: spot.regionId ?? "",
+    community: spot.community ?? "",
+    communityId: spot.communityId ?? "",
+    settlement: spot.settlement ?? "",
+    settlementId: spot.settlementId ?? "",
     tone: spot.tone,
+    visibility: spot.visibility,
     waterType: spot.waterType,
   };
 }
@@ -62,7 +68,7 @@ export function UserSpotFormPage({ mode, spotId }: UserSpotFormPageProps) {
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>{isEditing ? "Твоя картка" : "Нова точка на карті"}</p>
           <h1>{isEditing ? "Уточни деталі." : "Додай свою водойму."}</h1>
-          <p>{isEditing ? "Онови те, що змінилося або стало зрозумілішим після виїзду." : "Картка буде приватною: вона не потрапить до загального каталогу без окремої публікації."}</p>
+          <p>{isEditing ? "Онови деталі місця або зміни його видимість для спільноти." : "Обери точне місце зі списку та виріши, залишити водойму приватною чи опублікувати."}</p>
         </div>
       </section>
 

@@ -9,8 +9,16 @@ export function validateUserSpot(values: UserSpotFormValues): UserSpotFormErrors
     errors.name = "Вкажи назву водойми.";
   }
 
-  if (values.region.trim().length < 2) {
-    errors.region = "Вкажи область або населений пункт.";
+  if (!values.regionId) {
+    errors.region = "Обери область зі списку.";
+  }
+
+  if (!values.communityId) {
+    errors.community = "Обери громаду або місто зі списку.";
+  }
+
+  if (!values.settlementId) {
+    errors.settlement = "Обери населений пункт зі списку.";
   }
 
   if (values.waterType.trim().length < 2) {

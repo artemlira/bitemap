@@ -6,6 +6,14 @@ import type { UserSpot } from "@/entities/user-spot";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 import { useAuth } from "@/shared/lib/auth";
 
+function toUserSpot(id: string, data: Omit<UserSpot, "id" | "visibility"> & Partial<Pick<UserSpot, "visibility">>): UserSpot {
+  return {
+    ...data,
+    id,
+    visibility: data.visibility === "published" ? "published" : "private",
+  };
+}
+
 type UserSpotsSnapshot = {
   ownerId: string | null;
   spots: readonly UserSpot[];
@@ -38,10 +46,7 @@ export function useUserSpots() {
       (userSpotsSnapshot) => {
         setSnapshot({
           ownerId: userId,
-          spots: userSpotsSnapshot.docs.map((spot) => ({
-            id: spot.id,
-            ...(spot.data() as Omit<UserSpot, "id">),
-          })),
+          spots: userSpotsSnapshot.docs.map((spot) => toUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)),
         });
         setError("");
       },
@@ -82,7 +87,7 @@ export function useUserSpot(spotId: string) {
         setSnapshot({
           ownerId: userId,
           spot: userSpotSnapshot.exists()
-            ? { id: userSpotSnapshot.id, ...(userSpotSnapshot.data() as Omit<UserSpot, "id">) }
+            ? toUserSpot(userSpotSnapshot.id, userSpotSnapshot.data() as Omit<UserSpot, "id">)
             : null,
         });
         setError("");

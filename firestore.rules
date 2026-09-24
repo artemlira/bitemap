@@ -10,6 +10,10 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    function isPublishedSpot() {
+      return resource.data.visibility == "published";
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;
@@ -22,8 +26,8 @@ service cloud.firestore {
     match /user-spots/{spotId} {
       allow create: if isSignedIn()
         && request.resource.data.ownerId == request.auth.uid;
-      allow get, list: if isSignedIn()
-        && resource.data.ownerId == request.auth.uid;
+      allow get, list: if isPublishedSpot()
+        || isOwner(resource.data.ownerId);
       allow update: if isSignedIn()
         && resource.data.ownerId == request.auth.uid
         && request.resource.data.ownerId == resource.data.ownerId;

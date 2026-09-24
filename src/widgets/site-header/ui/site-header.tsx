@@ -7,6 +7,7 @@ import styles from "./site-header.module.scss";
 
 const navigation = [
   { href: "/spots", label: "Водойми" },
+  { href: "/community", label: "Спільнота" },
   { href: "/#how-it-works", label: "Як це працює" },
 ];
 

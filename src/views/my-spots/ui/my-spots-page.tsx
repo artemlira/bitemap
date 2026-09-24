@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { UserSpotCard } from "@/entities/user-spot";
 import { useUserSpots } from "@/features/manage-user-spot";
+import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./my-spots-page.module.scss";
 
@@ -62,7 +63,11 @@ export function MySpotsPage() {
         ) : spots.length > 0 ? (
           <div className={styles.grid}>
             {spots.map((spot) => (
-              <UserSpotCard key={spot.id} spot={spot} />
+              <UserSpotCard
+                key={spot.id}
+                spot={spot}
+                footerActions={spot.visibility === "published" ? <ShareUserSpotButton spotId={spot.id} spotName={spot.name} /> : null}
+              />
             ))}
           </div>
         ) : (

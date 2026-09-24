@@ -31,6 +31,12 @@ src/
 │   └── user-spot-form/
 │       ├── ui/
 │       └── index.ts
+│   ├── community/
+│   │   ├── ui/
+│   │   └── index.ts
+│   └── community-spot-details/
+│       ├── ui/
+│       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
 │   └── site-header/
 │       ├── ui/
@@ -52,6 +58,9 @@ src/
 │   └── manage-user-spot/
 │       ├── api/
 │       ├── model/
+│       ├── ui/
+│       └── index.ts
+│   └── share-user-spot/
 │       ├── ui/
 │       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
@@ -90,7 +99,10 @@ src/
 приватний профіль з Firestore. `entities/user-spot` містить доменну модель і
 картку приватної водойми, а `features/manage-user-spot` — створення,
 редагування та live-читання лише власних документів. Firebase SDK ізольовано в
-`shared/api/firebase`.
+`shared/api/firebase`. `features/share-user-spot` відкриває системне поширення
+або копіює публічне посилання на опубліковану водойму. `views/community` та
+`views/community-spot-details` відображають тільки записи з видимістю
+`published`.
 
 ## Правила
 

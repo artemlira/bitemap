@@ -14,7 +14,13 @@ function toSpotPayload(values: UserSpotFormValues) {
       .filter(Boolean),
     name: values.name.trim(),
     region: values.region.trim(),
+    regionId: values.regionId,
+    community: values.community.trim(),
+    communityId: values.communityId,
+    settlement: values.settlement.trim(),
+    settlementId: values.settlementId,
     tone: values.tone,
+    visibility: values.visibility,
     waterType: values.waterType.trim(),
   };
 }

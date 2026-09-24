@@ -95,6 +95,15 @@
   font-size: 0.925rem;
 }
 
+.visibility {
+  margin-top: $space-8;
+  color: var(--color-water);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
 .fish {
   margin-top: $space-16;
   color: var(--color-water);
@@ -114,7 +123,15 @@
   font-weight: 650;
 }
 
-.footer a {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-8;
+}
+
+.footer a,
+.actions button {
   min-height: 2.35rem;
   padding: 0 $space-12;
   border-radius: $radius-full;
@@ -129,4 +146,16 @@
     background: var(--color-water-deep);
     transform: translateY(-1px);
   }
+}
+
+.actions button {
+  border: 1px solid var(--color-water);
+  background: transparent;
+  color: var(--color-water);
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background: var(--color-water);
+  color: #fffdf8;
 }
