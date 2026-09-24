@@ -14,6 +14,7 @@ export function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const userName = user?.displayName ?? user?.email?.split("@")[0];
+  const navigationItems = user ? [...navigation, { href: "/favorites", label: "Мої водойми" }] : navigation;
 
   return (
     <header className={styles.header}>
@@ -22,7 +23,7 @@ export function SiteHeader() {
       </Link>
 
       <nav className={styles.navigation} aria-label="Основна навігація">
-        {navigation.map((item) => (
+        {navigationItems.map((item) => (
           <Link key={item.href} href={item.href}>
             {item.label}
           </Link>
