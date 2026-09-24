@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useTheme } from "@/components/providers/theme-provider";
+import { useTheme } from "@/shared/lib/theme";
 import styles from "./site-header.module.scss";
 
 const navigation = [

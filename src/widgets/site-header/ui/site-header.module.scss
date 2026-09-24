@@ -1,5 +1,5 @@
-@use "../../scss/abstracts/mixins" as *;
-@use "../../scss/abstracts/variables" as *;
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
 
 .header {
   @include container;
