@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "breakpoints" as *;
+@use "variables" as *;
+
+@mixin media-max($breakpoint) {
+  @media (max-width: #{map.get($breakpoints, $breakpoint)}px) {
+    @content;
+  }
+}
+
+@mixin container {
+  width: min(100% - ($page-padding * 2), $container-max);
+  margin-inline: auto;
+
+  @include media-max(tablet) {
+    width: min(100% - 40px, $container-max);
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}

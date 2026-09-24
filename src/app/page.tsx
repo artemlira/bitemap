@@ -1,69 +1,83 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { SiteHeader } from "@/components/site-header/site-header";
+import styles from "./page.module.scss";
+
+const featuredSpots = [
+  { name: "Озеро Блакитне", region: "Київська область", fish: "Короп · щука · окунь" },
+  { name: "Дністровські затоки", region: "Одеська область", fish: "Судак · лящ · сом" },
+  { name: "Річка Ворскла", region: "Полтавська область", fish: "Голавль · окунь · щука" },
+];
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <SiteHeader />
+
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>Риболовля ближче до природи</p>
           <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
+            Знайди своє
+            <span> місце для улову.</span>
           </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className={styles.lead}>
+            BiteMap допомагає обрати водойму, перевірити умови та зберегти найкращі
+            моменти риболовлі.
           </p>
+          <div className={styles.actions}>
+            <Link className={styles.primaryAction} href="#popular-spots">
+              Знайти водойму
+              <span aria-hidden="true">↗</span>
+            </Link>
+            <a className={styles.secondaryAction} href="#how-it-works">
+              Як це працює
+            </a>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className={styles.waterTexture} aria-hidden="true">
+          <span />
+          <span />
+          <span />
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className={styles.spotsSection} id="popular-spots">
+        <div className={styles.sectionHeading}>
+          <div>
+            <p className={styles.sectionLabel}>Відкривай нове</p>
+            <h2>Популярні водойми</h2>
+          </div>
+          <p className={styles.spotCount}>3 локації у добірці</p>
+        </div>
+
+        <div className={styles.spotGrid}>
+          {featuredSpots.map((spot, index) => (
+            <article className={styles.spotCard} key={spot.name}>
+              <div
+                className={`${styles.spotVisual} ${styles[`spotVisual${index + 1}`]}`}
+                aria-hidden="true"
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+              </div>
+              <div className={styles.spotContent}>
+                <p>{spot.region}</p>
+                <h3>{spot.name}</h3>
+                <span>{spot.fish}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.stepsSection} id="how-it-works">
+        <p className={styles.sectionLabel}>Просто почати</p>
+        <h2>
+          Більше часу біля води.
+          <br />
+          Менше — на пошук.
+        </h2>
+      </section>
+    </main>
   );
 }

@@ -1,0 +1,73 @@
+@use "../../scss/abstracts/mixins" as *;
+@use "../../scss/abstracts/variables" as *;
+
+.header {
+  @include container;
+
+  position: relative;
+  z-index: $z-header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-24;
+  padding-top: $space-24;
+}
+
+.logo {
+  color: #fffdf8;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.08em;
+
+  span {
+    color: var(--color-sun);
+  }
+}
+
+.navigation,
+.controls {
+  display: flex;
+  align-items: center;
+  gap: $space-20;
+}
+
+.navigation a {
+  color: rgb(255 253 248 / 82%);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 180ms ease;
+
+  @include hover {
+    color: #fffdf8;
+  }
+}
+
+.themeButton {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgb(255 253 248 / 26%);
+  border-radius: $radius-full;
+  background: rgb(255 253 248 / 10%);
+  color: #fffdf8;
+  font-size: 1.1rem;
+  transition: background 180ms ease, transform 180ms ease;
+
+  @include hover {
+    background: rgb(255 253 248 / 20%);
+    transform: rotate(12deg);
+  }
+}
+
+@include media-max(tablet) {
+  .navigation {
+    display: none;
+  }
+}
+
+@include media-max(phone) {
+  .header {
+    padding-top: $space-16;
+  }
+}
