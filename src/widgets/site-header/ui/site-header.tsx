@@ -27,6 +27,9 @@ export function SiteHeader() {
       </nav>
 
       <div className={styles.controls}>
+        <Link className={styles.loginLink} href="/login">
+          Увійти
+        </Link>
         <button
           className={styles.themeButton}
           type="button"

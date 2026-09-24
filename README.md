@@ -18,6 +18,7 @@ src/
 ```
 
 Правила імпортів і приклади для нових модулів — у [документі про структуру](docs/architecture.md).
+Налаштування Firebase Auth — у [firebase-setup.md](docs/firebase-setup.md).
 
 ## Запуск локально
 

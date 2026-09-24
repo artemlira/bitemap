@@ -60,6 +60,12 @@
   }
 }
 
+.loginLink {
+  color: #fffdf8;
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
 @include media-max(tablet) {
   .navigation {
     display: none;
@@ -69,5 +75,9 @@
 @include media-max(phone) {
   .header {
     padding-top: $space-16;
+  }
+
+  .loginLink {
+    display: none;
   }
 }

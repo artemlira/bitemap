@@ -15,7 +15,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="uk" className={geistSans.variable} suppressHydrationWarning>
+    <html
+      lang="uk"
+      className={geistSans.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>

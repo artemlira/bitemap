@@ -27,6 +27,11 @@ src/
 │       ├── ui/
 │       └── index.ts
 ├── features/                # дії користувача: favorite-spot, add-catch, sign-in
+│   ├── authentication/
+│   │   ├── api/
+│   │   ├── model/
+│   │   ├── ui/
+│   │   └── index.ts
 │   └── filter-spots/
 │       ├── model/
 │       ├── ui/
@@ -37,6 +42,7 @@ src/
 │       ├── ui/
 │       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
+    ├── api/firebase/
     ├── lib/theme/
     │   ├── theme-provider.tsx
     │   └── index.ts
@@ -50,6 +56,8 @@ src/
 `entities/fishing-spot` містить типи, MVP-дані та перевикористовувану картку
 водойми. `features/filter-spots` інкапсулює стан і UI взаємодії з фільтрами
 каталогу, а також синхронізує активні фільтри з query-параметрами URL.
+`features/authentication` містить email/password-сценарій, а Firebase SDK
+ізольовано в `shared/api/firebase`.
 
 ## Правила
 
