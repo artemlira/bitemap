@@ -2,35 +2,45 @@ import type { UserSpotFormValues } from "@/entities/user-spot";
 
 export type UserSpotFormErrors = Partial<Record<keyof UserSpotFormValues, string>>;
 
-export function validateUserSpot(values: UserSpotFormValues): UserSpotFormErrors {
+export type UserSpotValidationMessages = {
+  name: string;
+  region: string;
+  community: string;
+  settlement: string;
+  waterType: string;
+  fish: string;
+  description: string;
+};
+
+export function validateUserSpot(values: UserSpotFormValues, messages: UserSpotValidationMessages): UserSpotFormErrors {
   const errors: UserSpotFormErrors = {};
 
   if (values.name.trim().length < 2) {
-    errors.name = "Вкажи назву водойми.";
+    errors.name = messages.name;
   }
 
   if (!values.regionId) {
-    errors.region = "Обери область зі списку.";
+    errors.region = messages.region;
   }
 
   if (!values.communityId) {
-    errors.community = "Обери громаду або місто зі списку.";
+    errors.community = messages.community;
   }
 
   if (!values.settlementId) {
-    errors.settlement = "Обери населений пункт зі списку.";
+    errors.settlement = messages.settlement;
   }
 
   if (values.waterType.trim().length < 2) {
-    errors.waterType = "Вкажи тип водойми.";
+    errors.waterType = messages.waterType;
   }
 
   if (!values.fish.split(",").some((fish) => fish.trim())) {
-    errors.fish = "Додай хоча б один вид риби.";
+    errors.fish = messages.fish;
   }
 
   if (values.description.trim().length < 20) {
-    errors.description = "Опиши водойму щонайменше 20 символами.";
+    errors.description = messages.description;
   }
 
   return errors;

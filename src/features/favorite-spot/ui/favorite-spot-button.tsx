@@ -2,6 +2,7 @@
 
 import { Link } from "@/shared/lib/i18n";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import type { FishingSpot } from "@/entities/fishing-spot";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
@@ -23,6 +24,7 @@ const initialSnapshot: FavoriteSnapshot = {
 };
 
 export function FavoriteSpotButton({ spot }: FavoriteSpotButtonProps) {
+  const t = useTranslations("favorite");
   const { isLoading: isAuthLoading, user } = useAuth();
   const [favoriteSnapshot, setFavoriteSnapshot] = useState<FavoriteSnapshot>(initialSnapshot);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -46,21 +48,21 @@ export function FavoriteSpotButton({ spot }: FavoriteSpotButtonProps) {
       },
       () => {
         setFavoriteSnapshot({ isFavorite: false, ownerId: userId });
-        setError("Не вдалося завантажити статус збереження.");
+        setError(t("loadError"));
       },
     );
-  }, [spot.id, userId]);
+  }, [spot.id, t, userId]);
 
   if (!user && !isAuthLoading) {
     return (
       <Link className={styles.signInLink} href="/login">
-        Увійти, щоб зберегти
+        {t("signIn")}
       </Link>
     );
   }
 
   if (!user) {
-    return <span className={styles.loadingLabel}>Перевіряємо акаунт…</span>;
+    return <span className={styles.loadingLabel}>{t("checking")}</span>;
   }
 
   async function toggleFavorite() {
@@ -83,7 +85,7 @@ export function FavoriteSpotButton({ spot }: FavoriteSpotButtonProps) {
         });
       }
     } catch {
-      setError("Не вдалося оновити обране. Спробуй ще раз.");
+      setError(t("updateError"));
     } finally {
       setIsUpdating(false);
     }
@@ -99,7 +101,7 @@ export function FavoriteSpotButton({ spot }: FavoriteSpotButtonProps) {
         onClick={() => void toggleFavorite()}
       >
         <span aria-hidden="true">{isFavorite ? "♥" : "♡"}</span>
-        {isUpdating ? "Оновлюємо…" : isFavorite ? "Збережено" : "Зберегти водойму"}
+        {isUpdating ? t("updating") : isFavorite ? t("saved") : t("save")}
       </button>
       {error ? <p role="alert">{error}</p> : null}
     </div>

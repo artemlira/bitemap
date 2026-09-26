@@ -2,12 +2,14 @@
 
 import { Link } from "@/shared/lib/i18n";
 import { UserSpotCard } from "@/entities/user-spot";
+import { useTranslations } from "next-intl";
 import { useUserSpots } from "@/features/manage-user-spot";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./my-spots-page.module.scss";
 
 export function MySpotsPage() {
+  const t = useTranslations("mySpots");
   const { error, isAuthLoading, isLoading, spots, user } = useUserSpots();
 
   if (!user && !isAuthLoading) {
@@ -16,11 +18,11 @@ export function MySpotsPage() {
         <section className={styles.hero}>
           <SiteHeader />
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}>Твоя карта</p>
-            <h1>Місця, які знаєш ти.</h1>
-            <p>Увійди, щоб додавати власні водойми, нотувати важливі деталі та повертатися до них перед виїздом.</p>
+            <p className={styles.eyebrow}>{t("eyebrow")}</p>
+            <h1>{t("signedOutTitle")}</h1>
+            <p>{t("signedOutLead")}</p>
             <Link className={styles.primaryLink} href="/login">
-              Увійти в BiteMap
+              {t("signIn")}
             </Link>
           </div>
         </section>
@@ -33,32 +35,32 @@ export function MySpotsPage() {
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>Твоя карта</p>
-          <h1>Мої водойми.</h1>
-          <p>Зберігай перевірені місця у власній добірці. Вони приватні — бачиш і редагуєш їх лише ти.</p>
+          <p className={styles.eyebrow}>{t("eyebrow")}</p>
+          <h1>{t("title")}</h1>
+          <p>{t("lead")}</p>
         </div>
       </section>
 
       <section className={styles.content} aria-labelledby="my-spots-title">
         <div className={styles.heading}>
           <div>
-            <p className={styles.sectionLabel}>Власні локації</p>
-            <h2 id="my-spots-title">Твій атлас</h2>
+            <p className={styles.sectionLabel}>{t("section")}</p>
+            <h2 id="my-spots-title">{t("sectionTitle")}</h2>
           </div>
           <Link className={styles.addLink} href="/my-spots/new">
-            Додати водойму <span aria-hidden="true">↗</span>
+            {t("add")} <span aria-hidden="true">↗</span>
           </Link>
         </div>
 
         {error ? (
           <p className={styles.error} role="alert">
-            {error}
+            {t("loadError")}
           </p>
         ) : null}
 
         {isLoading || isAuthLoading ? (
           <div className={styles.loading} aria-live="polite">
-            Завантажуємо твої водойми…
+            {t("loading")}
           </div>
         ) : spots.length > 0 ? (
           <div className={styles.grid}>
@@ -72,10 +74,10 @@ export function MySpotsPage() {
           </div>
         ) : (
           <div className={styles.empty}>
-            <p className={styles.sectionLabel}>Почнімо з першої</p>
-            <h3>Додай свою водойму.</h3>
-            <p>Вкажи місце, тип водойми, рибу та власне враження — цього достатньо для корисної особистої картки.</p>
-            <Link href="/my-spots/new">Створити першу картку</Link>
+            <p className={styles.sectionLabel}>{t("emptyEyebrow")}</p>
+            <h3>{t("emptyTitle")}</h3>
+            <p>{t("emptyText")}</p>
+            <Link href="/my-spots/new">{t("create")}</Link>
           </div>
         )}
       </section>

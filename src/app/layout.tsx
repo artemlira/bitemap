@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import { AuthProvider } from "@/shared/lib/auth";
 import { ThemeProvider } from "@/shared/lib/theme";
 import "@/app/styles/main.scss";
@@ -14,10 +15,12 @@ export const metadata: Metadata = {
   description: "Знаходьте водойми, ведіть щоденник уловів і плануйте риболовлю.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+
   return (
     <html
-      lang="uk"
+      lang={locale}
       className={geistSans.variable}
       data-scroll-behavior="smooth"
       suppressHydrationWarning

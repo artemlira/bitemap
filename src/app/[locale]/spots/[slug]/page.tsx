@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getFishingSpotBySlug, fishingSpots } from "@/entities/fishing-spot";
+import { getFishingSpotBySlug, getFishingSpotText, fishingSpots } from "@/entities/fishing-spot";
 import { SpotDetailsPage } from "@/views/spot-details";
 
 export function generateStaticParams() {
@@ -10,11 +10,14 @@ export function generateStaticParams() {
 export async function generateMetadata(
   props: PageProps<"/[locale]/spots/[slug]">,
 ): Promise<Metadata> {
-  const { slug } = await props.params;
+  const { locale, slug } = await props.params;
   const spot = getFishingSpotBySlug(slug);
 
   return spot
-    ? { title: `${spot.name} — BiteMap`, description: `${spot.region}. ${spot.description}` }
+    ? {
+      title: `${getFishingSpotText(spot, "name", locale)} — BiteMap`,
+      description: `${getFishingSpotText(spot, "region", locale)}. ${getFishingSpotText(spot, "description", locale)}`,
+    }
     : { title: "BiteMap" };
 }
 

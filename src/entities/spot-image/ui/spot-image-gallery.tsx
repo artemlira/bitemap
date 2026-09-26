@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSpotImages } from "../model/use-spot-images";
 import type { SpotImageTargetType } from "../model/types";
 import styles from "./spot-image-gallery.module.scss";
@@ -13,14 +13,15 @@ type SpotImageGalleryProps = {
 
 export function SpotImageGallery({ targetId, targetType }: SpotImageGalleryProps) {
   const locale = useLocale();
-  const { error, images } = useSpotImages(targetType, targetId);
+  const t = useTranslations("gallery");
+  const { hasError, images } = useSpotImages(targetType, targetId);
 
-  if (error) {
-    return <p className={styles.error} role="alert">{error}</p>;
+  if (hasError) {
+    return <p className={styles.error} role="alert">{t("loadError")}</p>;
   }
 
   if (images.length === 0) {
-    return <p className={styles.empty}>Фотографій поки немає.</p>;
+    return <p className={styles.empty}>{t("empty")}</p>;
   }
 
   return (

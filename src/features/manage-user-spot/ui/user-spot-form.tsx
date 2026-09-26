@@ -2,6 +2,7 @@
 
 import { Link, useRouter } from "@/shared/lib/i18n";
 import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import type { UserSpotFormValues } from "@/entities/user-spot";
 import { useAuth } from "@/shared/lib/auth";
 import { createUserSpot, updateUserSpot } from "../api/user-spots";
@@ -37,15 +38,22 @@ const defaultValues: UserSpotFormValues = {
 };
 
 const tones = [
-  { value: "lagoon", label: "Блакитна вода" },
-  { value: "sunset", label: "Теплий захід" },
-  { value: "river", label: "Річкові береги" },
-  { value: "reeds", label: "Очерет і зелень" },
+  { value: "lagoon", labelKey: "toneLagoon" },
+  { value: "sunset", labelKey: "toneSunset" },
+  { value: "river", labelKey: "toneRiver" },
+  { value: "reeds", labelKey: "toneReeds" },
+] as const;
+
+const accessOptions = [
+  { value: "Вільний доступ", labelKey: "freeAccess" },
+  { value: "Платна водойма", labelKey: "paidAccess" },
+  { value: "Уточнюйте правила", labelKey: "checkRules" },
 ] as const;
 
 export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: UserSpotFormProps) {
   const { isLoading: isAuthLoading, user } = useAuth();
   const router = useRouter();
+  const t = useTranslations("userSpotForm");
   const [values, setValues] = useState<UserSpotFormValues>(initialValues);
   const [errors, setErrors] = useState<UserSpotFormErrors>({});
   const [submissionError, setSubmissionError] = useState("");
@@ -98,7 +106,15 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
     event.preventDefault();
     setSubmissionError("");
 
-    const nextErrors = validateUserSpot(values);
+    const nextErrors = validateUserSpot(values, {
+      name: t("validationName"),
+      region: t("validationRegion"),
+      community: t("validationCommunity"),
+      settlement: t("validationSettlement"),
+      waterType: t("validationWaterType"),
+      fish: t("validationFish"),
+      description: t("validationDescription"),
+    });
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0 || !user) {
@@ -116,7 +132,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
 
       router.push("/my-spots");
     } catch {
-      setSubmissionError("Не вдалося зберегти водойму. Перевір з’єднання та спробуй ще раз.");
+      setSubmissionError(t("submissionError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -125,21 +141,21 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
   if (!user && !isAuthLoading) {
     return (
       <div className={styles.signInNotice}>
-        <p>Увійди, щоб додавати власні водойми.</p>
-        <Link href="/login">Увійти в BiteMap</Link>
+        <p>{t("signIn")}</p>
+        <Link href="/login">{t("signInLink")}</Link>
       </div>
     );
   }
 
   if (!user) {
-    return <p className={styles.loading}>Перевіряємо акаунт…</p>;
+    return <p className={styles.loading}>{t("checking")}</p>;
   }
 
   return (
     <form className={styles.form} noValidate onSubmit={handleSubmit} aria-busy={isSubmitting}>
       <div className={styles.grid}>
         <label className={styles.field} htmlFor="user-spot-name">
-          <span>Назва водойми</span>
+          <span>{t("name")}</span>
           <input
             id="user-spot-name"
             value={values.name}
@@ -151,7 +167,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-region">
-          <span>Область</span>
+          <span>{t("region")}</span>
           <select
             id="user-spot-region"
             value={values.regionId}
@@ -159,7 +175,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
             aria-invalid={Boolean(errors.region) || undefined}
             aria-describedby={errors.region ? "user-spot-region-error" : undefined}
           >
-            <option value="">Обери область</option>
+            <option value="">{t("regionPlaceholder")}</option>
             {regions.map((region) => (
               <option key={region.id} value={region.id}>
                 {region.nameFull}
@@ -170,7 +186,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-community">
-          <span>Громада або місто</span>
+          <span>{t("community")}</span>
           <select
             id="user-spot-community"
             value={values.communityId}
@@ -179,7 +195,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
             aria-invalid={Boolean(errors.community) || undefined}
             aria-describedby={errors.community ? "user-spot-community-error" : undefined}
           >
-            <option value="">{values.regionId ? "Обери громаду" : "Спочатку обери область"}</option>
+            <option value="">{values.regionId ? t("communityPlaceholder") : t("chooseRegionFirst")}</option>
             {communities.map((community) => (
               <option key={community.id} value={community.id}>
                 {community.nameFull}
@@ -190,7 +206,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-settlement">
-          <span>Населений пункт</span>
+          <span>{t("settlement")}</span>
           <select
             id="user-spot-settlement"
             value={values.settlementId}
@@ -199,7 +215,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
             aria-invalid={Boolean(errors.settlement) || undefined}
             aria-describedby={errors.settlement ? "user-spot-settlement-error" : undefined}
           >
-            <option value="">{values.communityId ? "Обери населений пункт" : "Спочатку обери громаду"}</option>
+            <option value="">{values.communityId ? t("settlementPlaceholder") : t("chooseCommunityFirst")}</option>
             {settlements.map((settlement) => (
               <option key={settlement.id} value={settlement.id}>
                 {settlement.nameFull}
@@ -210,10 +226,10 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-water-type">
-          <span>Тип водойми</span>
+          <span>{t("waterType")}</span>
           <input
             id="user-spot-water-type"
-            placeholder="Наприклад, озеро або річка"
+            placeholder={t("waterTypePlaceholder")}
             value={values.waterType}
             onChange={(event) => updateValue("waterType", event.target.value)}
             aria-invalid={Boolean(errors.waterType) || undefined}
@@ -223,23 +239,23 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-access">
-          <span>Доступ</span>
+          <span>{t("access")}</span>
           <select
             id="user-spot-access"
             value={values.access}
             onChange={(event) => updateValue("access", event.target.value)}
           >
-            <option>Вільний доступ</option>
-            <option>Платна водойма</option>
-            <option>Уточнюйте правила</option>
+            {accessOptions.map((access) => (
+              <option key={access.value} value={access.value}>{t(access.labelKey)}</option>
+            ))}
           </select>
         </label>
 
         <label className={styles.field} htmlFor="user-spot-fish">
-          <span>Риба</span>
+          <span>{t("fish")}</span>
           <input
             id="user-spot-fish"
-            placeholder="Щука, окунь, короп"
+            placeholder={t("fishPlaceholder")}
             value={values.fish}
             onChange={(event) => updateValue("fish", event.target.value)}
             aria-invalid={Boolean(errors.fish) || undefined}
@@ -249,7 +265,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         </label>
 
         <label className={styles.field} htmlFor="user-spot-tone">
-          <span>Настрій картки</span>
+          <span>{t("tone")}</span>
           <select
             id="user-spot-tone"
             value={values.tone}
@@ -257,27 +273,27 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
           >
             {tones.map((tone) => (
               <option key={tone.value} value={tone.value}>
-                {tone.label}
+                {t(tone.labelKey)}
               </option>
             ))}
           </select>
         </label>
 
         <label className={styles.field} htmlFor="user-spot-visibility">
-          <span>Видимість</span>
+          <span>{t("visibility")}</span>
           <select
             id="user-spot-visibility"
             value={values.visibility}
             onChange={(event) => updateValue("visibility", event.target.value)}
           >
-            <option value="private">Приватна — лише для мене</option>
-            <option value="published">Опублікувати для спільноти</option>
+            <option value="private">{t("private")}</option>
+            <option value="published">{t("published")}</option>
           </select>
         </label>
       </div>
 
       <label className={styles.field} htmlFor="user-spot-description">
-        <span>Короткий опис</span>
+        <span>{t("description")}</span>
         <textarea
           id="user-spot-description"
           rows={5}
@@ -290,27 +306,27 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
       </label>
 
       <fieldset className={styles.translationFields}>
-        <legend>English version <span>(optional — Ukrainian text will be shown if it is empty)</span></legend>
+        <legend>{t("translationLegend")} <span>({t("translationLegendLead")})</span></legend>
         <div className={styles.grid}>
           <label className={styles.field} htmlFor="user-spot-name-en">
-            <span>Water body name</span>
+            <span>{t("englishName")}</span>
             <input id="user-spot-name-en" value={values.nameEn} onChange={(event) => updateValue("nameEn", event.target.value)} />
           </label>
           <label className={styles.field} htmlFor="user-spot-water-type-en">
-            <span>Water body type</span>
+            <span>{t("englishWaterType")}</span>
             <input id="user-spot-water-type-en" value={values.waterTypeEn} onChange={(event) => updateValue("waterTypeEn", event.target.value)} />
           </label>
           <label className={styles.field} htmlFor="user-spot-access-en">
-            <span>Access</span>
+            <span>{t("englishAccess")}</span>
             <input id="user-spot-access-en" value={values.accessEn} onChange={(event) => updateValue("accessEn", event.target.value)} />
           </label>
           <label className={styles.field} htmlFor="user-spot-fish-en">
-            <span>Fish</span>
-            <input id="user-spot-fish-en" placeholder="Pike, perch, carp" value={values.fishEn} onChange={(event) => updateValue("fishEn", event.target.value)} />
+            <span>{t("englishFish")}</span>
+            <input id="user-spot-fish-en" placeholder={t("englishFishPlaceholder")} value={values.fishEn} onChange={(event) => updateValue("fishEn", event.target.value)} />
           </label>
         </div>
         <label className={styles.field} htmlFor="user-spot-description-en">
-          <span>Short description</span>
+          <span>{t("englishDescription")}</span>
           <textarea id="user-spot-description-en" rows={5} value={values.descriptionEn} onChange={(event) => updateValue("descriptionEn", event.target.value)} />
         </label>
       </fieldset>
@@ -319,9 +335,9 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
 
       <div className={styles.actions}>
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Зберігаємо…" : isEditing ? "Зберегти зміни" : "Додати водойму"}
+          {isSubmitting ? t("submitting") : isEditing ? t("saveChanges") : t("add")}
         </button>
-        <Link href="/my-spots">Скасувати</Link>
+        <Link href="/my-spots">{t("cancel")}</Link>
       </div>
     </form>
   );

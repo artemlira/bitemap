@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getUserSpotFish, getUserSpotText, usePublishedUserSpot } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
@@ -13,18 +13,19 @@ type CommunitySpotDetailsPageProps = { spotId: string };
 
 export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPageProps) {
   const locale = useLocale();
-  const { error, isLoading, spot } = usePublishedUserSpot(spotId);
+  const t = useTranslations("communitySpotDetails");
+  const { isLoading, spot } = usePublishedUserSpot(spotId);
 
   if (isLoading) {
-    return <main className={styles.state} aria-live="polite">Відкриваємо водойму…</main>;
+    return <main className={styles.state} aria-live="polite">{t("loading")}</main>;
   }
 
-  if (error || !spot) {
+  if (!spot) {
     return (
       <main className={styles.state}>
-        <h1>Водойма недоступна.</h1>
-        <p>{error || "Можливо, автор зробив її приватною."}</p>
-        <Link href="/community">Повернутися до спільноти</Link>
+        <h1>{t("unavailableTitle")}</h1>
+        <p>{t("unavailableFallback")}</p>
+        <Link href="/community">{t("back")}</Link>
       </main>
     );
   }
@@ -34,12 +35,12 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <nav className={styles.breadcrumbs} aria-label="Навігація шляхом">
-            <Link href="/">Головна</Link><span aria-hidden="true">/</span><Link href="/community">Спільнота</Link><span aria-hidden="true">/</span><span aria-current="page">{getUserSpotText(spot, "name", locale)}</span>
+          <nav className={styles.breadcrumbs} aria-label={t("breadcrumbs")}>
+            <Link href="/">{t("home")}</Link><span aria-hidden="true">/</span><Link href="/community">{t("community")}</Link><span aria-hidden="true">/</span><span aria-current="page">{getUserSpotText(spot, "name", locale)}</span>
           </nav>
           <div className={styles.heroGrid}>
             <div>
-              <p className={styles.eyebrow}>Від спільноти BiteMap</p>
+              <p className={styles.eyebrow}>{t("eyebrow")}</p>
               <h1>{getUserSpotText(spot, "name", locale)}</h1>
               <p className={styles.region}>{spot.settlement ? `${spot.region} · ${spot.settlement}` : spot.region}</p>
               <p className={styles.description}>{getUserSpotText(spot, "description", locale)}</p>
@@ -52,15 +53,15 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
         </div>
       </section>
       <section className={styles.details} aria-labelledby="community-spot-details-title">
-        <div><p className={styles.sectionLabel}>Коротко про локацію</p><h2 id="community-spot-details-title">Плануй виїзд впевненіше</h2></div>
+        <div><p className={styles.sectionLabel}>{t("overview")}</p><h2 id="community-spot-details-title">{t("overviewTitle")}</h2></div>
         <dl className={styles.facts}>
-          <div><dt>Тип водойми</dt><dd>{getUserSpotText(spot, "waterType", locale)}</dd></div>
-          <div><dt>Локація</dt><dd>{spot.settlement || spot.community || spot.region}</dd></div>
-          <div><dt>Доступ</dt><dd>{getUserSpotText(spot, "access", locale)}</dd></div>
+          <div><dt>{t("waterType")}</dt><dd>{getUserSpotText(spot, "waterType", locale)}</dd></div>
+          <div><dt>{t("location")}</dt><dd>{spot.settlement || spot.community || spot.region}</dd></div>
+          <div><dt>{t("access")}</dt><dd>{getUserSpotText(spot, "access", locale)}</dd></div>
         </dl>
-        <div className={styles.fishSection}><div><p className={styles.sectionLabel}>Що можна зустріти</p><h2>Риба у водоймі</h2></div><ul className={styles.fishList} aria-label="Види риби">{getUserSpotFish(spot, locale).map((fish) => <li key={fish}>{fish}</li>)}</ul></div>
+        <div className={styles.fishSection}><div><p className={styles.sectionLabel}>{t("fishEyebrow")}</p><h2>{t("fishTitle")}</h2></div><ul className={styles.fishList} aria-label={t("fishList")}>{getUserSpotFish(spot, locale).map((fish) => <li key={fish}>{fish}</li>)}</ul></div>
         <section className={styles.gallery} aria-labelledby="community-gallery-title">
-          <div><p className={styles.sectionLabel}>Фотографії спільноти</p><h2 id="community-gallery-title">Вода очима рибалок</h2></div>
+          <div><p className={styles.sectionLabel}>{t("galleryEyebrow")}</p><h2 id="community-gallery-title">{t("galleryTitle")}</h2></div>
           <SpotImageGallery targetType="user-spot" targetId={spot.id} />
           <SpotImageUpload targetType="user-spot" targetId={spot.id} />
         </section>

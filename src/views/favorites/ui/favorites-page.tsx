@@ -2,11 +2,13 @@
 
 import { Link } from "@/shared/lib/i18n";
 import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
+import { useTranslations } from "next-intl";
 import { useFavoriteSpots } from "@/features/favorite-spot";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./favorites-page.module.scss";
 
 export function FavoritesPage() {
+  const t = useTranslations("favorites");
   const { error, isAuthLoading, isLoading, spotIds, user } = useFavoriteSpots();
   const favoriteSpots = fishingSpots.filter((spot) => spotIds.has(spot.id));
 
@@ -16,11 +18,11 @@ export function FavoritesPage() {
         <section className={styles.hero}>
           <SiteHeader />
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}>Твоя добірка</p>
-            <h1>Збережені водойми.</h1>
-            <p>Увійди, щоб побачити локації, які ти додав до власного списку.</p>
+            <p className={styles.eyebrow}>{t("eyebrow")}</p>
+            <h1>{t("signedOutTitle")}</h1>
+            <p>{t("signedOutLead")}</p>
             <Link className={styles.signInLink} href="/login">
-              Увійти в BiteMap
+              {t("signIn")}
             </Link>
           </div>
         </section>
@@ -33,32 +35,32 @@ export function FavoritesPage() {
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>Твоя добірка</p>
-          <h1>Мої водойми.</h1>
-          <p>Повертайся до локацій, які хочеш відвідати, коли з’явиться час для виїзду.</p>
+          <p className={styles.eyebrow}>{t("eyebrow")}</p>
+          <h1>{t("title")}</h1>
+          <p>{t("lead")}</p>
         </div>
       </section>
 
       <section className={styles.content} aria-labelledby="favorites-title">
         <div className={styles.heading}>
           <div>
-            <p className={styles.sectionLabel}>Збережене</p>
-            <h2 id="favorites-title">Твій список</h2>
+            <p className={styles.sectionLabel}>{t("section")}</p>
+            <h2 id="favorites-title">{t("sectionTitle")}</h2>
           </div>
           <p aria-live="polite" className={styles.counter}>
-            {isLoading ? "Завантажуємо…" : `Локацій: ${favoriteSpots.length}`}
+            {isLoading ? t("loading") : t("count", { count: favoriteSpots.length })}
           </p>
         </div>
 
         {error ? (
           <p className={styles.error} role="alert">
-            {error}
+            {t("loadError")}
           </p>
         ) : null}
 
         {isLoading ? (
           <div className={styles.loading} aria-live="polite">
-            Завантажуємо твою добірку…
+            {t("loadingList")}
           </div>
         ) : favoriteSpots.length > 0 ? (
           <div className={styles.grid}>
@@ -68,10 +70,10 @@ export function FavoritesPage() {
           </div>
         ) : (
           <div className={styles.empty}>
-            <p className={styles.sectionLabel}>Поки порожньо</p>
-            <h3>Тут з’являться твої водойми.</h3>
-            <p>Відкрий сторінку локації та натисни «Зберегти водойму».</p>
-            <Link href="/spots">Перейти до каталогу</Link>
+            <p className={styles.sectionLabel}>{t("emptyEyebrow")}</p>
+            <h3>{t("emptyTitle")}</h3>
+            <p>{t("emptyText")}</p>
+            <Link href="/spots">{t("browse")}</Link>
           </div>
         )}
       </section>

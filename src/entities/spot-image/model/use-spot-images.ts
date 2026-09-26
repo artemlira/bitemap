@@ -7,7 +7,7 @@ import { getFirebaseFirestore } from "@/shared/api/firebase";
 
 export function useSpotImages(targetType: SpotImageTargetType, targetId: string) {
   const [images, setImages] = useState<readonly SpotImage[]>([]);
-  const [error, setError] = useState("");
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const imagesQuery = query(
@@ -20,14 +20,14 @@ export function useSpotImages(targetType: SpotImageTargetType, targetId: string)
       imagesQuery,
       (snapshot) => {
         setImages(snapshot.docs.map((document) => ({ id: document.id, ...document.data() }) as SpotImage));
-        setError("");
+        setHasError(false);
       },
       () => {
         setImages([]);
-        setError("Не вдалося завантажити фотографії.");
+        setHasError(true);
       },
     );
   }, [targetId, targetType]);
 
-  return { error, images };
+  return { hasError, images };
 }

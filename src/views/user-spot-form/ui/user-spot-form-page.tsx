@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
+import { useTranslations } from "next-intl";
 import type { UserSpot, UserSpotFormValues } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { UserSpotForm, useUserSpot } from "@/features/manage-user-spot";
@@ -37,27 +38,28 @@ function toFormValues(spot: UserSpot): UserSpotFormValues {
 }
 
 function EditUserSpotForm({ spotId }: { spotId: string }) {
-  const { error, isAuthLoading, isLoading, spot, user } = useUserSpot(spotId);
+  const t = useTranslations("userSpotEditor");
+  const { isAuthLoading, isLoading, spot, user } = useUserSpot(spotId);
 
   if (!user && !isAuthLoading) {
     return (
       <div className={styles.state}>
-        <h2>Увійди, щоб редагувати водойму.</h2>
-        <Link href="/login">Увійти в BiteMap</Link>
+        <h2>{t("signInTitle")}</h2>
+        <Link href="/login">{t("signIn")}</Link>
       </div>
     );
   }
 
   if (isAuthLoading || isLoading) {
-    return <div className={styles.state} aria-live="polite">Відкриваємо картку водойми…</div>;
+    return <div className={styles.state} aria-live="polite">{t("loading")}</div>;
   }
 
-  if (error || !spot) {
+  if (!spot) {
     return (
       <div className={styles.state}>
-        <h2>Ця водойма недоступна.</h2>
-        <p>{error || "Можливо, її не існує або вона належить іншому користувачу."}</p>
-        <Link href="/my-spots">Повернутися до моїх водойм</Link>
+        <h2>{t("unavailableTitle")}</h2>
+        <p>{t("unavailableFallback")}</p>
+        <Link href="/my-spots">{t("back")}</Link>
       </div>
     );
   }
@@ -67,8 +69,8 @@ function EditUserSpotForm({ spotId }: { spotId: string }) {
       <UserSpotForm initialValues={toFormValues(spot)} mode="edit" spotId={spot.id} />
       <section className={styles.gallery} aria-labelledby="owner-gallery-title">
         <div>
-          <p className={styles.sectionLabel}>Твоя галерея</p>
-          <h3 id="owner-gallery-title">Фотографії водойми</h3>
+          <p className={styles.sectionLabel}>{t("galleryEyebrow")}</p>
+          <h3 id="owner-gallery-title">{t("galleryTitle")}</h3>
         </div>
         <SpotImageGallery targetType="user-spot" targetId={spot.id} />
         <SpotImageUpload targetType="user-spot" targetId={spot.id} />
@@ -79,23 +81,24 @@ function EditUserSpotForm({ spotId }: { spotId: string }) {
 
 export function UserSpotFormPage({ mode, spotId }: UserSpotFormPageProps) {
   const isEditing = mode === "edit";
+  const t = useTranslations("userSpotEditor");
 
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>{isEditing ? "Твоя картка" : "Нова точка на карті"}</p>
-          <h1>{isEditing ? "Уточни деталі." : "Додай свою водойму."}</h1>
-          <p>{isEditing ? "Онови деталі місця або зміни його видимість для спільноти." : "Обери точне місце зі списку та виріши, залишити водойму приватною чи опублікувати."}</p>
+          <p className={styles.eyebrow}>{isEditing ? t("editEyebrow") : t("newEyebrow")}</p>
+          <h1>{isEditing ? t("editTitle") : t("newTitle")}</h1>
+          <p>{isEditing ? t("editLead") : t("newLead")}</p>
         </div>
       </section>
 
       <section className={styles.content} aria-labelledby="user-spot-form-title">
         <div className={styles.intro}>
-          <p className={styles.sectionLabel}>{isEditing ? "Редагування" : "Власна водойма"}</p>
-          <h2 id="user-spot-form-title">{isEditing ? "Актуальна інформація" : "Коротко й по суті"}</h2>
-          <p>Поля зі зірочкою не потрібні: достатньо заповнити всі основні деталі природною мовою.</p>
+          <p className={styles.sectionLabel}>{isEditing ? t("editSection") : t("newSection")}</p>
+          <h2 id="user-spot-form-title">{isEditing ? t("editSectionTitle") : t("newSectionTitle")}</h2>
+          <p>{t("formLead")}</p>
         </div>
 
         <div className={styles.panel}>

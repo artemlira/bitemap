@@ -3,7 +3,7 @@
 import { Link } from "@/shared/lib/i18n";
 import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SiteHeader } from "@/widgets/site-header";
@@ -15,15 +15,16 @@ type SpotDetailsPageProps = {
 
 export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
   const locale = useLocale();
+  const t = useTranslations("spotDetails");
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <nav className={styles.breadcrumbs} aria-label="Навігація шляхом">
-            <Link href="/">Головна</Link>
+          <nav className={styles.breadcrumbs} aria-label={t("breadcrumbs")}>
+            <Link href="/">{t("home")}</Link>
             <span aria-hidden="true">/</span>
-            <Link href="/spots">Водойми</Link>
+            <Link href="/spots">{t("spots")}</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{getFishingSpotText(spot, "name", locale)}</span>
           </nav>
@@ -47,31 +48,31 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
 
       <section className={styles.details} aria-labelledby="details-title">
         <div className={styles.sectionHeading}>
-          <p className={styles.sectionLabel}>Коротко про локацію</p>
-          <h2 id="details-title">Плануй виїзд впевненіше</h2>
+          <p className={styles.sectionLabel}>{t("overview")}</p>
+          <h2 id="details-title">{t("overviewTitle")}</h2>
         </div>
 
         <dl className={styles.facts}>
           <div>
-            <dt>Тип водойми</dt>
+            <dt>{t("waterType")}</dt>
             <dd>{getFishingSpotText(spot, "waterType", locale)}</dd>
           </div>
           <div>
-            <dt>Регіон</dt>
+            <dt>{t("region")}</dt>
             <dd>{getFishingSpotText(spot, "region", locale)}</dd>
           </div>
           <div>
-            <dt>Доступ</dt>
+            <dt>{t("access")}</dt>
             <dd>{getFishingSpotText(spot, "access", locale)}</dd>
           </div>
         </dl>
 
         <div className={styles.fishSection}>
           <div>
-            <p className={styles.sectionLabel}>Що можна зустріти</p>
-            <h2>Риба у водоймі</h2>
+            <p className={styles.sectionLabel}>{t("fishEyebrow")}</p>
+            <h2>{t("fishTitle")}</h2>
           </div>
-          <ul className={styles.fishList} aria-label="Види риби">
+          <ul className={styles.fishList} aria-label={t("fishList")}>
             {getFishingSpotFish(spot, locale).map((fish) => (
               <li key={fish}>{fish}</li>
             ))}
@@ -80,18 +81,17 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
 
         <section className={styles.gallery} aria-labelledby="spot-gallery-title">
           <div className={styles.sectionHeading}>
-            <p className={styles.sectionLabel}>Фотографії спільноти</p>
-            <h2 id="spot-gallery-title">Вода очима рибалок</h2>
+            <p className={styles.sectionLabel}>{t("galleryEyebrow")}</p>
+            <h2 id="spot-gallery-title">{t("galleryTitle")}</h2>
           </div>
           <SpotImageGallery targetType="catalog" targetId={spot.id} />
           <SpotImageUpload targetType="catalog" targetId={spot.id} />
         </section>
 
         <aside className={styles.note}>
-          <p>Дані MVP</p>
+          <p>{t("mvp")}</p>
           <span>
-            Це стартовий профіль водойми. Погоду, точку на карті й нотатки користувачів
-            додамо після підключення бекенду.
+            {t("mvpText")}
           </span>
         </aside>
       </section>

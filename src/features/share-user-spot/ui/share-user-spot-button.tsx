@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 type ShareUserSpotButtonProps = {
   spotId: string;
@@ -8,26 +9,28 @@ type ShareUserSpotButtonProps = {
 };
 
 export function ShareUserSpotButton({ spotId, spotName }: ShareUserSpotButtonProps) {
-  const [label, setLabel] = useState("Поділитися");
+  const locale = useLocale();
+  const t = useTranslations("share");
+  const [label, setLabel] = useState(t("share"));
 
   async function shareSpot() {
-    const url = `${window.location.origin}/community/${spotId}`;
+    const url = `${window.location.origin}/${locale}/community/${spotId}`;
 
     try {
       if (navigator.share) {
-        await navigator.share({ text: `Водойма «${spotName}» у BiteMap`, title: spotName, url });
+        await navigator.share({ text: t("text", { spotName }), title: spotName, url });
         return;
       }
 
       await navigator.clipboard.writeText(url);
-      setLabel("Посилання скопійовано");
-      window.setTimeout(() => setLabel("Поділитися"), 2500);
+      setLabel(t("copied"));
+      window.setTimeout(() => setLabel(t("share")), 2500);
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
 
-      setLabel("Не вдалося скопіювати");
+      setLabel(t("failed"));
     }
   }
 
