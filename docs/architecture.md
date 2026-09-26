@@ -118,8 +118,8 @@ src/
 або копіює публічне посилання на опубліковану водойму. `views/community` та
 `views/community-spot-details` відображають тільки записи з видимістю
 `published`. `entities/spot-image` тримає галереї окремо від карток водойм, а
-`features/upload-spot-image` завантажує файл у Cloud Storage і створює його
-метадані в Firestore.
+`features/upload-spot-image` завантажує файл у Cloudinary через підписаний
+серверний маршрут і створює його метадані в Firestore.
 
 ## Правила
 

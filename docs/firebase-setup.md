@@ -18,14 +18,21 @@
 Firebase web configuration є клієнтською конфігурацією; приватні ключі
 сервісного акаунта сюди не додавай.
 
-## Cloud Storage для фотографій
+## Cloudinary для фотографій
 
-Щоб завантажувати фото водойм, у Firebase Console відкрий **Storage**, створи
-default bucket і застосуй правила з [`storage.rules`](../storage.rules). Значення
-`storageBucket` з Firebase configuration має бути в `.env.local` як
-`NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`.
+Фото зберігаються у Cloudinary, тому Firebase Storage і тариф Blaze не потрібні.
+Створи безкоштовний Cloudinary-акаунт і додай до `.env.local` значення
+`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` та `CLOUDINARY_API_SECRET`.
+Останнє значення не має префікса `NEXT_PUBLIC_`: воно використовується тільки
+серверним маршрутом `/api/media/signature` для створення короткочасного підпису
+завантаження. Для локальної розробки після зміни `.env.local` перезапусти
+`npm run dev`.
 
 У кожної фотографії є український підпис і необов’язковий англійський. Якщо
 англійський не вказано, англомовний інтерфейс показує український. Для нових
-Firebase-проєктів Cloud Storage потребує тариф Blaze; зміну тарифу виконуй лише
-після того, як усвідомлено підтвердиш білінг.
+фотографій не потрібно налаштовувати Firebase Storage чи додавати правила
+Storage.
+
+Під час деплою це також мають бути серверні environment variables на хостингу:
+маршрут підпису не працюватиме в статичному export. Не використовуй префікс
+`NEXT_PUBLIC_` для Cloudinary API Secret.

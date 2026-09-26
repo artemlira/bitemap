@@ -1,9 +1,8 @@
 "use client";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import type { SpotImageTargetType } from "@/entities/spot-image";
-import { getFirebaseFirestore, getFirebaseStorage } from "@/shared/api/firebase";
+import { getFirebaseFirestore } from "@/shared/api/firebase";
 
 const maxImageSize = 5 * 1024 * 1024;
 
@@ -11,20 +10,78 @@ type UploadSpotImageParams = {
   captionEn: string;
   captionUk: string;
   file: File;
+  idToken: string;
   ownerId: string;
   targetId: string;
   targetType: SpotImageTargetType;
 };
 
-function getFileExtension(file: File) {
-  const extension = file.name.split(".").pop()?.toLowerCase();
-  return extension && /^[a-z0-9]+$/.test(extension) ? extension : "jpg";
+type UploadSignature = {
+  apiKey: string;
+  cloudName: string;
+  folder: string;
+  signature: string;
+  timestamp: number;
+};
+
+type CloudinaryUploadResponse = {
+  public_id?: unknown;
+  secure_url?: unknown;
+};
+
+async function requestUploadSignature(idToken: string, targetType: SpotImageTargetType, targetId: string) {
+  const response = await fetch("/api/media/signature", {
+    body: JSON.stringify({ targetId, targetType }),
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });
+
+  const data: unknown = await response.json();
+
+  if (!response.ok || !isUploadSignature(data)) {
+    throw new Error(getResponseError(data, "Не вдалося підготувати завантаження."));
+  }
+
+  return data;
+}
+
+function isUploadSignature(value: unknown): value is UploadSignature {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const data = value as Record<string, unknown>;
+
+  return ["apiKey", "cloudName", "folder", "signature"].every((key) => typeof data[key] === "string")
+    && typeof data.timestamp === "number";
+}
+
+function isCloudinaryUploadResponse(value: unknown): value is Required<CloudinaryUploadResponse> {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const data = value as CloudinaryUploadResponse;
+  return typeof data.public_id === "string" && typeof data.secure_url === "string";
+}
+
+function getResponseError(value: unknown, fallback: string) {
+  if (!value || typeof value !== "object" || !("error" in value)) {
+    return fallback;
+  }
+
+  const error = (value as { error?: unknown }).error;
+  return typeof error === "string" ? error : fallback;
 }
 
 export async function uploadSpotImage({
   captionEn,
   captionUk,
   file,
+  idToken,
   ownerId,
   targetId,
   targetType,
@@ -37,13 +94,24 @@ export async function uploadSpotImage({
     throw new Error("Розмір зображення не повинен перевищувати 5 МБ.");
   }
 
-  const imageId = crypto.randomUUID();
-  const storagePath = `spot-images/${targetType}/${targetId}/${ownerId}/${imageId}.${getFileExtension(file)}`;
-  const storageReference = ref(getFirebaseStorage(), storagePath);
+  const uploadSignature = await requestUploadSignature(idToken, targetType, targetId);
+  const formData = new FormData();
+  formData.append("api_key", uploadSignature.apiKey);
+  formData.append("file", file);
+  formData.append("folder", uploadSignature.folder);
+  formData.append("signature", uploadSignature.signature);
+  formData.append("timestamp", String(uploadSignature.timestamp));
 
-  await uploadBytes(storageReference, file, { contentType: file.type });
+  const uploadResponse = await fetch(
+    `https://api.cloudinary.com/v1_1/${uploadSignature.cloudName}/image/upload`,
+    { body: formData, method: "POST" },
+  );
+  const uploadData: unknown = await uploadResponse.json();
 
-  const url = await getDownloadURL(storageReference);
+  if (!uploadResponse.ok || !isCloudinaryUploadResponse(uploadData)) {
+    throw new Error(getResponseError(uploadData, "Не вдалося завантажити зображення."));
+  }
+
   const caption = {
     uk: captionUk.trim() || "Фотографія водойми",
     ...(captionEn.trim() ? { en: captionEn.trim() } : {}),
@@ -53,9 +121,9 @@ export async function uploadSpotImage({
     caption,
     createdAt: serverTimestamp(),
     ownerId,
-    storagePath,
+    storagePath: uploadData.public_id,
     targetId,
     targetType,
-    url,
+    url: uploadData.secure_url,
   });
 }

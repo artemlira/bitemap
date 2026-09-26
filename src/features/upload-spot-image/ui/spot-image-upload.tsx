@@ -42,7 +42,8 @@ export function SpotImageUpload({ targetId, targetType }: SpotImageUploadProps) 
     setIsUploading(true);
 
     try {
-      await uploadSpotImage({ captionEn, captionUk, file, ownerId: user.uid, targetId, targetType });
+      const idToken = await user.getIdToken();
+      await uploadSpotImage({ captionEn, captionUk, file, idToken, ownerId: user.uid, targetId, targetType });
       setCaptionEn("");
       setCaptionUk("");
       setFile(null);
