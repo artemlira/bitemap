@@ -33,6 +33,25 @@
     "moreTime": "More time by the water.",
     "lessSearch": "Less time searching."
   },
+  "spots": {
+    "catalog": "Fishing spot catalogue",
+    "title": "Places that make you want to leave before dawn.",
+    "lead": "Find locations by region, water type or fish. A map, weather and community reviews will arrive as the backend grows.",
+    "direction": "Choose a direction",
+    "all": "All fishing spots",
+    "count": "Locations: {count}",
+    "noResults": "Nothing found",
+    "noResultsText": "Try a different filter combination or reset your current selection.",
+    "resetFilters": "Reset filters",
+    "filterGroup": "Fishing spot catalogue filters",
+    "region": "Region",
+    "allRegions": "All regions",
+    "waterType": "Water body type",
+    "allWaterTypes": "All types",
+    "fish": "Fish",
+    "allFish": "All species",
+    "reset": "Reset"
+  },
   "auth": {
     "login": {
       "eyebrow": "Back by the water",

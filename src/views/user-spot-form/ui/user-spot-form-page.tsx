@@ -2,7 +2,9 @@
 
 import { Link } from "@/shared/lib/i18n";
 import type { UserSpot, UserSpotFormValues } from "@/entities/user-spot";
+import { SpotImageGallery } from "@/entities/spot-image";
 import { UserSpotForm, useUserSpot } from "@/features/manage-user-spot";
+import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./user-spot-form-page.module.scss";
 
@@ -14,9 +16,13 @@ type UserSpotFormPageProps = {
 function toFormValues(spot: UserSpot): UserSpotFormValues {
   return {
     access: spot.access,
+    accessEn: spot.translations?.en?.access ?? "",
     description: spot.description,
+    descriptionEn: spot.translations?.en?.description ?? "",
     fish: spot.fish.join(", "),
+    fishEn: spot.translations?.en?.fish?.join(", ") ?? "",
     name: spot.name,
+    nameEn: spot.translations?.en?.name ?? "",
     region: spot.region,
     regionId: spot.regionId ?? "",
     community: spot.community ?? "",
@@ -26,6 +32,7 @@ function toFormValues(spot: UserSpot): UserSpotFormValues {
     tone: spot.tone,
     visibility: spot.visibility,
     waterType: spot.waterType,
+    waterTypeEn: spot.translations?.en?.waterType ?? "",
   };
 }
 
@@ -55,7 +62,19 @@ function EditUserSpotForm({ spotId }: { spotId: string }) {
     );
   }
 
-  return <UserSpotForm initialValues={toFormValues(spot)} mode="edit" spotId={spot.id} />;
+  return (
+    <>
+      <UserSpotForm initialValues={toFormValues(spot)} mode="edit" spotId={spot.id} />
+      <section className={styles.gallery} aria-labelledby="owner-gallery-title">
+        <div>
+          <p className={styles.sectionLabel}>Твоя галерея</p>
+          <h3 id="owner-gallery-title">Фотографії водойми</h3>
+        </div>
+        <SpotImageGallery targetType="user-spot" targetId={spot.id} />
+        <SpotImageUpload targetType="user-spot" targetId={spot.id} />
+      </section>
+    </>
+  );
 }
 
 export function UserSpotFormPage({ mode, spotId }: UserSpotFormPageProps) {

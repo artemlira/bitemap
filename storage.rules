@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isImageUnderFiveMb() {
+      return request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    function userSpot(spotId) {
+      return firestore.get(/databases/(default)/documents/user-spots/$(spotId));
+    }
+
+    function canReadUserSpotImage(spotId) {
+      return userSpot(spotId).data.visibility == 'published'
+        || (isSignedIn() && userSpot(spotId).data.ownerId == request.auth.uid);
+    }
+
+    function canWriteUserSpotImage(spotId, userId) {
+      return isSignedIn()
+        && request.auth.uid == userId
+        && (userSpot(spotId).data.visibility == 'published'
+          || userSpot(spotId).data.ownerId == request.auth.uid)
+        && isImageUnderFiveMb();
+    }
+
+    match /spot-images/catalog/{spotId}/{userId}/{imageId} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.auth.uid == userId && isImageUnderFiveMb();
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /spot-images/user-spot/{spotId}/{userId}/{imageId} {
+      allow read: if canReadUserSpotImage(spotId);
+      allow create: if canWriteUserSpotImage(spotId, userId);
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}

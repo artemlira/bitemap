@@ -5,6 +5,24 @@ import type { UserSpotFormValues } from "@/entities/user-spot";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 
 function toSpotPayload(values: UserSpotFormValues) {
+  const englishTranslation = {
+    ...(values.accessEn.trim() ? { access: values.accessEn.trim() } : {}),
+    ...(values.descriptionEn.trim() ? { description: values.descriptionEn.trim() } : {}),
+    ...(values.fishEn
+      .split(",")
+      .map((fish) => fish.trim())
+      .filter(Boolean).length > 0
+      ? {
+          fish: values.fishEn
+            .split(",")
+            .map((fish) => fish.trim())
+            .filter(Boolean),
+        }
+      : {}),
+    ...(values.nameEn.trim() ? { name: values.nameEn.trim() } : {}),
+    ...(values.waterTypeEn.trim() ? { waterType: values.waterTypeEn.trim() } : {}),
+  };
+
   return {
     access: values.access,
     description: values.description.trim(),
@@ -22,6 +40,7 @@ function toSpotPayload(values: UserSpotFormValues) {
     tone: values.tone,
     visibility: values.visibility,
     waterType: values.waterType.trim(),
+    translations: Object.keys(englishTranslation).length > 0 ? { en: englishTranslation } : {},
   };
 }
 

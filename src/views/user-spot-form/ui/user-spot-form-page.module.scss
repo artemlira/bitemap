@@ -82,6 +82,19 @@
   box-shadow: var(--shadow-soft);
 }
 
+.gallery {
+  display: grid;
+  gap: $space-24;
+  margin-top: $space-48;
+}
+
+.gallery h3 {
+  margin-top: $space-8;
+  color: var(--color-ink);
+  font-size: 1.75rem;
+  letter-spacing: -0.06em;
+}
+
 .state {
   display: grid;
   justify-items: start;

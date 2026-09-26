@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
 import { SpotFilterBar, useSpotFilters, type SpotFilters } from "@/features/filter-spots";
 import { SiteHeader } from "@/widgets/site-header";
@@ -10,6 +11,7 @@ type SpotsPageProps = {
 };
 
 export function SpotsPage({ initialFilters }: SpotsPageProps) {
+  const t = useTranslations("spots");
   const {
     filters,
     filteredSpots,
@@ -24,23 +26,20 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
       <section className={styles.hero}>
         <SiteHeader />
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>Каталог водойм</p>
-          <h1>Місця, куди хочеться вирушити ще до світанку.</h1>
-          <p>
-            Знаходь локації за регіоном, типом водойми або рибою. Карта, погода й відгуки
-            спільноти з’являться після підключення бекенду.
-          </p>
+          <p className={styles.eyebrow}>{t("catalog")}</p>
+          <h1>{t("title")}</h1>
+          <p>{t("lead")}</p>
         </div>
       </section>
 
       <section className={styles.catalog} aria-labelledby="spots-title">
         <div className={styles.catalogHeading}>
           <div>
-            <p className={styles.sectionLabel}>Обери напрямок</p>
-            <h2 id="spots-title">Усі водойми</h2>
+            <p className={styles.sectionLabel}>{t("direction")}</p>
+            <h2 id="spots-title">{t("all")}</h2>
           </div>
           <p className={styles.counter} aria-live="polite">
-            Локацій: {filteredSpots.length}
+            {t("count", { count: filteredSpots.length })}
           </p>
         </div>
 
@@ -60,10 +59,10 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
           </div>
         ) : (
           <div className={styles.empty}>
-            <h3>Нічого не знайшли</h3>
-            <p>Спробуй інше поєднання фільтрів або скинь поточний вибір.</p>
+            <h3>{t("noResults")}</h3>
+            <p>{t("noResultsText")}</p>
             <button type="button" onClick={resetFilters}>
-              Скинути фільтри
+              {t("resetFilters")}
             </button>
           </div>
         )}

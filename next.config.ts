@@ -2,7 +2,14 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        hostname: "firebasestorage.googleapis.com",
+        protocol: "https",
+      },
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");

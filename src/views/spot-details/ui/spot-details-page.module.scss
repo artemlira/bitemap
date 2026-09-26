@@ -147,6 +147,12 @@
   box-shadow: var(--shadow-soft);
 }
 
+.gallery {
+  display: grid;
+  gap: $space-24;
+  margin-top: clamp($space-64, 9vw, 8rem);
+}
+
 .facts div {
   padding: $space-24;
 }

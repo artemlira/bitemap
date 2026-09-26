@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import type { FishingSpot } from "@/entities/fishing-spot";
+import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { useRouter } from "@/shared/lib/i18n";
+import { useLocale } from "next-intl";
 import type {
   SpotFilterName,
   SpotFilterOptions,
@@ -19,11 +20,11 @@ function uniqueSorted(values: Iterable<string>) {
   return [...new Set(values)].sort((first, second) => first.localeCompare(second, "uk"));
 }
 
-function getFilterOptions(spots: readonly FishingSpot[]): SpotFilterOptions {
+function getFilterOptions(spots: readonly FishingSpot[], locale: string): SpotFilterOptions {
   return {
-    region: uniqueSorted(spots.map((spot) => spot.region)),
-    waterType: uniqueSorted(spots.map((spot) => spot.waterType)),
-    fish: uniqueSorted(spots.flatMap((spot) => spot.fish)),
+    region: uniqueSorted(spots.map((spot) => getFishingSpotText(spot, "region", locale))),
+    waterType: uniqueSorted(spots.map((spot) => getFishingSpotText(spot, "waterType", locale))),
+    fish: uniqueSorted(spots.flatMap((spot) => getFishingSpotFish(spot, locale))),
   };
 }
 
@@ -60,9 +61,10 @@ export function useSpotFilters(
   spots: readonly FishingSpot[],
   initialFilterValues: SpotFilters = initialFilters,
 ) {
+  const locale = useLocale();
   const router = useRouter();
 
-  const options = useMemo(() => getFilterOptions(spots), [spots]);
+  const options = useMemo(() => getFilterOptions(spots, locale), [locale, spots]);
   const [filters, setFilters] = useState<SpotFilters>(() =>
     normalizeFilters(initialFilterValues, options),
   );
@@ -71,11 +73,11 @@ export function useSpotFilters(
     () =>
       spots.filter(
         (spot) =>
-          (filters.region === "" || spot.region === filters.region) &&
-          (filters.waterType === "" || spot.waterType === filters.waterType) &&
-          (filters.fish === "" || spot.fish.includes(filters.fish)),
+          (filters.region === "" || getFishingSpotText(spot, "region", locale) === filters.region) &&
+          (filters.waterType === "" || getFishingSpotText(spot, "waterType", locale) === filters.waterType) &&
+          (filters.fish === "" || getFishingSpotFish(spot, locale).includes(filters.fish)),
       ),
-    [filters, spots],
+    [filters, locale, spots],
   );
 
   const updateFilters = useCallback(

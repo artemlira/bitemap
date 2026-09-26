@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { SpotFilterName, SpotFilterOptions, SpotFilters } from "../model/types";
 import styles from "./spot-filter-bar.module.scss";
 
@@ -11,17 +12,6 @@ type SpotFilterBarProps = {
   onReset: () => void;
 };
 
-const filterFields: ReadonlyArray<{
-  id: string;
-  label: string;
-  name: SpotFilterName;
-  placeholder: string;
-}> = [
-  { id: "spot-filter-region", label: "Регіон", name: "region", placeholder: "Усі регіони" },
-  { id: "spot-filter-water-type", label: "Тип водойми", name: "waterType", placeholder: "Усі типи" },
-  { id: "spot-filter-fish", label: "Риба", name: "fish", placeholder: "Усі види" },
-];
-
 export function SpotFilterBar({
   filters,
   hasActiveFilters,
@@ -29,8 +19,20 @@ export function SpotFilterBar({
   onChange,
   onReset,
 }: SpotFilterBarProps) {
+  const t = useTranslations("spots");
+  const filterFields: ReadonlyArray<{
+    id: string;
+    label: string;
+    name: SpotFilterName;
+    placeholder: string;
+  }> = [
+    { id: "spot-filter-region", label: t("region"), name: "region", placeholder: t("allRegions") },
+    { id: "spot-filter-water-type", label: t("waterType"), name: "waterType", placeholder: t("allWaterTypes") },
+    { id: "spot-filter-fish", label: t("fish"), name: "fish", placeholder: t("allFish") },
+  ];
+
   return (
-    <div className={styles.filters} role="group" aria-label="Фільтри каталогу водойм">
+    <div className={styles.filters} role="group" aria-label={t("filterGroup")}>
       {filterFields.map((field) => (
         <label className={styles.field} htmlFor={field.id} key={field.name}>
           <span>{field.label}</span>
@@ -51,7 +53,7 @@ export function SpotFilterBar({
       ))}
 
       <button className={styles.reset} type="button" onClick={onReset} disabled={!hasActiveFilters}>
-        Скинути
+        {t("reset")}
       </button>
     </div>
   );

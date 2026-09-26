@@ -1,0 +1,35 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-16;
+}
+
+.item {
+  overflow: hidden;
+  margin: 0;
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+}
+
+.image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+
+.image img {
+  object-fit: cover;
+}
+
+.item figcaption,
+.empty,
+.error {
+  padding: $space-12;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.error {
+  color: #b42e1e;
+}

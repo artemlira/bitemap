@@ -60,6 +60,26 @@
   font-weight: 650;
 }
 
+.translationFields {
+  display: grid;
+  gap: $space-20;
+  padding: $space-24;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+}
+
+.translationFields legend {
+  padding-inline: $space-8;
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.translationFields legend span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;

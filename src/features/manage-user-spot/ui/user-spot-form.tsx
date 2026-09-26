@@ -29,6 +29,11 @@ const defaultValues: UserSpotFormValues = {
   tone: "lagoon",
   visibility: "private",
   waterType: "",
+  accessEn: "",
+  descriptionEn: "",
+  fishEn: "",
+  nameEn: "",
+  waterTypeEn: "",
 };
 
 const tones = [
@@ -283,6 +288,32 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         />
         {errors.description ? <small id="user-spot-description-error">{errors.description}</small> : null}
       </label>
+
+      <fieldset className={styles.translationFields}>
+        <legend>English version <span>(optional — Ukrainian text will be shown if it is empty)</span></legend>
+        <div className={styles.grid}>
+          <label className={styles.field} htmlFor="user-spot-name-en">
+            <span>Water body name</span>
+            <input id="user-spot-name-en" value={values.nameEn} onChange={(event) => updateValue("nameEn", event.target.value)} />
+          </label>
+          <label className={styles.field} htmlFor="user-spot-water-type-en">
+            <span>Water body type</span>
+            <input id="user-spot-water-type-en" value={values.waterTypeEn} onChange={(event) => updateValue("waterTypeEn", event.target.value)} />
+          </label>
+          <label className={styles.field} htmlFor="user-spot-access-en">
+            <span>Access</span>
+            <input id="user-spot-access-en" value={values.accessEn} onChange={(event) => updateValue("accessEn", event.target.value)} />
+          </label>
+          <label className={styles.field} htmlFor="user-spot-fish-en">
+            <span>Fish</span>
+            <input id="user-spot-fish-en" placeholder="Pike, perch, carp" value={values.fishEn} onChange={(event) => updateValue("fishEn", event.target.value)} />
+          </label>
+        </div>
+        <label className={styles.field} htmlFor="user-spot-description-en">
+          <span>Short description</span>
+          <textarea id="user-spot-description-en" rows={5} value={values.descriptionEn} onChange={(event) => updateValue("descriptionEn", event.target.value)} />
+        </label>
+      </fieldset>
 
       {submissionError ? <p className={styles.error} role="alert">{submissionError}</p> : null}
 

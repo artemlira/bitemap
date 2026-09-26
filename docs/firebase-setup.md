@@ -17,3 +17,15 @@
 
 Firebase web configuration є клієнтською конфігурацією; приватні ключі
 сервісного акаунта сюди не додавай.
+
+## Cloud Storage для фотографій
+
+Щоб завантажувати фото водойм, у Firebase Console відкрий **Storage**, створи
+default bucket і застосуй правила з [`storage.rules`](../storage.rules). Значення
+`storageBucket` з Firebase configuration має бути в `.env.local` як
+`NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`.
+
+У кожної фотографії є український підпис і необов’язковий англійський. Якщо
+англійський не вказано, англомовний інтерфейс показує український. Для нових
+Firebase-проєктів Cloud Storage потребує тариф Blaze; зміну тарифу виконуй лише
+після того, як усвідомлено підтвердиш білінг.

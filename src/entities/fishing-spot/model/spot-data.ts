@@ -1,6 +1,6 @@
-import type { FishingSpot } from "./types";
+import type { FishingSpot, FishingSpotEnglishTranslation } from "./types";
 
-export const fishingSpots: readonly FishingSpot[] = [
+const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   {
     id: "blue-lake",
     slug: "blue-lake",
@@ -90,6 +90,78 @@ export const fishingSpots: readonly FishingSpot[] = [
     tone: "lagoon",
   },
 ];
+
+const englishTranslations: Record<string, FishingSpotEnglishTranslation> = {
+  "blue-lake": {
+    access: "Free access",
+    description: "A quiet lake for early morning float and spinning fishing.",
+    fish: ["Carp", "Pike", "Perch"],
+    name: "Blue Lake",
+    region: "Kyiv Oblast",
+    waterType: "Lake",
+  },
+  "dnister-bays": {
+    access: "Free access",
+    description: "A place for boat fishing with deep drop-offs and quiet reaches.",
+    fish: ["Zander", "Bream", "Catfish"],
+    name: "Dniester Bays",
+    region: "Odesa Oblast",
+    waterType: "River bay",
+  },
+  "vorskla-river": {
+    access: "Free access",
+    description: "Clean current, riffles and willow shade for an unhurried fishing trip.",
+    fish: ["Chub", "Perch", "Pike"],
+    name: "Vorskla River",
+    region: "Poltava Oblast",
+    waterType: "River",
+  },
+  "svitiaz-lake": {
+    access: "Free access",
+    description: "A large clear lake for summer trips, shore fishing and recreation.",
+    fish: ["Perch", "Bream", "Eel"],
+    name: "Svitiaz Lake",
+    region: "Volyn Oblast",
+    waterType: "Lake",
+  },
+  "kremenchuk-reservoir": {
+    access: "Free access",
+    description: "Open reaches and depth for anglers planning a full day on the water.",
+    fish: ["Zander", "Roach", "Catfish"],
+    name: "Kremenchuk Reservoir",
+    region: "Cherkasy Oblast",
+    waterType: "Reservoir",
+  },
+  "ros-river": {
+    access: "Free access",
+    description: "Small calm stretches near the city for a short evening fishing trip.",
+    fish: ["Crucian carp", "Roach", "Perch"],
+    name: "Ros River",
+    region: "Kyiv Oblast",
+    waterType: "River",
+  },
+  "desna-backwaters": {
+    access: "Free access",
+    description: "Calm overgrown banks and shallows that are especially inviting at dawn.",
+    fish: ["Tench", "Crucian carp", "Pike"],
+    name: "Desna Backwaters",
+    region: "Chernihiv Oblast",
+    waterType: "Oxbow lake",
+  },
+  "synevyr-lake": {
+    access: "Check the rules",
+    description: "A mountain location for planning a trip and exploring Carpathian nature.",
+    fish: ["Trout", "Perch"],
+    name: "Synevyr Lake",
+    region: "Zakarpattia Oblast",
+    waterType: "Mountain lake",
+  },
+};
+
+export const fishingSpots: readonly FishingSpot[] = fishingSpotRecords.map((spot) => ({
+  ...spot,
+  translations: { en: englishTranslations[spot.id] },
+}));
 
 export const featuredFishingSpots = fishingSpots.slice(0, 3);
 

@@ -14,6 +14,23 @@ service cloud.firestore {
       return resource.data.visibility == "published";
     }
 
+    function userSpot(spotId) {
+      return get(/databases/$(database)/documents/user-spots/$(spotId));
+    }
+
+    function canContributeToSpot(targetType, targetId) {
+      return targetType == "catalog"
+        || (targetType == "user-spot"
+          && (userSpot(targetId).data.visibility == "published"
+            || isOwner(userSpot(targetId).data.ownerId)));
+    }
+
+    function canReadSpotImages(targetType, targetId, ownerId) {
+      return isOwner(ownerId)
+        || targetType == "catalog"
+        || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;
@@ -33,6 +50,21 @@ service cloud.firestore {
         && request.resource.data.ownerId == resource.data.ownerId;
       allow delete: if isSignedIn()
         && resource.data.ownerId == request.auth.uid;
+    }
+
+    match /spot-images/{imageId} {
+      allow get, list: if canReadSpotImages(
+        resource.data.targetType,
+        resource.data.targetId,
+        resource.data.ownerId,
+      );
+      allow create: if isSignedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && canContributeToSpot(
+          request.resource.data.targetType,
+          request.resource.data.targetId,
+        );
+      allow delete: if isOwner(resource.data.ownerId);
     }
   }
 }

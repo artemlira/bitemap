@@ -1,6 +1,14 @@
 export type UserSpotTone = "lagoon" | "reeds" | "river" | "sunset";
 export type UserSpotVisibility = "private" | "published";
 
+export type UserSpotEnglishTranslation = Partial<{
+  access: string;
+  description: string;
+  fish: string[];
+  name: string;
+  waterType: string;
+}>;
+
 export type UserSpot = {
   access: string;
   description: string;
@@ -17,6 +25,9 @@ export type UserSpot = {
   tone: UserSpotTone;
   visibility: UserSpotVisibility;
   waterType: string;
+  translations?: {
+    en?: UserSpotEnglishTranslation;
+  };
 };
 
 export type UserSpotFormValues = {
@@ -33,4 +44,9 @@ export type UserSpotFormValues = {
   tone: UserSpotTone;
   visibility: UserSpotVisibility;
   waterType: string;
+  accessEn: string;
+  descriptionEn: string;
+  fishEn: string;
+  nameEn: string;
+  waterTypeEn: string;
 };

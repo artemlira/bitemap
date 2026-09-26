@@ -1,5 +1,9 @@
+"use client";
+
 import { Link } from "@/shared/lib/i18n";
 import type { ReactNode } from "react";
+import { useLocale } from "next-intl";
+import { getUserSpotFish, getUserSpotText } from "../model/localization";
 import type { UserSpot } from "../model/types";
 import styles from "./user-spot-card.module.scss";
 
@@ -16,6 +20,7 @@ export function UserSpotCard({
   href,
   spot,
 }: UserSpotCardProps) {
+  const locale = useLocale();
   const destination = href ?? `/my-spots/${spot.id}/edit`;
 
   return (
@@ -26,12 +31,12 @@ export function UserSpotCard({
       </div>
       <div className={styles.content}>
         <p className={styles.region}>{spot.settlement ? `${spot.region} · ${spot.settlement}` : spot.region}</p>
-        <h2>{spot.name}</h2>
+        <h2>{getUserSpotText(spot, "name", locale)}</h2>
         <p className={styles.visibility}>{spot.visibility === "published" ? "Опубліковано для спільноти" : "Приватна водойма"}</p>
-        <p className={styles.description}>{spot.description}</p>
-        <p className={styles.fish}>{spot.fish.join(" · ")}</p>
+        <p className={styles.description}>{getUserSpotText(spot, "description", locale)}</p>
+        <p className={styles.fish}>{getUserSpotFish(spot, locale).join(" · ")}</p>
         <div className={styles.footer}>
-          <span>{spot.access}</span>
+          <span>{getUserSpotText(spot, "access", locale)}</span>
           <div className={styles.actions}>
             {footerActions}
             <Link href={destination}>{actionLabel}</Link>

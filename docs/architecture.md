@@ -64,6 +64,10 @@ src/
 │   └── share-user-spot/
 │       ├── ui/
 │       └── index.ts
+│   └── upload-spot-image/
+│       ├── api/
+│       ├── ui/
+│       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
 │   ├── fishing-spot/
 │       ├── model/
@@ -74,6 +78,10 @@ src/
 │       ├── model/
 │       └── index.ts
 │   └── user-spot/
+│       ├── model/
+│       ├── ui/
+│       └── index.ts
+│   └── spot-image/
 │       ├── model/
 │       ├── ui/
 │       └── index.ts
@@ -109,7 +117,9 @@ src/
 `shared/api/firebase`. `features/share-user-spot` відкриває системне поширення
 або копіює публічне посилання на опубліковану водойму. `views/community` та
 `views/community-spot-details` відображають тільки записи з видимістю
-`published`.
+`published`. `entities/spot-image` тримає галереї окремо від карток водойм, а
+`features/upload-spot-image` завантажує файл у Cloud Storage і створює його
+метадані в Firestore.
 
 ## Правила
 
