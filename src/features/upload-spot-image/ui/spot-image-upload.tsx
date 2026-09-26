@@ -17,8 +17,10 @@ export function SpotImageUpload({ targetId, targetType }: SpotImageUploadProps) 
   const [captionUk, setCaptionUk] = useState("");
   const [error, setError] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState("");
+  const formId = `spot-image-upload-${targetType}-${targetId}`;
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     setFile(event.target.files?.[0] ?? null);
@@ -57,24 +59,37 @@ export function SpotImageUpload({ targetId, targetType }: SpotImageUploadProps) 
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <h3>Додати фотографію</h3>
-      <p>До 5 МБ. Український підпис є основним, англійський — необов’язковий.</p>
-      <label>
-        <span>Зображення</span>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-      </label>
-      <label>
-        <span>Підпис українською</span>
-        <input value={captionUk} onChange={(event) => setCaptionUk(event.target.value)} />
-      </label>
-      <label>
-        <span>Caption in English</span>
-        <input value={captionEn} onChange={(event) => setCaptionEn(event.target.value)} />
-      </label>
-      {error ? <p className={styles.error} role="alert">{error}</p> : null}
-      {success ? <p className={styles.success} role="status">{success}</p> : null}
-      <button type="submit" disabled={isUploading}>{isUploading ? "Завантажуємо…" : "Додати фото"}</button>
-    </form>
+    <section className={styles.disclosure}>
+      <button
+        aria-controls={formId}
+        aria-expanded={isOpen}
+        className={styles.trigger}
+        onClick={() => setIsOpen((currentValue) => !currentValue)}
+        type="button"
+      >
+        {isOpen ? "Сховати форму" : "Додати фото"}
+      </button>
+      <div hidden={!isOpen} id={formId}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <h3>Додати фотографію</h3>
+          <p>До 5 МБ. Український підпис є основним, англійський — необов’язковий.</p>
+          <label>
+            <span>Зображення</span>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+          </label>
+          <label>
+            <span>Підпис українською</span>
+            <input value={captionUk} onChange={(event) => setCaptionUk(event.target.value)} />
+          </label>
+          <label>
+            <span>Caption in English</span>
+            <input value={captionEn} onChange={(event) => setCaptionEn(event.target.value)} />
+          </label>
+          {error ? <p className={styles.error} role="alert">{error}</p> : null}
+          {success ? <p className={styles.success} role="status">{success}</p> : null}
+          <button type="submit" disabled={isUploading}>{isUploading ? "Завантажуємо…" : "Додати фото"}</button>
+        </form>
+      </div>
+    </section>
   );
 }

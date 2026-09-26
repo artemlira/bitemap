@@ -74,7 +74,26 @@ function getResponseError(value: unknown, fallback: string) {
   }
 
   const error = (value as { error?: unknown }).error;
-  return typeof error === "string" ? error : fallback;
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (!error || typeof error !== "object" || !("message" in error)) {
+    return fallback;
+  }
+
+  const message = (error as { message?: unknown }).message;
+
+  if (typeof message !== "string") {
+    return fallback;
+  }
+
+  if (/api key|signature|cloud name/i.test(message)) {
+    return "Cloudinary відхилив налаштування. Перевір Cloud name, API Key і API Secret, потім перезапусти сервер.";
+  }
+
+  return `Cloudinary не прийняв файл: ${message}`;
 }
 
 export async function uploadSpotImage({
