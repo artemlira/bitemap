@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import type { UserSpot, UserSpotFormValues } from "@/entities/user-spot";
 import { UserSpotForm, useUserSpot } from "@/features/manage-user-spot";
 import { SiteHeader } from "@/widgets/site-header";

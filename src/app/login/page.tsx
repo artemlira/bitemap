@@ -1,5 +1,5 @@
-import { AuthPage } from "@/views/auth";
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
-  return <AuthPage mode="login" />;
+  redirect("/uk/login");
 }

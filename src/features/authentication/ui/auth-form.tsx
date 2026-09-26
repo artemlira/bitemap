@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import {
   authenticateWithGoogle,
   authenticateWithEmailPassword,
@@ -21,6 +22,7 @@ const emptyValues: AuthFormValues = {
 };
 
 export function AuthForm({ mode }: AuthFormProps) {
+  const t = useTranslations("auth");
   const [values, setValues] = useState<AuthFormValues>(emptyValues);
   const [errors, setErrors] = useState<AuthFormErrors>({});
   const [submissionError, setSubmissionError] = useState("");
@@ -28,7 +30,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [submissionMethod, setSubmissionMethod] = useState<"email" | "google" | null>(null);
 
   const isRegistration = mode === "register";
-  const submitLabel = isRegistration ? "Створити акаунт" : "Увійти";
+  const submitLabel = isRegistration ? t("createAccount") : t("logIn");
   const isSubmitting = submissionMethod !== null;
 
   function updateValue(name: keyof AuthFormValues, value: string) {
@@ -40,7 +42,11 @@ export function AuthForm({ mode }: AuthFormProps) {
     setSubmissionError("");
     setSuccessMessage("");
 
-    const nextErrors = validateAuthForm(mode, values);
+    const nextErrors = validateAuthForm(mode, values, {
+      emailInvalid: t("emailInvalid"),
+      passwordMismatch: t("passwordMismatch"),
+      passwordShort: t("passwordShort"),
+    });
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
@@ -58,8 +64,8 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       setSuccessMessage(
         isRegistration
-          ? `Акаунт ${credential.user.email ?? ""} створено. Тепер ти можеш додавати власні записи.`
-          : `Ти увійшов як ${credential.user.email ?? ""}.`,
+          ? t("accountCreated", { email: credential.user.email ?? "" })
+          : t("signedInAs", { email: credential.user.email ?? "" }),
       );
     } catch (error) {
       setSubmissionError(getAuthErrorMessage(error));
@@ -76,7 +82,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     try {
       const credential = await authenticateWithGoogle();
 
-      setSuccessMessage(`Ти увійшов як ${credential.user.email ?? "користувач"}.`);
+      setSuccessMessage(t("signedInAs", { email: credential.user.email ?? "user" }));
     } catch (error) {
       setSubmissionError(getAuthErrorMessage(error));
     } finally {
@@ -87,7 +93,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <form className={styles.form} noValidate onSubmit={handleSubmit} aria-busy={isSubmitting}>
       <label className={styles.field} htmlFor="auth-email">
-        <span>Електронна пошта</span>
+        <span>{t("email")}</span>
         <input
           id="auth-email"
           type="email"
@@ -105,7 +111,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       </label>
 
       <label className={styles.field} htmlFor="auth-password">
-        <span>Пароль</span>
+        <span>{t("password")}</span>
         <input
           id="auth-password"
           type="password"
@@ -124,7 +130,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       {isRegistration ? (
         <label className={styles.field} htmlFor="auth-confirm-password">
-          <span>Повтори пароль</span>
+          <span>{t("confirmPassword")}</span>
           <input
             id="auth-confirm-password"
             type="password"
@@ -155,10 +161,10 @@ export function AuthForm({ mode }: AuthFormProps) {
       ) : null}
 
       <button type="submit" disabled={isSubmitting}>
-        {submissionMethod === "email" ? "Зачекай…" : submitLabel}
+        {submissionMethod === "email" ? t("wait") : submitLabel}
       </button>
 
-      <p className={styles.divider}>або</p>
+      <p className={styles.divider}>{t("or")}</p>
 
       <button
         className={styles.googleButton}
@@ -167,7 +173,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         onClick={handleGoogleSignIn}
       >
         <span aria-hidden="true">G</span>
-        {submissionMethod === "google" ? "Відкриваємо Google…" : "Продовжити з Google"}
+        {submissionMethod === "google" ? t("openingGoogle") : t("continueWithGoogle")}
       </button>
     </form>
   );

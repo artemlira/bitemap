@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import type { FishingSpot } from "../model/types";
 import styles from "./fishing-spot-card.module.scss";
 

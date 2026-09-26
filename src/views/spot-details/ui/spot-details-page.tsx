@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import type { FishingSpot } from "@/entities/fishing-spot";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SiteHeader } from "@/widgets/site-header";

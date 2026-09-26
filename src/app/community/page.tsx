@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
-import { CommunityPage } from "@/views/community";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "Спільнота — BiteMap", description: "Опубліковані водойми спільноти BiteMap." };
-
-export default function Page() { return <CommunityPage />; }
+export default function Page() {
+  redirect("/uk/community");
+}

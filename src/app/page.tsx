@@ -1,1 +1,5 @@
-export { HomePage as default } from "@/views/home";
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/uk");
+}

@@ -1,0 +1,14 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.button {
+  min-width: 2.5rem;
+  min-height: 2.35rem;
+  padding-inline: $space-8;
+  border: 1px solid rgb(255 253 248 / 42%);
+  border-radius: $radius-full;
+  background: rgb(255 253 248 / 10%);
+  color: #fffdf8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}

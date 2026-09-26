@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/shared/lib/i18n";
 import { AuthForm, type AuthMode } from "@/features/authentication";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./auth-page.module.scss";
@@ -7,27 +8,28 @@ type AuthPageProps = {
   mode: AuthMode;
 };
 
-const contentByMode = {
-  login: {
-    eyebrow: "Повертаєшся до води",
-    title: "Радий бачити знову.",
-    description: "Увійди, щоб зберігати локації й пізніше вести власний щоденник уловів.",
-    secondaryAction: "Створити акаунт",
-    secondaryHref: "/register",
-    secondaryLead: "Ще не маєш акаунта?",
-  },
-  register: {
-    eyebrow: "Почни свою карту",
-    title: "Створи акаунт рибалки.",
-    description: "Зберігай водойми, плануй виїзди й поступово збирай власну історію уловів.",
-    secondaryAction: "Увійти",
-    secondaryHref: "/login",
-    secondaryLead: "Вже маєш акаунт?",
-  },
-} as const;
-
 export function AuthPage({ mode }: AuthPageProps) {
-  const content = contentByMode[mode];
+  const t = useTranslations("auth");
+  const isRegistration = mode === "register";
+  const content = isRegistration
+    ? {
+        description: t("register.description"),
+        eyebrow: t("register.eyebrow"),
+        heading: t("register.heading"),
+        secondaryAction: t("register.secondaryAction"),
+        secondaryHref: "/login",
+        secondaryLead: t("register.secondaryLead"),
+        title: t("register.title"),
+      }
+    : {
+        description: t("login.description"),
+        eyebrow: t("login.eyebrow"),
+        heading: t("login.heading"),
+        secondaryAction: t("login.secondaryAction"),
+        secondaryHref: "/register",
+        secondaryLead: t("login.secondaryLead"),
+        title: t("login.title"),
+      };
 
   return (
     <main className={styles.page}>
@@ -43,8 +45,8 @@ export function AuthPage({ mode }: AuthPageProps) {
       <section className={styles.authSection} aria-labelledby="auth-form-title">
         <div className={styles.formCard}>
           <div className={styles.formHeading}>
-            <p className={styles.sectionLabel}>BiteMap account</p>
-            <h2 id="auth-form-title">{mode === "register" ? "Реєстрація" : "Вхід"}</h2>
+            <p className={styles.sectionLabel}>{t("account")}</p>
+            <h2 id="auth-form-title">{content.heading}</h2>
           </div>
           <AuthForm mode={mode} />
           <p className={styles.secondaryAction}>

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import { useEffect, useState } from "react";
 import { deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import type { FishingSpot } from "@/entities/fishing-spot";

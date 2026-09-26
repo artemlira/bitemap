@@ -9,6 +9,7 @@
 ```text
 src/
 ├── app/                     # конфігурація застосунку та Next.js entry points
+│   ├── [locale]/            # локалізовані App Router-адаптери: /uk/* та /en/*
 │   ├── styles/              # глобальні SCSS-токени, reset і типографіка
 │   ├── layout.tsx
 │   └── page.tsx             # тонкий адаптер маршруту → views/home
@@ -79,11 +80,17 @@ src/
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── api/firebase/
     ├── lib/auth/
+    ├── lib/i18n/             # routing і locale-aware navigation next-intl
     ├── lib/theme/
     │   ├── theme-provider.tsx
     │   └── index.ts
     └── styles/abstracts/    # SCSS-змінні, breakpoints і mixins
 ```
+
+`messages/uk.json` і `messages/en.json` містять тексти інтерфейсу. `src/proxy.ts`
+додає префікс локалі до URL, тому публічні маршрути мають вигляд `/uk/spots` і
+`/en/spots`. Маршрути без префікса зберігаються лише як сумісні редиректи на
+українську версію.
 
 `src/views` — це фізична назва FSD-шару **Pages**. Її використано замість
 `src/pages`, оскільки Next.js сприймає саме `src/pages` як окремий Pages Router,
@@ -118,6 +125,11 @@ src/
 5. Не створюй абстрактні `components`, `hooks`, `utils` або `types` на рівні
    всього проєкту. Визначай конкретну відповідальність і обирай відповідний
    slice та сегмент (`ui`, `model`, `api`, `lib`, `config`).
+6. Тексти інтерфейсу не дублюються між мовами в компонентах: додавай ключі до
+   `messages/uk.json` і `messages/en.json`, а в React використовуй
+   `useTranslations`. Для внутрішньої навігації імпортуй `Link` і `useRouter`
+   з `@/shared/lib/i18n`, а не безпосередньо з Next.js — так URL зберігає
+   поточну локаль.
 
 ## Шаблон нового slice
 

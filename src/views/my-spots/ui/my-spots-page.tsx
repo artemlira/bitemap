@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import { UserSpotCard } from "@/entities/user-spot";
 import { useUserSpots } from "@/features/manage-user-spot";
 import { ShareUserSpotButton } from "@/features/share-user-spot";

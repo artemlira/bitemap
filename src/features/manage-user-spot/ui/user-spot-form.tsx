@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link, useRouter } from "@/shared/lib/i18n";
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import type { UserSpotFormValues } from "@/entities/user-spot";
 import { useAuth } from "@/shared/lib/auth";
 import { createUserSpot, updateUserSpot } from "../api/user-spots";

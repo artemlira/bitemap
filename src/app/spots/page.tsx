@@ -1,8 +1,5 @@
-import { getSpotFiltersFromSearchParams } from "@/features/filter-spots";
-import { SpotsPage } from "@/views/spots";
+import { redirect } from "next/navigation";
 
-export default async function Page(props: PageProps<"/spots">) {
-  const searchParams = await props.searchParams;
-
-  return <SpotsPage initialFilters={getSpotFiltersFromSearchParams(searchParams)} />;
+export default function Page() {
+  redirect("/uk/spots");
 }

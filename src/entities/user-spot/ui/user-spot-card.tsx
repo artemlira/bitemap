@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import type { ReactNode } from "react";
 import type { UserSpot } from "../model/types";
 import styles from "./user-spot-card.module.scss";

@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
-import { MySpotsPage } from "@/views/my-spots";
-
-export const metadata: Metadata = {
-  title: "Мої водойми — BiteMap",
-  description: "Приватні водойми, додані користувачем у BiteMap.",
-};
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <MySpotsPage />;
+  redirect("/uk/my-spots");
 }

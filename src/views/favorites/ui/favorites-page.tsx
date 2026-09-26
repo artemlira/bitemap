@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/shared/lib/i18n";
 import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
 import { useFavoriteSpots } from "@/features/favorite-spot";
 import { SiteHeader } from "@/widgets/site-header";

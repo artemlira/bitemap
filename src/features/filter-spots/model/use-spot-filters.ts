@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type { FishingSpot } from "@/entities/fishing-spot";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/shared/lib/i18n";
 import type {
   SpotFilterName,
   SpotFilterOptions,

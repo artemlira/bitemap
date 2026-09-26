@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "BiteMap — риболовля ближче до природи",
+    "description": "Знаходьте водойми, ведіть щоденник уловів і плануйте риболовлю."
+  },
+  "navigation": {
+    "home": "BiteMap — на головну",
+    "spots": "Водойми",
+    "community": "Спільнота",
+    "howItWorks": "Як це працює",
+    "favorites": "Збережене",
+    "mySpots": "Мої водойми",
+    "logIn": "Увійти",
+    "signOut": "Вийти",
+    "main": "Основна навігація",
+    "enableDarkTheme": "Увімкнути темну тему",
+    "enableLightTheme": "Увімкнути світлу тему"
+  },
+  "languageSwitcher": {
+    "switchTo": "Перемкнути мову на {locale}"
+  },
+  "home": {
+    "eyebrow": "Риболовля ближче до природи",
+    "title": "Знайди своє",
+    "titleAccent": " місце для улову.",
+    "lead": "BiteMap допомагає обрати водойму, перевірити умови та зберегти найкращі моменти риболовлі.",
+    "findSpot": "Знайти водойму",
+    "howItWorks": "Як це працює",
+    "discover": "Відкривай нове",
+    "popular": "Популярні водойми",
+    "spotCount": "3 локації у добірці",
+    "start": "Просто почати",
+    "moreTime": "Більше часу біля води.",
+    "lessSearch": "Менше — на пошук."
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Повертаєшся до води",
+      "title": "Радий бачити знову.",
+      "description": "Увійди, щоб зберігати локації й пізніше вести власний щоденник уловів.",
+      "secondaryAction": "Створити акаунт",
+      "secondaryLead": "Ще не маєш акаунта?",
+      "heading": "Вхід"
+    },
+    "register": {
+      "eyebrow": "Почни свою карту",
+      "title": "Створи акаунт рибалки.",
+      "description": "Зберігай водойми, плануй виїзди й поступово збирай власну історію уловів.",
+      "secondaryAction": "Увійти",
+      "secondaryLead": "Вже маєш акаунт?",
+      "heading": "Реєстрація"
+    },
+    "account": "BiteMap account",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword": "Повтори пароль",
+    "createAccount": "Створити акаунт",
+    "logIn": "Увійти",
+    "wait": "Зачекай…",
+    "or": "або",
+    "continueWithGoogle": "Продовжити з Google",
+    "openingGoogle": "Відкриваємо Google…",
+    "emailInvalid": "Введи коректну електронну пошту.",
+    "passwordShort": "Пароль має містити щонайменше 8 символів.",
+    "passwordMismatch": "Паролі не збігаються.",
+    "accountCreated": "Акаунт {email} створено. Тепер ти можеш додавати власні записи.",
+    "signedInAs": "Ти увійшов як {email}."
+  }
+}

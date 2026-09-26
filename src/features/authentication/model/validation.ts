@@ -8,21 +8,31 @@ export type AuthFormValues = {
 
 export type AuthFormErrors = Partial<Record<keyof AuthFormValues, string>>;
 
+export type AuthValidationMessages = {
+  emailInvalid: string;
+  passwordMismatch: string;
+  passwordShort: string;
+};
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function validateAuthForm(mode: AuthMode, values: AuthFormValues): AuthFormErrors {
+export function validateAuthForm(
+  mode: AuthMode,
+  values: AuthFormValues,
+  messages: AuthValidationMessages,
+): AuthFormErrors {
   const errors: AuthFormErrors = {};
 
   if (!emailPattern.test(values.email.trim())) {
-    errors.email = "Введи коректну електронну пошту.";
+    errors.email = messages.emailInvalid;
   }
 
   if (values.password.length < 8) {
-    errors.password = "Пароль має містити щонайменше 8 символів.";
+    errors.password = messages.passwordShort;
   }
 
   if (mode === "register" && values.password !== values.confirmPassword) {
-    errors.confirmPassword = "Паролі не збігаються.";
+    errors.confirmPassword = messages.passwordMismatch;
   }
 
   return errors;

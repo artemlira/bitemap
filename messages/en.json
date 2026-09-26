@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "BiteMap — fishing closer to nature",
+    "description": "Find fishing spots, keep a catch journal and plan your next trip."
+  },
+  "navigation": {
+    "home": "BiteMap — home",
+    "spots": "Fishing spots",
+    "community": "Community",
+    "howItWorks": "How it works",
+    "favorites": "Saved",
+    "mySpots": "My spots",
+    "logIn": "Log in",
+    "signOut": "Sign out",
+    "main": "Main navigation",
+    "enableDarkTheme": "Enable dark theme",
+    "enableLightTheme": "Enable light theme"
+  },
+  "languageSwitcher": {
+    "switchTo": "Switch language to {locale}"
+  },
+  "home": {
+    "eyebrow": "Fishing closer to nature",
+    "title": "Find your",
+    "titleAccent": " next fishing spot.",
+    "lead": "BiteMap helps you choose a spot, check the conditions and save your best fishing moments.",
+    "findSpot": "Find a spot",
+    "howItWorks": "How it works",
+    "discover": "Discover something new",
+    "popular": "Popular fishing spots",
+    "spotCount": "3 featured places",
+    "start": "Easy to start",
+    "moreTime": "More time by the water.",
+    "lessSearch": "Less time searching."
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Back by the water",
+      "title": "Good to see you again.",
+      "description": "Log in to save locations and soon keep your own catch journal.",
+      "secondaryAction": "Create an account",
+      "secondaryLead": "Don't have an account yet?",
+      "heading": "Log in"
+    },
+    "register": {
+      "eyebrow": "Start your own map",
+      "title": "Create an angler account.",
+      "description": "Save fishing spots, plan trips and gradually build your personal catch history.",
+      "secondaryAction": "Log in",
+      "secondaryLead": "Already have an account?",
+      "heading": "Create account"
+    },
+    "account": "BiteMap account",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "createAccount": "Create account",
+    "logIn": "Log in",
+    "wait": "Please wait…",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "openingGoogle": "Opening Google…",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordShort": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "accountCreated": "Account {email} has been created. You can now add your own locations.",
+    "signedInAs": "You are signed in as {email}."
+  }
+}
