@@ -93,7 +93,11 @@ function getResponseError(value: unknown, fallback: string) {
     return "Cloudinary відхилив налаштування. Перевір Cloud name, API Key і API Secret, потім перезапусти сервер.";
   }
 
-  return `Cloudinary не прийняв файл: ${message}`;
+  if (/missing permissions|forbidden/i.test(message)) {
+    return "Cloudinary API Key не має дозволу створювати файли. Створи або обери ключ із роллю Master Admin у Settings → API Keys, онови .env.local і перезапусти сервер.";
+  }
+
+  return "Cloudinary не прийняв цей файл. Спробуй інше зображення JPG, PNG або WebP до 5 МБ.";
 }
 
 export async function uploadSpotImage({
