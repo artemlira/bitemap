@@ -133,12 +133,21 @@
     "formLead": "Briefly share the conditions and your impression to help others plan their fishing trip.",
     "tripDate": "Trip date",
     "rating": "Overall rating",
+    "activity": "Fish activity",
+    "activityOption": {
+      "excellent": "High",
+      "good": "Good",
+      "fair": "Moderate",
+      "low": "Low"
+    },
     "ratingOption": "{rating} out of 5",
     "ratingValue": "Rating: {rating} out of 5",
     "fish": "What you caught",
     "fishPlaceholder": "Carp, pike, perch",
     "method": "What worked",
     "methodPlaceholder": "For example, feeder and sweetcorn",
+    "bait": "Bait or lure",
+    "baitPlaceholder": "For example, sweetcorn, bloodworm or a wobbler",
     "impression": "Experience and conditions",
     "translationLegend": "English version",
     "translationLead": "Optional — Ukrainian text will appear in every language when these fields are empty.",
@@ -146,6 +155,8 @@
     "fishPlaceholderEn": "Carp, pike, perch",
     "methodEn": "Method in English",
     "methodPlaceholderEn": "For example, feeder and sweetcorn",
+    "baitEn": "Bait or lure in English",
+    "baitPlaceholderEn": "For example, sweetcorn, bloodworm or a wobbler",
     "impressionEn": "Experience in English",
     "submit": "Publish report",
     "submitting": "Publishing…",
@@ -155,7 +166,8 @@
     "authLoading": "Checking your account…",
     "defaultAuthor": "BiteMap angler",
     "noFish": "No catch specified",
-    "noMethod": "Not specified"
+    "noMethod": "Not specified",
+    "noBait": "Not specified"
   },
   "favorite": {
     "loadError": "Could not load the saved status.",
@@ -218,6 +230,15 @@
     "emptyTitle": "The first stories will appear here.",
     "emptyText": "Publish one of your spots in My spots so others can use it too.",
     "loadError": "Could not load community fishing spots."
+  },
+  "communityReports": {
+    "eyebrow": "New stories",
+    "title": "Latest angler reports",
+    "lead": "Real experience from BiteMap fishing spots: what worked and how active the fish were.",
+    "listLabel": "Latest community reports",
+    "loading": "Loading the latest reports…",
+    "error": "Could not load the latest reports.",
+    "empty": "There are no public reports yet. Share the first experience from a fishing spot."
   },
   "favorites": {
     "eyebrow": "Your collection",

@@ -1,0 +1,14 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.section { margin-top: clamp($space-64, 9vw, 8rem); }
+.heading { display: flex; align-items: end; justify-content: space-between; gap: $space-24; }
+.heading > div > p { color: var(--color-sun); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.heading h2 { margin-top: $space-12; color: var(--color-ink); font-size: clamp(2.3rem, 5vw, 4.5rem); letter-spacing: -0.075em; line-height: 0.95; }
+.heading > p { max-width: 33rem; color: var(--color-muted); }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: $space-16; margin: $space-32 0 0; padding: 0; list-style: none; }
+.state, .error { margin-top: $space-32; padding: $space-24; border-radius: $radius-lg; }
+.state { border: 1px dashed var(--color-line); background: var(--color-surface); color: var(--color-muted); }
+.error { background: rgb(180 46 30 / 10%); color: #b42e1e; }
+
+@media (max-width: 768px) { .list { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .heading { align-items: flex-start; flex-direction: column; } }

@@ -12,7 +12,7 @@ export function getFishingReportFish(report: FishingReport, locale: string) {
   return report.fish;
 }
 
-export function getFishingReportText(report: FishingReport, field: "impression" | "method", locale: string) {
+export function getFishingReportText(report: FishingReport, field: "bait" | "impression" | "method", locale: string) {
   if (locale === "en") {
     const translatedValue = report.translations?.en?.[field];
 

@@ -75,7 +75,7 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
           <SpotImageGallery targetType="user-spot" targetId={spot.id} />
           <SpotImageUpload targetType="user-spot" targetId={spot.id} />
         </section>
-        <SpotReports targetType="user-spot" targetId={spot.id} />
+        <SpotReports isPublic targetType="user-spot" targetId={spot.id} />
       </section>
     </main>
   );

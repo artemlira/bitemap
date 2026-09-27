@@ -3,6 +3,7 @@
 import { UserSpotCard, usePublishedUserSpots } from "@/entities/user-spot";
 import { useTranslations } from "next-intl";
 import { SiteHeader } from "@/widgets/site-header";
+import { CommunityReports } from "@/widgets/community-reports";
 import styles from "./community-page.module.scss";
 
 export function CommunityPage() {
@@ -46,6 +47,8 @@ export function CommunityPage() {
             <p>{t("emptyText")}</p>
           </div>
         )}
+
+        <CommunityReports spots={spots} />
       </section>
     </main>
   );

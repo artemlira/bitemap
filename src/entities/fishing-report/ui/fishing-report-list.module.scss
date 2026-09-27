@@ -54,6 +54,13 @@
   color: var(--color-muted);
 }
 
+.targetLink {
+  align-self: start;
+  color: var(--color-water);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
 .facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -69,6 +76,25 @@
   color: var(--color-water);
   font-size: 0.9rem;
   font-weight: 750;
+}
+
+.activity {
+  display: inline-flex;
+  padding: $space-8 $space-12;
+  border-radius: $radius-full;
+  background: color-mix(in srgb, var(--color-water) 10%, transparent);
+  color: var(--color-water);
+  font-size: 0.76rem;
+}
+
+.activity[data-level="excellent"] {
+  background: color-mix(in srgb, var(--color-forest) 18%, transparent);
+  color: var(--color-forest);
+}
+
+.activity[data-level="low"] {
+  background: color-mix(in srgb, var(--color-sun) 18%, transparent);
+  color: var(--color-focus);
 }
 
 .error {

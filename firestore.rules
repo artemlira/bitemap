@@ -38,9 +38,8 @@ service cloud.firestore {
             || isOwner(userSpot(targetId).data.ownerId)));
     }
 
-    function canReadReport(targetType, targetId, authorId) {
-      return isOwner(authorId)
-        || targetType == "catalog"
+    function canPublishReport(targetType, targetId) {
+      return targetType == "catalog"
         || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
     }
 
@@ -85,14 +84,15 @@ service cloud.firestore {
     }
 
     match /fishing-reports/{reportId} {
-      allow get, list: if canReadReport(
-        resource.data.targetType,
-        resource.data.targetId,
-        resource.data.authorId,
-      );
+      allow get, list: if resource.data.isPublic == true
+        || isOwner(resource.data.authorId);
       allow create: if isSignedIn()
         && request.resource.data.authorId == request.auth.uid
         && canContributeToReport(
+          request.resource.data.targetType,
+          request.resource.data.targetId,
+        )
+        && request.resource.data.isPublic == canPublishReport(
           request.resource.data.targetType,
           request.resource.data.targetId,
         );

@@ -2,12 +2,13 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
-import type { FishingReportTargetType } from "@/entities/fishing-report";
+import type { FishingActivity, FishingReportTargetType } from "@/entities/fishing-report";
 import { useAuth } from "@/shared/lib/auth";
 import { createFishingReport, type FishingReportFormValues } from "../api/create-fishing-report";
 import styles from "./create-fishing-report-form.module.scss";
 
 type CreateFishingReportFormProps = {
+  isPublic: boolean;
   targetId: string;
   targetType: FishingReportTargetType;
 };
@@ -19,6 +20,9 @@ function getLocalDate() {
 }
 
 const initialValues: FishingReportFormValues = {
+  activity: "good",
+  bait: "",
+  baitEn: "",
   fish: "",
   fishEn: "",
   impression: "",
@@ -29,7 +33,7 @@ const initialValues: FishingReportFormValues = {
   tripDate: "",
 };
 
-export function CreateFishingReportForm({ targetId, targetType }: CreateFishingReportFormProps) {
+export function CreateFishingReportForm({ isPublic, targetId, targetType }: CreateFishingReportFormProps) {
   const t = useTranslations("reports");
   const { isLoading: isAuthLoading, user } = useAuth();
   const [error, setError] = useState("");
@@ -60,6 +64,7 @@ export function CreateFishingReportForm({ targetId, targetType }: CreateFishingR
         ...values,
         authorId: user.uid,
         authorName: user.displayName || user.email?.split("@")[0] || t("defaultAuthor"),
+        isPublic,
         targetId,
         targetType,
       });
@@ -106,6 +111,12 @@ export function CreateFishingReportForm({ targetId, targetType }: CreateFishingR
                 {[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{t("ratingOption", { rating })}</option>)}
               </select>
             </label>
+            <label>
+              <span>{t("activity")}</span>
+              <select onChange={(event) => updateValue("activity", event.target.value as FishingActivity)} value={values.activity}>
+                {(["excellent", "good", "fair", "low"] as const).map((activity) => <option key={activity} value={activity}>{t(`activityOption.${activity}`)}</option>)}
+              </select>
+            </label>
           </div>
           <label>
             <span>{t("fish")}</span>
@@ -114,6 +125,10 @@ export function CreateFishingReportForm({ targetId, targetType }: CreateFishingR
           <label>
             <span>{t("method")}</span>
             <input onChange={(event) => updateValue("method", event.target.value)} placeholder={t("methodPlaceholder")} value={values.method} />
+          </label>
+          <label>
+            <span>{t("bait")}</span>
+            <input onChange={(event) => updateValue("bait", event.target.value)} placeholder={t("baitPlaceholder")} value={values.bait} />
           </label>
           <label>
             <span>{t("impression")}</span>
@@ -129,6 +144,10 @@ export function CreateFishingReportForm({ targetId, targetType }: CreateFishingR
             <label>
               <span>{t("methodEn")}</span>
               <input onChange={(event) => updateValue("methodEn", event.target.value)} placeholder={t("methodPlaceholderEn")} value={values.methodEn} />
+            </label>
+            <label>
+              <span>{t("baitEn")}</span>
+              <input onChange={(event) => updateValue("baitEn", event.target.value)} placeholder={t("baitPlaceholderEn")} value={values.baitEn} />
             </label>
             <label>
               <span>{t("impressionEn")}</span>

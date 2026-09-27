@@ -1,10 +1,13 @@
 "use client";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import type { FishingReportTargetType } from "@/entities/fishing-report";
+import type { FishingActivity, FishingReportTargetType } from "@/entities/fishing-report";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 
 export type FishingReportFormValues = {
+  activity: FishingActivity;
+  bait: string;
+  baitEn: string;
   fish: string;
   fishEn: string;
   impression: string;
@@ -18,6 +21,7 @@ export type FishingReportFormValues = {
 type CreateFishingReportParams = FishingReportFormValues & {
   authorId: string;
   authorName: string;
+  isPublic: boolean;
   targetId: string;
   targetType: FishingReportTargetType;
 };
@@ -32,6 +36,10 @@ function toFishList(value: string) {
 export async function createFishingReport({
   authorId,
   authorName,
+  isPublic,
+  activity,
+  bait,
+  baitEn,
   fish,
   fishEn,
   impression,
@@ -45,6 +53,7 @@ export async function createFishingReport({
 }: CreateFishingReportParams) {
   const translatedFish = toFishList(fishEn);
   const englishTranslation = {
+    ...(baitEn.trim() ? { bait: baitEn.trim() } : {}),
     ...(translatedFish.length > 0 ? { fish: translatedFish } : {}),
     ...(impressionEn.trim() ? { impression: impressionEn.trim() } : {}),
     ...(methodEn.trim() ? { method: methodEn.trim() } : {}),
@@ -53,10 +62,13 @@ export async function createFishingReport({
   await addDoc(collection(getFirebaseFirestore(), "fishing-reports"), {
     authorId,
     authorName,
+    activity,
+    bait: bait.trim(),
     createdAt: serverTimestamp(),
     fish: toFishList(fish),
     impression: impression.trim(),
     method: method.trim(),
+    isPublic,
     rating,
     targetId,
     targetType,
