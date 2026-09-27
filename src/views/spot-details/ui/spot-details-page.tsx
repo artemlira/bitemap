@@ -7,6 +7,7 @@ import { SpotLocationPanel } from "@/entities/spot-location";
 import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
+import { SpotReports } from "@/widgets/spot-reports";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./spot-details-page.module.scss";
 
@@ -95,6 +96,8 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <SpotImageGallery targetType="catalog" targetId={spot.id} />
           <SpotImageUpload targetType="catalog" targetId={spot.id} />
         </section>
+
+        <SpotReports targetType="catalog" targetId={spot.id} />
 
         <aside className={styles.note}>
           <p>{t("mvp")}</p>

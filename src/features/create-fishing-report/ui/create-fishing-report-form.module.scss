@@ -1,0 +1,98 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.disclosure {
+  display: grid;
+  justify-items: start;
+  gap: $space-16;
+}
+
+.trigger,
+.form > button {
+  min-height: 3rem;
+  padding-inline: $space-20;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-weight: 800;
+}
+
+.form {
+  display: grid;
+  gap: $space-16;
+  width: min(100%, 52rem);
+  padding: $space-24;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+}
+
+.form h3,
+.form p {
+  margin: 0;
+}
+
+.form > div > p,
+.form fieldset > p {
+  margin-top: $space-8;
+  color: var(--color-muted);
+}
+
+.form label {
+  display: grid;
+  gap: $space-8;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: $space-12;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-16;
+}
+
+.form fieldset {
+  display: grid;
+  gap: $space-16;
+  margin: 0;
+  padding: $space-20;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+}
+
+.form legend {
+  padding-inline: $space-8;
+  color: var(--color-water);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.form > button {
+  justify-self: start;
+}
+
+.error { color: #b42e1e; }
+.success { color: #287a52; }
+.authState { color: var(--color-muted); }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+}

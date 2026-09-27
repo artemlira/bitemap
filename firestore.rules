@@ -31,6 +31,19 @@ service cloud.firestore {
         || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
     }
 
+    function canContributeToReport(targetType, targetId) {
+      return targetType == "catalog"
+        || (targetType == "user-spot"
+          && (userSpot(targetId).data.visibility == "published"
+            || isOwner(userSpot(targetId).data.ownerId)));
+    }
+
+    function canReadReport(targetType, targetId, authorId) {
+      return isOwner(authorId)
+        || targetType == "catalog"
+        || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;
@@ -69,6 +82,20 @@ service cloud.firestore {
         && request.resource.data.targetId == resource.data.targetId
         && request.resource.data.targetType == resource.data.targetType;
       allow delete: if isOwner(resource.data.ownerId);
+    }
+
+    match /fishing-reports/{reportId} {
+      allow get, list: if canReadReport(
+        resource.data.targetType,
+        resource.data.targetId,
+        resource.data.authorId,
+      );
+      allow create: if isSignedIn()
+        && request.resource.data.authorId == request.auth.uid
+        && canContributeToReport(
+          request.resource.data.targetType,
+          request.resource.data.targetId,
+        );
     }
   }
 }

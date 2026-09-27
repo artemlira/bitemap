@@ -7,6 +7,7 @@ import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
+import { SpotReports } from "@/widgets/spot-reports";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./community-spot-details-page.module.scss";
 
@@ -72,6 +73,7 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
           <SpotImageGallery targetType="user-spot" targetId={spot.id} />
           <SpotImageUpload targetType="user-spot" targetId={spot.id} />
         </section>
+        <SpotReports targetType="user-spot" targetId={spot.id} />
       </section>
     </main>
   );
