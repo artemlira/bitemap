@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { Link } from "@/shared/lib/i18n";
 import { getFishingReportFish, getFishingReportText } from "../model/localization";
 import { useFishingReports } from "../model/use-fishing-reports";
@@ -8,17 +9,19 @@ import type { FishingReport, FishingReportTargetType } from "../model/types";
 import styles from "./fishing-report-list.module.scss";
 
 type FishingReportListProps = {
+  renderActions?: (report: FishingReport) => ReactNode;
   targetId: string;
   targetType: FishingReportTargetType;
 };
 
 type FishingReportCardProps = {
+  actions?: ReactNode;
   report: FishingReport;
   showAuthor?: boolean;
   target?: { href: string; label: string };
 };
 
-export function FishingReportCard({ report, showAuthor = true, target }: FishingReportCardProps) {
+export function FishingReportCard({ actions, report, showAuthor = true, target }: FishingReportCardProps) {
   const locale = useLocale();
   const t = useTranslations("reports");
   const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
@@ -41,11 +44,12 @@ export function FishingReportCard({ report, showAuthor = true, target }: Fishing
         <div><dt>{t("bait")}</dt><dd>{getFishingReportText(report, "bait", locale) || t("noBait")}</dd></div>
         <div><dt>{t("activity")}</dt><dd><span className={styles.activity} data-level={activity}>{t(`activityOption.${activity}`)}</span></dd></div>
       </dl>
+      {actions ? <div className={styles.actions}>{actions}</div> : null}
     </article>
   );
 }
 
-export function FishingReportList({ targetId, targetType }: FishingReportListProps) {
+export function FishingReportList({ renderActions, targetId, targetType }: FishingReportListProps) {
   const t = useTranslations("reports");
   const { error, isLoading, reports } = useFishingReports(targetType, targetId);
 
@@ -64,7 +68,7 @@ export function FishingReportList({ targetId, targetType }: FishingReportListPro
   return (
     <ol className={styles.list} aria-label={t("listLabel")}>
       {reports.map((report) => (
-        <li key={report.id}><FishingReportCard report={report} /></li>
+        <li key={report.id}><FishingReportCard actions={renderActions?.(report)} report={report} /></li>
       ))}
     </ol>
   );

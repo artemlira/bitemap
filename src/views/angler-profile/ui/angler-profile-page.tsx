@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FishingReportCard, usePublicFishingReportsByAuthor } from "@/entities/fishing-report";
 import { usePublicUserProfile } from "@/entities/user";
 import { UserSpotCard, usePublishedUserSpotsByOwner } from "@/entities/user-spot";
+import { ManageFishingReportActions } from "@/features/manage-fishing-report";
 import { Link } from "@/shared/lib/i18n";
 import { SiteHeader } from "@/widgets/site-header";
 import { useTranslations } from "next-intl";
@@ -83,7 +84,7 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
         {!areReportsLoading && !reportsError && reports.length === 0 ? <p className={styles.stateText}>{t("reportsEmpty")}</p> : null}
         {reports.length > 0 ? (
           <ol className={styles.reportList} aria-label={t("reportsList")}>
-            {reports.map((report) => <li key={report.id}><FishingReportCard report={report} showAuthor={false} /></li>)}
+            {reports.map((report) => <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} report={report} showAuthor={false} /></li>)}
           </ol>
         ) : null}
       </section>

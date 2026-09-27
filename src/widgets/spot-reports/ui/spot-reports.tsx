@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { FishingReportList, type FishingReportTargetType } from "@/entities/fishing-report";
 import { CreateFishingReportForm } from "@/features/create-fishing-report";
+import { ManageFishingReportActions } from "@/features/manage-fishing-report";
 import styles from "./spot-reports.module.scss";
 
 type SpotReportsProps = {
@@ -21,7 +22,7 @@ export function SpotReports({ isPublic, targetId, targetType }: SpotReportsProps
         <p>{t("eyebrow")}</p>
         <h2 id={`spot-reports-title-${targetType}-${targetId}`}>{t("title")}</h2>
       </div>
-      <FishingReportList targetType={targetType} targetId={targetId} />
+      <FishingReportList renderActions={(report) => <ManageFishingReportActions report={report} />} targetType={targetType} targetId={targetId} />
       <CreateFishingReportForm isPublic={reportIsPublic} targetType={targetType} targetId={targetId} />
     </section>
   );

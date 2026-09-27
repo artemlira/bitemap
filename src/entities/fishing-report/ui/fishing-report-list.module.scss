@@ -94,6 +94,11 @@
   font-weight: 750;
 }
 
+.actions {
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--color-line);
+}
+
 .activity {
   display: inline-flex;
   padding: $space-8 $space-12;

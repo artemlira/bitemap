@@ -1,0 +1,121 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.controls {
+  display: grid;
+  gap: $space-16;
+}
+
+.actions,
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-8;
+}
+
+.actions button,
+.formActions button {
+  min-height: 2.5rem;
+  padding-inline: $space-16;
+  border: 1px solid var(--color-water);
+  border-radius: $radius-full;
+  background: transparent;
+  color: var(--color-water);
+  font-weight: 800;
+}
+
+.actions button:last-child {
+  border-color: #b42e1e;
+  color: #b42e1e;
+}
+
+.actions button:disabled,
+.formActions button:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.form {
+  display: grid;
+  gap: $space-16;
+  padding: $space-20;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-page);
+}
+
+.form h3,
+.form p {
+  margin: 0;
+}
+
+.form > div > p,
+.form fieldset > p {
+  margin-top: $space-8;
+  color: var(--color-muted);
+}
+
+.form label {
+  display: grid;
+  gap: $space-8;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-weight: 750;
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: $space-12;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-16;
+}
+
+.form fieldset {
+  display: grid;
+  gap: $space-16;
+  margin: 0;
+  padding: $space-20;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+}
+
+.form legend {
+  padding-inline: $space-8;
+  color: var(--color-water);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.formActions button:first-child {
+  background: var(--color-water);
+  color: #fffdf8;
+}
+
+.success,
+.error {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.success { color: #287a52; }
+.error { color: #b42e1e; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+}
