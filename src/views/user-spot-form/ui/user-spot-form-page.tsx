@@ -22,6 +22,8 @@ function toFormValues(spot: UserSpot): UserSpotFormValues {
     descriptionEn: spot.translations?.en?.description ?? "",
     fish: spot.fish.join(", "),
     fishEn: spot.translations?.en?.fish?.join(", ") ?? "",
+    latitude: spot.latitude ?? null,
+    longitude: spot.longitude ?? null,
     name: spot.name,
     nameEn: spot.translations?.en?.name ?? "",
     region: spot.region,

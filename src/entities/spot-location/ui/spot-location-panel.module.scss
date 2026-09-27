@@ -1,0 +1,79 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.section {
+  display: grid;
+  gap: $space-20;
+  margin-top: clamp($space-48, 8vw, $space-96);
+}
+
+.heading {
+  display: grid;
+  gap: $space-12;
+}
+
+.eyebrow {
+  color: var(--color-sun);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.heading h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  letter-spacing: -0.065em;
+  line-height: 0.96;
+}
+
+.mapActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-12;
+}
+
+.coordinates {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 700;
+
+  &:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding-inline: $space-20;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-weight: 800;
+  transition: background 180ms ease, transform 180ms ease;
+
+  &:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @include hover {
+    background: var(--color-water-deep);
+    transform: translateY(-2px);
+  }
+}
+
+.fallback {
+  display: grid;
+  justify-items: start;
+  gap: $space-16;
+  padding: $space-24;
+  border: 1px dashed var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  color: var(--color-muted);
+}

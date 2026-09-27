@@ -14,6 +14,8 @@ export type UserSpot = {
   description: string;
   fish: string[];
   id: string;
+  latitude?: number;
+  longitude?: number;
   name: string;
   ownerId: string;
   region: string;
@@ -47,6 +49,8 @@ export type UserSpotFormValues = {
   accessEn: string;
   descriptionEn: string;
   fishEn: string;
+  latitude: number | null;
+  longitude: number | null;
   nameEn: string;
   waterTypeEn: string;
 };

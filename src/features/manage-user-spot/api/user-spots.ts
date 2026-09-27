@@ -30,6 +30,9 @@ function toSpotPayload(values: UserSpotFormValues) {
       .split(",")
       .map((fish) => fish.trim())
       .filter(Boolean),
+    ...(typeof values.latitude === "number" && typeof values.longitude === "number"
+      ? { latitude: values.latitude, longitude: values.longitude }
+      : {}),
     name: values.name.trim(),
     region: values.region.trim(),
     regionId: values.regionId,

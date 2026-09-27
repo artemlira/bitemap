@@ -4,6 +4,7 @@ import { Link, useRouter } from "@/shared/lib/i18n";
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { UserSpotFormValues } from "@/entities/user-spot";
+import { formatCoordinates, getSpotCoordinates, SpotLocationMap, type SpotCoordinates } from "@/entities/spot-location";
 import { useAuth } from "@/shared/lib/auth";
 import { createUserSpot, updateUserSpot } from "../api/user-spots";
 import { getCommunities, getSettlements, regions } from "../model/location-options";
@@ -33,6 +34,8 @@ const defaultValues: UserSpotFormValues = {
   accessEn: "",
   descriptionEn: "",
   fishEn: "",
+  latitude: null,
+  longitude: null,
   nameEn: "",
   waterTypeEn: "",
 };
@@ -57,10 +60,13 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
   const [values, setValues] = useState<UserSpotFormValues>(initialValues);
   const [errors, setErrors] = useState<UserSpotFormErrors>({});
   const [submissionError, setSubmissionError] = useState("");
+  const [locationError, setLocationError] = useState("");
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = mode === "edit";
   const communities = values.regionId ? getCommunities(values.regionId) : [];
   const settlements = values.communityId ? getSettlements(values.communityId) : [];
+  const coordinates = getSpotCoordinates(values);
 
   function updateValue(name: keyof UserSpotFormValues, value: string) {
     setValues((currentValues) => ({ ...currentValues, [name]: value }));
@@ -102,6 +108,40 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
     }));
   }
 
+  function updateCoordinates(nextCoordinates: SpotCoordinates) {
+    setLocationError("");
+    setValues((currentValues) => ({
+      ...currentValues,
+      latitude: nextCoordinates.latitude,
+      longitude: nextCoordinates.longitude,
+    }));
+  }
+
+  function useCurrentLocation() {
+    if (!("geolocation" in navigator)) {
+      setLocationError(t("currentLocationError"));
+      return;
+    }
+
+    setLocationError("");
+    setIsGettingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        updateCoordinates({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setIsGettingLocation(false);
+      },
+      () => {
+        setLocationError(t("currentLocationError"));
+        setIsGettingLocation(false);
+      },
+      { enableHighAccuracy: true, maximumAge: 60_000, timeout: 10_000 },
+    );
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmissionError("");
@@ -114,6 +154,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
       waterType: t("validationWaterType"),
       fish: t("validationFish"),
       description: t("validationDescription"),
+      location: t("validationLocation"),
     });
     setErrors(nextErrors);
 
@@ -304,6 +345,25 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         />
         {errors.description ? <small id="user-spot-description-error">{errors.description}</small> : null}
       </label>
+
+      <section className={styles.locationPicker} aria-labelledby="user-spot-location-title">
+        <div>
+          <p className={styles.locationEyebrow}>{t("locationEyebrow")}</p>
+          <h3 id="user-spot-location-title">{t("locationTitle")}</h3>
+          <p>{t("locationLead")}</p>
+        </div>
+        <div className={styles.locationActions}>
+          <button type="button" onClick={useCurrentLocation} disabled={isGettingLocation}>
+            {isGettingLocation ? t("gettingCurrentLocation") : t("useCurrentLocation")}
+          </button>
+          <p className={styles.coordinates} aria-live="polite">
+            {t("coordinates")}: {coordinates ? formatCoordinates(coordinates) : t("coordinatesEmpty")}
+          </p>
+        </div>
+        <SpotLocationMap coordinates={coordinates} isPicker onCoordinatesChange={updateCoordinates} />
+        {locationError ? <p className={styles.error} role="alert">{locationError}</p> : null}
+        {errors.latitude ? <p className={styles.error} role="alert">{errors.latitude}</p> : null}
+      </section>
 
       <fieldset className={styles.translationFields}>
         <legend>{t("translationLegend")} <span>({t("translationLegendLead")})</span></legend>

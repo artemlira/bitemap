@@ -105,7 +105,7 @@
     "galleryEyebrow": "Community photos",
     "galleryTitle": "Fishing through anglers’ eyes",
     "mvp": "MVP data",
-    "mvpText": "This is a starter profile for the location. Weather, map coordinates and angler notes will be added as the backend grows."
+    "mvpText": "This is a starter profile for the location. Weather and angler notes will be added in future versions."
   },
   "favorite": {
     "loadError": "Could not load the saved status.",
@@ -214,7 +214,9 @@
     "fishTitle": "Fish in this spot",
     "fishList": "Fish species",
     "galleryEyebrow": "Community photos",
-    "galleryTitle": "Fishing through anglers’ eyes"
+    "galleryTitle": "Fishing through anglers’ eyes",
+    "locationEyebrow": "Getting there",
+    "locationTitle": "Map location"
   },
   "userSpotEditor": {
     "signInTitle": "Log in to edit this fishing spot.",
@@ -286,6 +288,24 @@
     "validationSettlement": "Choose a settlement from the list.",
     "validationWaterType": "Enter a water body type.",
     "validationFish": "Add at least one fish species.",
-    "validationDescription": "Describe the fishing spot using at least 20 characters."
+    "validationDescription": "Describe the fishing spot using at least 20 characters.",
+    "locationEyebrow": "Map location",
+    "locationTitle": "Pin the fishing spot precisely",
+    "locationLead": "Click the map or use your current location. You can adjust the point before saving.",
+    "useCurrentLocation": "Use my current location",
+    "gettingCurrentLocation": "Finding your location…",
+    "currentLocationError": "Could not determine your location. Allow location access in your browser or choose a point on the map.",
+    "coordinates": "Coordinates",
+    "coordinatesEmpty": "No point selected yet.",
+    "validationLocation": "Pin the fishing spot on the map."
+  },
+  "spotLocation": {
+    "eyebrow": "Getting there",
+    "title": "Map location",
+    "coordinates": "Coordinates",
+    "buildRoute": "Build a route",
+    "openOnMap": "Open on map",
+    "missingCoordinates": "The author has not added exact coordinates for this fishing spot yet.",
+    "openApproximateLocation": "Open approximate location"
   }
 }

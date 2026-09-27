@@ -3,6 +3,8 @@ import type { FishingSpot, FishingSpotEnglishTranslation } from "./types";
 const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   {
     id: "blue-lake",
+    latitude: 50.38721,
+    longitude: 30.52399,
     slug: "blue-lake",
     name: "Озеро Блакитне",
     region: "Київська область",
@@ -14,6 +16,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "dnister-bays",
+    latitude: 46.48344,
+    longitude: 30.73552,
     slug: "dnister-bays",
     name: "Дністровські затоки",
     region: "Одеська область",
@@ -25,6 +29,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "vorskla-river",
+    latitude: 49.58909,
+    longitude: 34.55053,
     slug: "vorskla-river",
     name: "Річка Ворскла",
     region: "Полтавська область",
@@ -36,6 +42,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "svitiaz-lake",
+    latitude: 51.49148,
+    longitude: 23.85773,
     slug: "svitiaz-lake",
     name: "Озеро Світязь",
     region: "Волинська область",
@@ -47,6 +55,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "kremenchuk-reservoir",
+    latitude: 49.29606,
+    longitude: 32.81448,
     slug: "kremenchuk-reservoir",
     name: "Кременчуцьке водосховище",
     region: "Черкаська область",
@@ -58,6 +68,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "ros-river",
+    latitude: 49.80821,
+    longitude: 30.11937,
     slug: "ros-river",
     name: "Річка Рось",
     region: "Київська область",
@@ -69,6 +81,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "desna-backwaters",
+    latitude: 51.50588,
+    longitude: 31.28872,
     slug: "desna-backwaters",
     name: "Деснянські стариці",
     region: "Чернігівська область",
@@ -80,6 +94,8 @@ const fishingSpotRecords: readonly Omit<FishingSpot, "translations">[] = [
   },
   {
     id: "synevyr-lake",
+    latitude: 48.61748,
+    longitude: 23.69117,
     slug: "synevyr-lake",
     name: "Озеро Синевир",
     region: "Закарпатська область",

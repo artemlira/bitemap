@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { getLocale } from "next-intl/server";
+import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "@/shared/lib/auth";
 import { ThemeProvider } from "@/shared/lib/theme";
 import "@/app/styles/main.scss";

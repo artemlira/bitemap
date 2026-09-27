@@ -10,6 +10,7 @@ export type UserSpotValidationMessages = {
   waterType: string;
   fish: string;
   description: string;
+  location: string;
 };
 
 export function validateUserSpot(values: UserSpotFormValues, messages: UserSpotValidationMessages): UserSpotFormErrors {
@@ -41,6 +42,10 @@ export function validateUserSpot(values: UserSpotFormValues, messages: UserSpotV
 
   if (values.description.trim().length < 20) {
     errors.description = messages.description;
+  }
+
+  if (typeof values.latitude !== "number" || typeof values.longitude !== "number") {
+    errors.latitude = messages.location;
   }
 
   return errors;

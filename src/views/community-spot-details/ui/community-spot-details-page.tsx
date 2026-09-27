@@ -4,6 +4,7 @@ import { Link } from "@/shared/lib/i18n";
 import { useLocale, useTranslations } from "next-intl";
 import { getUserSpotFish, getUserSpotText, usePublishedUserSpot } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
+import { SpotLocationPanel } from "@/entities/spot-location";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SiteHeader } from "@/widgets/site-header";
@@ -59,6 +60,12 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
           <div><dt>{t("location")}</dt><dd>{spot.settlement || spot.community || spot.region}</dd></div>
           <div><dt>{t("access")}</dt><dd>{getUserSpotText(spot, "access", locale)}</dd></div>
         </dl>
+        <SpotLocationPanel
+          id={spot.id}
+          latitude={spot.latitude}
+          longitude={spot.longitude}
+          locationLabel={[getUserSpotText(spot, "name", locale), spot.settlement, spot.community, spot.region].filter(Boolean).join(", ")}
+        />
         <div className={styles.fishSection}><div><p className={styles.sectionLabel}>{t("fishEyebrow")}</p><h2>{t("fishTitle")}</h2></div><ul className={styles.fishList} aria-label={t("fishList")}>{getUserSpotFish(spot, locale).map((fish) => <li key={fish}>{fish}</li>)}</ul></div>
         <section className={styles.gallery} aria-labelledby="community-gallery-title">
           <div><p className={styles.sectionLabel}>{t("galleryEyebrow")}</p><h2 id="community-gallery-title">{t("galleryTitle")}</h2></div>

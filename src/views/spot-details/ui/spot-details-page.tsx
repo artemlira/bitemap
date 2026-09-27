@@ -3,6 +3,7 @@
 import { Link } from "@/shared/lib/i18n";
 import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
+import { SpotLocationPanel } from "@/entities/spot-location";
 import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
@@ -66,6 +67,13 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
             <dd>{getFishingSpotText(spot, "access", locale)}</dd>
           </div>
         </dl>
+
+        <SpotLocationPanel
+          id={spot.id}
+          latitude={spot.latitude}
+          longitude={spot.longitude}
+          locationLabel={`${getFishingSpotText(spot, "name", locale)}, ${getFishingSpotText(spot, "region", locale)}`}
+        />
 
         <div className={styles.fishSection}>
           <div>

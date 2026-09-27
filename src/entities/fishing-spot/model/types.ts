@@ -10,6 +10,8 @@ export type FishingSpotEnglishTranslation = {
 };
 
 export type FishingSpot = {
+  latitude: number;
+  longitude: number;
   id: string;
   slug: string;
   name: string;
