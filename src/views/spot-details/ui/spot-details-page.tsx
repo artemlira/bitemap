@@ -6,6 +6,7 @@ import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
+import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SpotReports } from "@/widgets/spot-reports";
 import { SpotWeather } from "@/widgets/spot-weather";
@@ -96,7 +97,13 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
             <p className={styles.sectionLabel}>{t("galleryEyebrow")}</p>
             <h2 id="spot-gallery-title">{t("galleryTitle")}</h2>
           </div>
-          <SpotImageGallery targetType="catalog" targetId={spot.id} />
+          <SpotImageGallery
+            renderActions={(image) => (
+              <ManageSpotImageActions image={image} targetType="catalog" targetId={spot.id} />
+            )}
+            targetType="catalog"
+            targetId={spot.id}
+          />
           <SpotImageUpload targetType="catalog" targetId={spot.id} />
         </section>
 
