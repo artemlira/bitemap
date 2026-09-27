@@ -163,6 +163,8 @@
     "success": "Report published.",
     "submissionError": "Could not publish the report. Please try again.",
     "signIn": "Log in to share a report.",
+    "signInLead": "Log in to share your fishing report.",
+    "signInAction": "Log in",
     "authLoading": "Checking your account…",
     "defaultAuthor": "BiteMap angler",
     "noFish": "No catch specified",
@@ -192,6 +194,9 @@
   },
   "imageUpload": {
     "signIn": "Log in to add a photo.",
+    "authLoading": "Checking your account…",
+    "signInLead": "Log in to add your own photo to this fishing spot gallery.",
+    "signInAction": "Log in",
     "chooseImage": "Choose an image.",
     "success": "The photo has been added to the gallery.",
     "error": "Could not add the photo.",

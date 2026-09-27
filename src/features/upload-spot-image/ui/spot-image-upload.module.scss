@@ -55,5 +55,34 @@
 
 .form button { justify-self: start; }
 
+.authPrompt {
+  display: grid;
+  justify-items: start;
+  gap: $space-12;
+  width: min(100%, 44rem);
+  padding: $space-20 $space-24;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+}
+
+.authPrompt p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.authPrompt a {
+  display: inline-grid;
+  min-height: 3rem;
+  align-items: center;
+  padding-inline: $space-20;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
 .error { color: #b42e1e; }
 .success { color: #287a52; }
+.authState { color: var(--color-muted); }

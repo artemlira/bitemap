@@ -1,9 +1,11 @@
 "use client";
 
+import type { User } from "firebase/auth";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { SpotImageTargetType } from "@/entities/spot-image";
 import { useAuth } from "@/shared/lib/auth";
+import { Link } from "@/shared/lib/i18n";
 import { uploadSpotImage } from "../api/upload-spot-image";
 import styles from "./spot-image-upload.module.scss";
 
@@ -14,7 +16,30 @@ type SpotImageUploadProps = {
 
 export function SpotImageUpload({ targetId, targetType }: SpotImageUploadProps) {
   const t = useTranslations("imageUpload");
-  const { user } = useAuth();
+  const { isLoading, user } = useAuth();
+
+  if (isLoading) {
+    return <p className={styles.authState} aria-live="polite">{t("authLoading")}</p>;
+  }
+
+  if (!user) {
+    return (
+      <section className={styles.authPrompt}>
+        <p>{t("signInLead")}</p>
+        <Link href="/login">{t("signInAction")}</Link>
+      </section>
+    );
+  }
+
+  return <AuthenticatedSpotImageUpload key={user.uid} targetId={targetId} targetType={targetType} user={user} />;
+}
+
+type AuthenticatedSpotImageUploadProps = SpotImageUploadProps & {
+  user: User;
+};
+
+function AuthenticatedSpotImageUpload({ targetId, targetType, user }: AuthenticatedSpotImageUploadProps) {
+  const t = useTranslations("imageUpload");
   const [captionEn, setCaptionEn] = useState("");
   const [captionUk, setCaptionUk] = useState("");
   const [error, setError] = useState("");
@@ -32,11 +57,6 @@ export function SpotImageUpload({ targetId, targetType }: SpotImageUploadProps) 
     event.preventDefault();
     setError("");
     setSuccess("");
-
-    if (!user) {
-      setError(t("signIn"));
-      return;
-    }
 
     if (!file) {
       setError(t("chooseImage"));

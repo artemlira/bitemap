@@ -1,9 +1,11 @@
 "use client";
 
+import type { User } from "firebase/auth";
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { FishingActivity, FishingReportTargetType } from "@/entities/fishing-report";
 import { useAuth } from "@/shared/lib/auth";
+import { Link } from "@/shared/lib/i18n";
 import { createFishingReport, type FishingReportFormValues } from "../api/create-fishing-report";
 import styles from "./create-fishing-report-form.module.scss";
 
@@ -36,6 +38,29 @@ const initialValues: FishingReportFormValues = {
 export function CreateFishingReportForm({ isPublic, targetId, targetType }: CreateFishingReportFormProps) {
   const t = useTranslations("reports");
   const { isLoading: isAuthLoading, user } = useAuth();
+
+  if (isAuthLoading) {
+    return <p className={styles.authState} aria-live="polite">{t("authLoading")}</p>;
+  }
+
+  if (!user) {
+    return (
+      <section className={styles.authPrompt}>
+        <p>{t("signInLead")}</p>
+        <Link href="/login">{t("signInAction")}</Link>
+      </section>
+    );
+  }
+
+  return <AuthenticatedCreateFishingReportForm key={user.uid} isPublic={isPublic} targetId={targetId} targetType={targetType} user={user} />;
+}
+
+type AuthenticatedCreateFishingReportFormProps = CreateFishingReportFormProps & {
+  user: User;
+};
+
+function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, user }: AuthenticatedCreateFishingReportFormProps) {
+  const t = useTranslations("reports");
   const [error, setError] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,11 +76,6 @@ export function CreateFishingReportForm({ isPublic, targetId, targetType }: Crea
     event.preventDefault();
     setError("");
     setSuccess("");
-
-    if (!user) {
-      setError(t("signIn"));
-      return;
-    }
 
     setIsSubmitting(true);
 
@@ -76,10 +96,6 @@ export function CreateFishingReportForm({ isPublic, targetId, targetType }: Crea
     } finally {
       setIsSubmitting(false);
     }
-  }
-
-  if (isAuthLoading) {
-    return <p className={styles.authState} aria-live="polite">{t("authLoading")}</p>;
   }
 
   return (
