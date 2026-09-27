@@ -10,6 +10,13 @@
   border-radius: $radius-lg;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+
+  @include hover {
+    border-color: color-mix(in srgb, var(--color-water) 42%, var(--color-line));
+    box-shadow: 0 1.25rem 3rem rgb(6 53 68 / 14%);
+    transform: translateY(-0.45rem);
+  }
 }
 
 .visual {

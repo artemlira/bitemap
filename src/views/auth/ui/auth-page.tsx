@@ -35,7 +35,7 @@ export function AuthPage({ mode }: AuthPageProps) {
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+          <div className={styles.heroContent} data-page-hero>
           <p className={styles.eyebrow}>{content.eyebrow}</p>
           <h1>{content.title}</h1>
           <p>{content.description}</p>

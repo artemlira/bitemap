@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { FishingSpotCard, featuredFishingSpots } from "@/entities/fishing-spot";
+import { Reveal } from "@/shared/ui/reveal";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./home-page.module.scss";
 
@@ -12,7 +13,7 @@ export function HomePage() {
       <section className={styles.hero}>
         <SiteHeader />
 
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <p className={styles.eyebrow}>{t("eyebrow")}</p>
           <h1>
             {t("title")}
@@ -38,30 +39,37 @@ export function HomePage() {
       </section>
 
       <section className={styles.spotsSection} id="popular-spots">
-        <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.sectionLabel}>{t("discover")}</p>
-            <h2>{t("popular")}</h2>
+        <Reveal>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.sectionLabel}>{t("discover")}</p>
+              <h2>{t("popular")}</h2>
+            </div>
+            <p className={styles.spotCount}>{t("spotCount")}</p>
           </div>
-          <p className={styles.spotCount}>{t("spotCount")}</p>
-        </div>
+        </Reveal>
 
-        <div className={styles.spotGrid}>
-          {featuredFishingSpots.map((spot) => (
-            <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
-          ))}
-        </div>
+        <Reveal delay={90}>
+          <div className={styles.spotGrid}>
+            {featuredFishingSpots.map((spot) => (
+              <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       <section className={styles.stepsSection} id="how-it-works" aria-labelledby="how-it-works-title">
-        <div className={styles.stepsHeading}>
-          <div>
-            <p className={styles.sectionLabel}>{t("start")}</p>
-            <h2 id="how-it-works-title">{t("howItWorksTitle")}</h2>
+        <Reveal>
+          <div className={styles.stepsHeading}>
+            <div>
+              <p className={styles.sectionLabel}>{t("start")}</p>
+              <h2 id="how-it-works-title">{t("howItWorksTitle")}</h2>
+            </div>
+            <p className={styles.stepsLead}>{t("howItWorksLead")}</p>
           </div>
-          <p className={styles.stepsLead}>{t("howItWorksLead")}</p>
-        </div>
+        </Reveal>
 
+        <Reveal delay={90}>
         <ol className={styles.stepsList}>
           <li className={styles.stepCard}>
             <span className={styles.stepNumber}>01</span>
@@ -87,15 +95,18 @@ export function HomePage() {
             </Link>
           </li>
         </ol>
+        </Reveal>
 
-        <div className={styles.stepsSummary}>
-          <p>{t("whatYouGet")}</p>
-          <ul>
-            <li>{t("whatYouGetMap")}</li>
-            <li>{t("whatYouGetDetails")}</li>
-            <li>{t("whatYouGetCommunity")}</li>
-          </ul>
-        </div>
+        <Reveal delay={160}>
+          <div className={styles.stepsSummary}>
+            <p>{t("whatYouGet")}</p>
+            <ul>
+              <li>{t("whatYouGetMap")}</li>
+              <li>{t("whatYouGetDetails")}</li>
+              <li>{t("whatYouGetCommunity")}</li>
+            </ul>
+          </div>
+        </Reveal>
       </section>
     </main>
   );

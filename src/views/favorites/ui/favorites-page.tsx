@@ -34,7 +34,7 @@ export function FavoritesPage() {
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <p className={styles.eyebrow}>{t("eyebrow")}</p>
           <h1>{t("title")}</h1>
           <p>{t("lead")}</p>

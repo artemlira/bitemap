@@ -23,7 +23,7 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <nav className={styles.breadcrumbs} aria-label={t("breadcrumbs")}>
             <Link href="/">{t("home")}</Link>
             <span aria-hidden="true">/</span>

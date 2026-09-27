@@ -37,7 +37,7 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <nav className={styles.breadcrumbs} aria-label={t("breadcrumbs")}>
             <Link href="/">{t("home")}</Link><span aria-hidden="true">/</span><Link href="/community">{t("community")}</Link><span aria-hidden="true">/</span><span aria-current="page">{getUserSpotText(spot, "name", locale)}</span>
           </nav>

@@ -40,7 +40,7 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <p className={styles.eyebrow}>{t("eyebrow")}</p>
           <div className={styles.identity}>
             <div className={styles.avatar}>

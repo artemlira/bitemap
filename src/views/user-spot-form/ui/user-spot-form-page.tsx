@@ -94,7 +94,7 @@ export function UserSpotFormPage({ mode, spotId }: UserSpotFormPageProps) {
     <main className={styles.page}>
       <section className={styles.hero}>
         <SiteHeader />
-        <div className={styles.heroContent}>
+        <div className={styles.heroContent} data-page-hero>
           <p className={styles.eyebrow}>{isEditing ? t("editEyebrow") : t("newEyebrow")}</p>
           <h1>{isEditing ? t("editTitle") : t("newTitle")}</h1>
           <p>{isEditing ? t("editLead") : t("newLead")}</p>

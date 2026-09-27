@@ -11,6 +11,11 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
   transition: border-color 180ms ease, transform 180ms ease;
+
+  @include hover {
+    border-color: color-mix(in srgb, var(--color-water) 42%, var(--color-line));
+    transform: translateY(-0.45rem);
+  }
 }
 
 .visual {
@@ -33,6 +38,7 @@
     border: 1px solid rgb(255 253 248 / 30%);
     border-radius: 50%;
     content: "";
+    transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &::before {
@@ -52,6 +58,13 @@
   span {
     position: relative;
     z-index: 1;
+  }
+}
+
+@include hover {
+  .card:hover .visual::before,
+  .card:hover .visual i {
+    transform: scale(1.06);
   }
 }
 
