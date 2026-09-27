@@ -42,7 +42,7 @@ export function SiteHeader() {
       <div className={styles.controls}>
         {user ? (
           <>
-            <span className={styles.userName}>{userName}</span>
+            <Link className={styles.userName} href={`/anglers/${user.uid}`}>{userName}</Link>
             <button className={styles.signOutButton} type="button" onClick={() => void signOut()}>
               {t("signOut")}
             </button>

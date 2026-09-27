@@ -52,6 +52,13 @@ service cloud.firestore {
       }
     }
 
+    match /public-profiles/{userId} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if isOwner(userId);
+      allow delete: if false;
+    }
+
     match /user-spots/{spotId} {
       allow create: if isSignedIn()
         && request.resource.data.ownerId == request.auth.uid;

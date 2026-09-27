@@ -4,3 +4,5 @@ export type UserProfile = {
   photoURL: string | null;
   providerIds: string[];
 };
+
+export type PublicUserProfile = Pick<UserProfile, "displayName" | "photoURL">;

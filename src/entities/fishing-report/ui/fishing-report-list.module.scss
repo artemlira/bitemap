@@ -31,6 +31,15 @@
   font-weight: 800;
 }
 
+.authorLink {
+  color: var(--color-ink);
+  font-weight: 800;
+
+  @include hover {
+    color: var(--color-water);
+  }
+}
+
 .meta time,
 .facts dt,
 .state {

@@ -72,3 +72,37 @@ export function useCommunityFishingReports() {
 
   return { error, isLoading, reports };
 }
+
+export function usePublicFishingReportsByAuthor(authorId: string) {
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [reports, setReports] = useState<readonly FishingReport[]>([]);
+
+  useEffect(() => {
+    const reportsQuery = query(
+      collection(getFirebaseFirestore(), "fishing-reports"),
+      where("authorId", "==", authorId),
+      where("isPublic", "==", true),
+    );
+
+    return onSnapshot(
+      reportsQuery,
+      (snapshot) => {
+        const nextReports = snapshot.docs
+          .map((report) => ({ id: report.id, ...report.data() }) as FishingReport)
+          .sort((firstReport, secondReport) => secondReport.tripDate.localeCompare(firstReport.tripDate));
+
+        setReports(nextReports);
+        setError(false);
+        setIsLoading(false);
+      },
+      () => {
+        setReports([]);
+        setError(true);
+        setIsLoading(false);
+      },
+    );
+  }, [authorId]);
+
+  return { error, isLoading, reports };
+}

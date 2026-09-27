@@ -417,5 +417,30 @@
       "showers": "Showers",
       "thunderstorm": "Thunderstorm"
     }
+  },
+  "anglerProfile": {
+    "loading": "Loading angler profile…",
+    "unavailableTitle": "Profile not found",
+    "unavailableText": "This profile has not been created yet or is no longer available.",
+    "back": "Back to community",
+    "eyebrow": "Member profile",
+    "defaultName": "BiteMap angler",
+    "lead": "Shares trusted fishing spots and personal fishing experience.",
+    "avatarAlt": "{name}'s avatar",
+    "spotsStat": "Published spots",
+    "reportsStat": "Public reports",
+    "spotsEyebrow": "Open places",
+    "spotsTitle": "Angler's spots",
+    "spotsLoading": "Loading fishing spots…",
+    "spotsEmpty": "This angler has not published any fishing spots yet.",
+    "spotsError": "Could not load the angler's fishing spots.",
+    "reportsEyebrow": "Stories from the water",
+    "reportsTitle": "Latest reports",
+    "reportsLoading": "Loading reports…",
+    "reportsEmpty": "No public reports yet.",
+    "reportsError": "Could not load the angler's reports.",
+    "spotsList": "Angler's published fishing spots",
+    "reportsList": "Angler's public reports",
+    "openSpot": "Open"
   }
 }

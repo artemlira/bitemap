@@ -14,10 +14,11 @@ type FishingReportListProps = {
 
 type FishingReportCardProps = {
   report: FishingReport;
+  showAuthor?: boolean;
   target?: { href: string; label: string };
 };
 
-export function FishingReportCard({ report, target }: FishingReportCardProps) {
+export function FishingReportCard({ report, showAuthor = true, target }: FishingReportCardProps) {
   const locale = useLocale();
   const t = useTranslations("reports");
   const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
@@ -27,7 +28,7 @@ export function FishingReportCard({ report, target }: FishingReportCardProps) {
     <article className={styles.item}>
       <div className={styles.meta}>
         <div>
-          <p>{report.authorName}</p>
+          {showAuthor ? <Link className={styles.authorLink} href={`/anglers/${report.authorId}`}>{report.authorName}</Link> : <p>{report.authorName}</p>}
           <time dateTime={report.tripDate}>{dateFormatter.format(new Date(`${report.tripDate}T00:00:00`))}</time>
         </div>
         <span aria-label={t("ratingValue", { rating: report.rating })}>{"★".repeat(report.rating)}<i>{"★".repeat(5 - report.rating)}</i></span>

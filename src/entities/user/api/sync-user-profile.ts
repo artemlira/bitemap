@@ -1,7 +1,7 @@
 import type { User } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
-import type { UserProfile } from "../model/types";
+import type { PublicUserProfile, UserProfile } from "../model/types";
 
 function getProfileFields(user: User): UserProfile {
   return {
@@ -12,8 +12,17 @@ function getProfileFields(user: User): UserProfile {
   };
 }
 
+function getPublicProfileFields(user: User): PublicUserProfile {
+  return {
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+  };
+}
+
 export async function syncUserProfile(user: User) {
-  const profileReference = doc(getFirebaseFirestore(), "users", user.uid);
+  const firestore = getFirebaseFirestore();
+  const profileReference = doc(firestore, "users", user.uid);
+  const publicProfileReference = doc(firestore, "public-profiles", user.uid);
   const profileSnapshot = await getDoc(profileReference);
   const profileFields = getProfileFields(user);
 
@@ -23,12 +32,31 @@ export async function syncUserProfile(user: User) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
-
-    return;
+  } else {
+    await updateDoc(profileReference, {
+      ...profileFields,
+      updatedAt: serverTimestamp(),
+    });
   }
 
-  await updateDoc(profileReference, {
-    ...profileFields,
-    updatedAt: serverTimestamp(),
-  });
+  await setDoc(
+    publicProfileReference,
+    {
+      ...getPublicProfileFields(user),
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true },
+  );
+}
+
+export async function ensurePublicUserProfile(user: User) {
+  const publicProfileReference = doc(getFirebaseFirestore(), "public-profiles", user.uid);
+  const publicProfileSnapshot = await getDoc(publicProfileReference);
+
+  if (!publicProfileSnapshot.exists()) {
+    await setDoc(publicProfileReference, {
+      ...getPublicProfileFields(user),
+      updatedAt: serverTimestamp(),
+    });
+  }
 }
