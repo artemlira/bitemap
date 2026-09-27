@@ -11,6 +11,7 @@ type UserSpotCardProps = {
   actionLabel?: string;
   footerActions?: ReactNode;
   href?: string;
+  showVisibility?: boolean;
   spot: UserSpot;
 };
 
@@ -18,6 +19,7 @@ export function UserSpotCard({
   actionLabel,
   footerActions,
   href,
+  showVisibility = true,
   spot,
 }: UserSpotCardProps) {
   const locale = useLocale();
@@ -33,7 +35,7 @@ export function UserSpotCard({
       <div className={styles.content}>
         <p className={styles.region}>{spot.settlement ? `${spot.region} · ${spot.settlement}` : spot.region}</p>
         <h2>{getUserSpotText(spot, "name", locale)}</h2>
-        <p className={styles.visibility}>{spot.visibility === "published" ? t("published") : t("private")}</p>
+        {showVisibility ? <p className={styles.visibility}>{spot.visibility === "published" ? t("published") : t("private")}</p> : null}
         <p className={styles.description}>{getUserSpotText(spot, "description", locale)}</p>
         <p className={styles.fish}>{getUserSpotFish(spot, locale).join(" · ")}</p>
         <div className={styles.footer}>

@@ -64,6 +64,10 @@ service cloud.firestore {
           request.resource.data.targetType,
           request.resource.data.targetId,
         );
+      allow update: if isOwner(resource.data.ownerId)
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.targetId == resource.data.targetId
+        && request.resource.data.targetType == resource.data.targetType;
       allow delete: if isOwner(resource.data.ownerId);
     }
   }

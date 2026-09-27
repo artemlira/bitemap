@@ -30,6 +30,13 @@
   font-size: 0.875rem;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-8;
+  padding: 0 $space-12 $space-12;
+}
+
 .error {
   color: #b42e1e;
 }

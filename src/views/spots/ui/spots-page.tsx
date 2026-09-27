@@ -104,7 +104,13 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
               entry.kind === "catalog" ? (
                 <FishingSpotCard key={`catalog-${entry.spot.id}`} spot={entry.spot} href={`/spots/${entry.spot.slug}`} />
               ) : (
-                <UserSpotCard key={`community-${entry.spot.id}`} spot={entry.spot} href={`/community/${entry.spot.id}`} actionLabel={t("openCommunitySpot")} />
+                <UserSpotCard
+                  key={`community-${entry.spot.id}`}
+                  spot={entry.spot}
+                  href={`/community/${entry.spot.id}`}
+                  actionLabel={t("openCommunitySpot")}
+                  showVisibility={false}
+                />
               )
             ))}
           </div>

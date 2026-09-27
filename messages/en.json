@@ -55,7 +55,8 @@
     "searchPlaceholder": "For example, Kyiv Oblast or Svityaz",
     "loading": "Adding community fishing spots…",
     "communityLoadError": "Could not load community fishing spots.",
-    "openCommunitySpot": "Open"
+    "openCommunitySpot": "Open",
+    "open": "Open"
   },
   "auth": {
     "login": {
@@ -118,7 +119,15 @@
   },
   "gallery": {
     "loadError": "Could not load the photos.",
-    "empty": "No photos yet."
+    "empty": "No photos yet.",
+    "replace": "Replace",
+    "replacing": "Replacing…",
+    "replaceSuccess": "Photo replaced.",
+    "delete": "Delete",
+    "deleting": "Deleting…",
+    "deleteSuccess": "Photo deleted.",
+    "deleteConfirmation": "Delete this photo permanently?",
+    "manageError": "Could not update the photo. Please try again."
   },
   "imageUpload": {
     "signIn": "Log in to add a photo.",

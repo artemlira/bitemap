@@ -1,17 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSpotImages } from "../model/use-spot-images";
-import type { SpotImageTargetType } from "../model/types";
+import type { SpotImage, SpotImageTargetType } from "../model/types";
 import styles from "./spot-image-gallery.module.scss";
 
 type SpotImageGalleryProps = {
+  renderActions?: (image: SpotImage) => ReactNode;
   targetId: string;
   targetType: SpotImageTargetType;
 };
 
-export function SpotImageGallery({ targetId, targetType }: SpotImageGalleryProps) {
+export function SpotImageGallery({ renderActions, targetId, targetType }: SpotImageGalleryProps) {
   const locale = useLocale();
   const t = useTranslations("gallery");
   const { hasError, images } = useSpotImages(targetType, targetId);
@@ -38,6 +40,7 @@ export function SpotImageGallery({ targetId, targetType }: SpotImageGalleryProps
             />
           </div>
           <figcaption>{locale === "en" ? image.caption.en || image.caption.uk : image.caption.uk}</figcaption>
+          {renderActions ? <div className={styles.actions}>{renderActions(image)}</div> : null}
         </figure>
       ))}
     </div>

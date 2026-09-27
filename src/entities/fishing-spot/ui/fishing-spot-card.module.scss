@@ -1,24 +1,6 @@
 @use "../../../shared/styles/abstracts/mixins" as *;
 @use "../../../shared/styles/abstracts/variables" as *;
 
-.link {
-  display: block;
-  height: 100%;
-  color: inherit;
-
-  @include hover {
-    .card {
-      border-color: rgb(13 89 114 / 44%);
-      transform: translateY(-4px);
-    }
-  }
-}
-
-.link:focus-visible .card {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 4px;
-}
-
 .card {
   display: flex;
   height: 100%;
@@ -35,7 +17,7 @@
   position: relative;
   display: flex;
   align-items: end;
-  min-height: 13rem;
+  min-height: 11rem;
   overflow: hidden;
   padding: $space-20;
   color: rgb(255 253 248 / 68%);
@@ -101,8 +83,9 @@
   font-size: 0.825rem;
 }
 
-.content h3 {
+.content h2 {
   margin-top: $space-8;
+  color: var(--color-ink);
   font-size: 1.35rem;
   letter-spacing: -0.045em;
 }
@@ -113,24 +96,45 @@
   font-size: 0.925rem;
 }
 
-.meta {
-  display: grid;
-  gap: $space-8;
-  margin-top: auto;
-  padding-top: $space-24;
+.fish {
+  margin-top: $space-16;
   color: var(--color-water);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 750;
 }
 
-.meta span:last-child {
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-12;
+  margin-top: auto;
+  padding-top: $space-24;
   color: var(--color-muted);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 650;
 }
 
-@include media-max(tablet) {
-  .visual {
-    min-height: 10rem;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-8;
+}
+
+.footer a {
+  min-height: 2.35rem;
+  padding: 0 $space-12;
+  border-radius: $radius-full;
+  background: var(--color-water);
+  color: #fffdf8;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 2.35rem;
+  transition: background 180ms ease, transform 180ms ease;
+
+  @include hover {
+    background: var(--color-water-deep);
+    transform: translateY(-1px);
   }
 }

@@ -4,6 +4,7 @@ import { Link } from "@/shared/lib/i18n";
 import { useTranslations } from "next-intl";
 import type { UserSpot, UserSpotFormValues } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
+import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { UserSpotForm, useUserSpot } from "@/features/manage-user-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SiteHeader } from "@/widgets/site-header";
@@ -74,7 +75,11 @@ function EditUserSpotForm({ spotId }: { spotId: string }) {
           <p className={styles.sectionLabel}>{t("galleryEyebrow")}</p>
           <h3 id="owner-gallery-title">{t("galleryTitle")}</h3>
         </div>
-        <SpotImageGallery targetType="user-spot" targetId={spot.id} />
+        <SpotImageGallery
+          targetType="user-spot"
+          targetId={spot.id}
+          renderActions={(image) => <ManageSpotImageActions image={image} targetType="user-spot" targetId={spot.id} />}
+        />
         <SpotImageUpload targetType="user-spot" targetId={spot.id} />
       </section>
     </>
