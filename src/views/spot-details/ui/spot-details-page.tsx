@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SpotReports } from "@/widgets/spot-reports";
+import { SpotWeather } from "@/widgets/spot-weather";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./spot-details-page.module.scss";
 
@@ -75,6 +76,8 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           longitude={spot.longitude}
           locationLabel={`${getFishingSpotText(spot, "name", locale)}, ${getFishingSpotText(spot, "region", locale)}`}
         />
+
+        <SpotWeather id={spot.id} latitude={spot.latitude} longitude={spot.longitude} />
 
         <div className={styles.fishSection}>
           <div>

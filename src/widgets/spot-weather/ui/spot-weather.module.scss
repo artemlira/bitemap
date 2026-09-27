@@ -1,0 +1,39 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.section { display: grid; gap: $space-24; margin-top: clamp($space-48, 8vw, $space-96); }
+.heading > p { color: var(--color-sun); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.heading h2 { margin-top: $space-12; color: var(--color-ink); font-size: clamp(2rem, 4vw, 3.5rem); letter-spacing: -0.065em; line-height: 0.96; }
+.heading > span { display: block; max-width: 38rem; margin-top: $space-16; color: var(--color-muted); }
+.status { padding: $space-24; border: 1px dashed var(--color-line); border-radius: $radius-lg; background: var(--color-surface); color: var(--color-muted); }
+.current { display: flex; align-items: center; gap: $space-16; padding: $space-24 $space-32; border: 1px solid var(--color-line); border-radius: $radius-lg; background: linear-gradient(135deg, color-mix(in srgb, var(--color-water) 12%, var(--color-surface)), var(--color-surface)); box-shadow: var(--shadow-soft); }
+.weatherIcon, .dayIcon { display: grid; place-items: center; color: var(--color-sun); }
+.weatherIcon { width: 4.25rem; height: 4.25rem; border-radius: 50%; background: color-mix(in srgb, var(--color-sun) 16%, transparent); font-size: 2.2rem; }
+.current p { color: var(--color-muted); font-weight: 700; }
+.current strong { display: block; margin-top: $space-8; color: var(--color-ink); font-size: clamp(2.4rem, 5vw, 3.8rem); letter-spacing: -0.08em; line-height: 0.8; }
+.current dl { display: flex; flex-wrap: wrap; gap: $space-16 $space-32; margin-left: auto; }
+.current dt, .dayFacts dt { color: var(--color-muted); font-size: 0.75rem; }
+.current dd, .dayFacts dd { margin-top: $space-8; color: var(--color-ink); font-weight: 800; }
+.calendarHeading { display: flex; align-items: end; justify-content: space-between; gap: $space-16; }
+.calendarHeading h3 { color: var(--color-ink); font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -0.055em; line-height: 1; }
+.calendarHeading p { max-width: 34rem; color: var(--color-muted); }
+.dailyList { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: $space-12; list-style: none; }
+.dayCard { min-width: 0; padding: $space-16; border: 1px solid var(--color-line); border-radius: $radius-lg; background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.day { min-height: 2.5rem; color: var(--color-muted); font-size: 0.76rem; font-weight: 800; line-height: 1.2; }
+.dayIcon { height: 3.1rem; margin-top: $space-8; font-size: 1.9rem; }
+.temperatures { display: flex; gap: $space-8; margin-top: $space-8; }
+.temperatures strong { color: var(--color-ink); }
+.temperatures span { color: var(--color-muted); }
+.dayFacts { display: grid; gap: $space-12; margin-top: $space-16; }
+.activity { margin-top: $space-16; padding: $space-8; border-radius: $radius-full; background: color-mix(in srgb, var(--color-water) 10%, transparent); color: var(--color-water); font-size: 0.72rem; font-weight: 800; text-align: center; }
+.activity[data-level="excellent"] { background: color-mix(in srgb, var(--color-forest) 18%, transparent); color: var(--color-forest); }
+.activity[data-level="low"] { background: color-mix(in srgb, var(--color-sun) 18%, transparent); color: var(--color-focus); }
+.disclaimer { color: var(--color-muted); font-size: 0.82rem; }
+
+@include media-max(tablet) { .dailyList { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@include media-max(phone) {
+  .current, .calendarHeading { align-items: flex-start; flex-direction: column; }
+  .current { padding: $space-24; }
+  .current dl { margin-left: 0; }
+  .dailyList { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
