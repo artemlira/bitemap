@@ -48,6 +48,8 @@ function AuthenticatedSpotImageUpload({ targetId, targetType, user }: Authentica
   const [isUploading, setIsUploading] = useState(false);
   const [success, setSuccess] = useState("");
   const formId = `spot-image-upload-${targetType}-${targetId}`;
+  const fileInputId = `${formId}-file`;
+  const fileLabelId = `${formId}-file-label`;
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     setFile(event.target.files?.[0] ?? null);
@@ -95,10 +97,21 @@ function AuthenticatedSpotImageUpload({ targetId, targetType, user }: Authentica
         <form className={styles.form} onSubmit={handleSubmit}>
           <h3>{t("title")}</h3>
           <p>{t("description")}</p>
-          <label>
-            <span>{t("file")}</span>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-          </label>
+          <div className={styles.fileField}>
+            <span id={fileLabelId}>{t("file")}</span>
+            <div className={styles.fileControl}>
+              <input
+                aria-labelledby={fileLabelId}
+                accept="image/*"
+                className={styles.fileInput}
+                id={fileInputId}
+                onChange={handleFileChange}
+                type="file"
+              />
+              <label className={styles.filePicker} htmlFor={fileInputId}>{t("chooseFile")}</label>
+              <span className={styles.fileName} aria-live="polite">{file?.name ?? t("noFileSelected")}</span>
+            </div>
+          </div>
           <label>
             <span>{t("captionUk")}</span>
             <input value={captionUk} onChange={(event) => setCaptionUk(event.target.value)} />

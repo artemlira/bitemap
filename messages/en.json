@@ -198,6 +198,8 @@
     "signInLead": "Log in to add your own photo to this fishing spot gallery.",
     "signInAction": "Log in",
     "chooseImage": "Choose an image.",
+    "chooseFile": "Choose photo",
+    "noFileSelected": "No file selected",
     "success": "The photo has been added to the gallery.",
     "error": "Could not add the photo.",
     "hideForm": "Hide form",

@@ -15,6 +15,7 @@ export function useFishingReports(targetType: FishingReportTargetType, targetId:
       collection(getFirebaseFirestore(), "fishing-reports"),
       where("targetId", "==", targetId),
       where("targetType", "==", targetType),
+      where("isPublic", "==", true),
     );
 
     return onSnapshot(
