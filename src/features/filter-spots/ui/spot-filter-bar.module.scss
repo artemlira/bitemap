@@ -3,7 +3,7 @@
 
 .filters {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
   align-items: end;
   gap: $space-12;
   margin-top: $space-32;
@@ -25,6 +25,7 @@
   text-transform: uppercase;
 }
 
+.field input,
 .field select {
   width: 100%;
   min-height: 3rem;
@@ -40,6 +41,7 @@
   text-transform: none;
 }
 
+.field input:focus-visible,
 .field select:focus-visible,
 .reset:focus-visible {
   outline: 3px solid var(--color-focus);

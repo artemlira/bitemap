@@ -6,6 +6,7 @@ function getFirstSearchParamValue(value: string | string[] | undefined) {
 
 export function getSpotFiltersFromSearchParams(searchParams: SpotFilterSearchParams): SpotFilters {
   return {
+    query: getFirstSearchParamValue(searchParams.query),
     region: getFirstSearchParamValue(searchParams.region),
     waterType: getFirstSearchParamValue(searchParams.waterType),
     fish: getFirstSearchParamValue(searchParams.fish),

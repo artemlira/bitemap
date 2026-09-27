@@ -1,16 +1,16 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { useRouter } from "@/shared/lib/i18n";
-import { useLocale } from "next-intl";
 import type {
+  FilterableSpot,
   SpotFilterName,
   SpotFilterOptions,
   SpotFilters,
 } from "./types";
 
 const initialFilters: SpotFilters = {
+  query: "",
   region: "",
   waterType: "",
   fish: "",
@@ -20,26 +20,14 @@ function uniqueSorted(values: Iterable<string>) {
   return [...new Set(values)].sort((first, second) => first.localeCompare(second, "uk"));
 }
 
-function getFilterOptions(spots: readonly FishingSpot[], locale: string): SpotFilterOptions {
+function getFilterOptions<TSpot>(
+  spots: readonly TSpot[],
+  getSpot: (spot: TSpot) => FilterableSpot,
+): SpotFilterOptions {
   return {
-    region: uniqueSorted(spots.map((spot) => getFishingSpotText(spot, "region", locale))),
-    waterType: uniqueSorted(spots.map((spot) => getFishingSpotText(spot, "waterType", locale))),
-    fish: uniqueSorted(spots.flatMap((spot) => getFishingSpotFish(spot, locale))),
-  };
-}
-
-function isFilterOption(
-  value: string,
-  options: readonly string[],
-): value is (typeof options)[number] {
-  return value === "" || options.includes(value);
-}
-
-function normalizeFilters(filters: SpotFilters, options: SpotFilterOptions): SpotFilters {
-  return {
-    region: isFilterOption(filters.region, options.region) ? filters.region : "",
-    waterType: isFilterOption(filters.waterType, options.waterType) ? filters.waterType : "",
-    fish: isFilterOption(filters.fish, options.fish) ? filters.fish : "",
+    region: uniqueSorted(spots.map((spot) => getSpot(spot).region)),
+    waterType: uniqueSorted(spots.map((spot) => getSpot(spot).waterType)),
+    fish: uniqueSorted(spots.flatMap((spot) => getSpot(spot).fish)),
   };
 }
 
@@ -57,27 +45,26 @@ function createFiltersUrl(filters: SpotFilters) {
   return query ? `/spots?${query}` : "/spots";
 }
 
-export function useSpotFilters(
-  spots: readonly FishingSpot[],
+export function useSpotFilters<TSpot>(
+  spots: readonly TSpot[],
+  getSpot: (spot: TSpot) => FilterableSpot,
   initialFilterValues: SpotFilters = initialFilters,
 ) {
-  const locale = useLocale();
   const router = useRouter();
 
-  const options = useMemo(() => getFilterOptions(spots, locale), [locale, spots]);
-  const [filters, setFilters] = useState<SpotFilters>(() =>
-    normalizeFilters(initialFilterValues, options),
-  );
+  const options = useMemo(() => getFilterOptions(spots, getSpot), [getSpot, spots]);
+  const [filters, setFilters] = useState<SpotFilters>(initialFilterValues);
 
   const filteredSpots = useMemo(
     () =>
       spots.filter(
         (spot) =>
-          (filters.region === "" || getFishingSpotText(spot, "region", locale) === filters.region) &&
-          (filters.waterType === "" || getFishingSpotText(spot, "waterType", locale) === filters.waterType) &&
-          (filters.fish === "" || getFishingSpotFish(spot, locale).includes(filters.fish)),
+          (filters.query === "" || getSpot(spot).searchText.toLocaleLowerCase().includes(filters.query.toLocaleLowerCase())) &&
+          (filters.region === "" || getSpot(spot).region === filters.region) &&
+          (filters.waterType === "" || getSpot(spot).waterType === filters.waterType) &&
+          (filters.fish === "" || getSpot(spot).fish.includes(filters.fish)),
       ),
-    [filters, locale, spots],
+    [filters, getSpot, spots],
   );
 
   const updateFilters = useCallback(

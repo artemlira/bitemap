@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { SpotFilterName, SpotFilterOptions, SpotFilters } from "../model/types";
+import type { SpotFilterName, SpotFilterOptionName, SpotFilterOptions, SpotFilters } from "../model/types";
 import styles from "./spot-filter-bar.module.scss";
 
 type SpotFilterBarProps = {
@@ -23,7 +23,7 @@ export function SpotFilterBar({
   const filterFields: ReadonlyArray<{
     id: string;
     label: string;
-    name: SpotFilterName;
+    name: SpotFilterOptionName;
     placeholder: string;
   }> = [
     { id: "spot-filter-region", label: t("region"), name: "region", placeholder: t("allRegions") },
@@ -33,6 +33,17 @@ export function SpotFilterBar({
 
   return (
     <div className={styles.filters} role="group" aria-label={t("filterGroup")}>
+      <label className={styles.field} htmlFor="spot-filter-query">
+        <span>{t("search")}</span>
+        <input
+          id="spot-filter-query"
+          name="query"
+          type="search"
+          placeholder={t("searchPlaceholder")}
+          value={filters.query}
+          onChange={(event) => onChange("query", event.target.value)}
+        />
+      </label>
       {filterFields.map((field) => (
         <label className={styles.field} htmlFor={field.id} key={field.name}>
           <span>{field.label}</span>

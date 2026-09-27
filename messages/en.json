@@ -36,7 +36,7 @@
   "spots": {
     "catalog": "Fishing spot catalogue",
     "title": "Places that make you want to leave before dawn.",
-    "lead": "Find locations by region, water type or fish. A map, weather and community reviews will arrive as the backend grows.",
+    "lead": "Find locations by name, region, water type or fish. You will also find fishing spots shared by the community here.",
     "direction": "Choose a direction",
     "all": "All fishing spots",
     "count": "Locations: {count}",
@@ -50,7 +50,12 @@
     "allWaterTypes": "All types",
     "fish": "Fish",
     "allFish": "All species",
-    "reset": "Reset"
+    "reset": "Reset",
+    "search": "Search by location or region",
+    "searchPlaceholder": "For example, Kyiv Oblast or Svityaz",
+    "loading": "Adding community fishing spots…",
+    "communityLoadError": "Could not load community fishing spots.",
+    "openCommunitySpot": "Open"
   },
   "auth": {
     "login": {

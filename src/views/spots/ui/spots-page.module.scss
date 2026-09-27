@@ -82,6 +82,12 @@
   margin-top: $space-32;
 }
 
+.error {
+  margin-top: $space-16;
+  color: var(--color-focus);
+  font-weight: 700;
+}
+
 .empty {
   display: grid;
   justify-items: start;
