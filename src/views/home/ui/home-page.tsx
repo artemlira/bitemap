@@ -53,13 +53,49 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className={styles.stepsSection} id="how-it-works">
-        <p className={styles.sectionLabel}>{t("start")}</p>
-        <h2>
-          {t("moreTime")}
-          <br />
-          {t("lessSearch")}
-        </h2>
+      <section className={styles.stepsSection} id="how-it-works" aria-labelledby="how-it-works-title">
+        <div className={styles.stepsHeading}>
+          <div>
+            <p className={styles.sectionLabel}>{t("start")}</p>
+            <h2 id="how-it-works-title">{t("howItWorksTitle")}</h2>
+          </div>
+          <p className={styles.stepsLead}>{t("howItWorksLead")}</p>
+        </div>
+
+        <ol className={styles.stepsList}>
+          <li className={styles.stepCard}>
+            <span className={styles.stepNumber}>01</span>
+            <h3>{t("stepExploreTitle")}</h3>
+            <p>{t("stepExploreText")}</p>
+            <Link className={styles.stepLink} href="/spots">
+              {t("stepExploreAction")}
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </li>
+          <li className={styles.stepCard}>
+            <span className={styles.stepNumber}>02</span>
+            <h3>{t("stepPlanTitle")}</h3>
+            <p>{t("stepPlanText")}</p>
+          </li>
+          <li className={styles.stepCard}>
+            <span className={styles.stepNumber}>03</span>
+            <h3>{t("stepShareTitle")}</h3>
+            <p>{t("stepShareText")}</p>
+            <Link className={styles.stepLink} href="/community">
+              {t("openCommunity")}
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </li>
+        </ol>
+
+        <div className={styles.stepsSummary}>
+          <p>{t("whatYouGet")}</p>
+          <ul>
+            <li>{t("whatYouGetMap")}</li>
+            <li>{t("whatYouGetDetails")}</li>
+            <li>{t("whatYouGetCommunity")}</li>
+          </ul>
+        </div>
       </section>
     </main>
   );

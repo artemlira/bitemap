@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "BiteMap — fishing closer to nature",
-    "description": "Find fishing spots, keep a catch journal and plan your next trip."
+    "description": "A map and community for anglers: discover fishing spots, plan trips, and share photos and reports."
   },
   "navigation": {
     "home": "BiteMap — home",
@@ -23,15 +23,27 @@
     "eyebrow": "Fishing closer to nature",
     "title": "Find your",
     "titleAccent": " next fishing spot.",
-    "lead": "BiteMap helps you choose a spot, check the conditions and save your best fishing moments.",
+    "lead": "BiteMap is a map and community for anglers: discover fishing spots, plan trips and share your own experience.",
     "findSpot": "Find a spot",
     "howItWorks": "How it works",
     "discover": "Discover something new",
     "popular": "Popular fishing spots",
     "spotCount": "3 featured places",
-    "start": "Easy to start",
-    "moreTime": "More time by the water.",
-    "lessSearch": "Less time searching."
+    "start": "Everything for a trip in one place",
+    "howItWorksTitle": "From discovery to your own fishing story.",
+    "howItWorksLead": "BiteMap brings together a map, practical fishing-spot information and community experience, so it is easier to choose a place and share trusted finds.",
+    "stepExploreTitle": "Find a place",
+    "stepExploreText": "Search fishing spots by name, oblast, settlement, water body type or fish species.",
+    "stepExploreAction": "Browse fishing spots",
+    "stepPlanTitle": "Plan your trip",
+    "stepPlanText": "Check access, fish, photos and coordinates, then build a route in your navigation app.",
+    "stepShareTitle": "Share your experience",
+    "stepShareText": "Add your own fishing spots, photos and reports about catches, conditions and impressions to help other anglers.",
+    "openCommunity": "Open community",
+    "whatYouGet": "What is already in BiteMap",
+    "whatYouGetMap": "map and filters",
+    "whatYouGetDetails": "fishing-spot pages and routes",
+    "whatYouGetCommunity": "photos, saved places and community reports"
   },
   "spots": {
     "catalog": "Fishing spot catalogue",

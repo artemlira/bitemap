@@ -165,9 +165,123 @@
   padding-top: 0;
 }
 
+.stepsHeading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+  align-items: end;
+  gap: clamp($space-24, 5vw, $space-64);
+}
+
+.stepsLead {
+  max-width: 35rem;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+}
+
+.stepsList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-16;
+  margin-top: clamp($space-32, 5vw, $space-48);
+  list-style: none;
+}
+
+.stepCard {
+  display: flex;
+  min-height: 21rem;
+  flex-direction: column;
+  padding: clamp($space-24, 3vw, $space-32);
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.stepNumber {
+  color: var(--color-sun);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.stepCard h3 {
+  margin-top: $space-32;
+  font-size: clamp(1.65rem, 2.5vw, 2.2rem);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.stepCard p {
+  margin-top: $space-16;
+  color: var(--color-muted);
+}
+
+.stepLink {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: $space-8;
+  margin-top: auto;
+  padding-top: $space-24;
+  color: var(--color-water);
+  font-weight: 800;
+
+  @include hover {
+    color: var(--color-water-deep);
+  }
+}
+
+.stepsSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-24;
+  margin-top: $space-16;
+  padding: $space-24 $space-32;
+  border-radius: $radius-lg;
+  background: color-mix(in srgb, var(--color-water) 8%, transparent);
+}
+
+.stepsSummary > p {
+  flex: none;
+  color: var(--color-water);
+  font-weight: 800;
+}
+
+.stepsSummary ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-8 $space-24;
+  color: var(--color-muted);
+}
+
+.stepsSummary li::before {
+  margin-right: $space-8;
+  color: var(--color-sun);
+  content: "•";
+}
+
 @include media-max(tablet) {
   .spotGrid {
     grid-template-columns: 1fr;
+  }
+
+  .stepsHeading,
+  .stepsList {
+    grid-template-columns: 1fr;
+  }
+
+  .stepsLead {
+    max-width: 42rem;
+  }
+
+  .stepCard {
+    min-height: auto;
+  }
+
+  .stepLink {
+    margin-top: $space-24;
   }
 
 }
@@ -189,5 +303,15 @@
   .sectionHeading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .stepsSummary {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: $space-24;
+  }
+
+  .stepsSummary ul {
+    justify-content: flex-start;
   }
 }
