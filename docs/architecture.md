@@ -44,6 +44,12 @@ src/
 │   └── article-details/
 │       ├── ui/
 │       └── index.ts
+│   └── admin-articles/
+│       ├── ui/
+│       └── index.ts
+│   └── admin-article-editor/
+│       ├── ui/
+│       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
 │   └── site-header/
 │       ├── ui/
@@ -74,6 +80,10 @@ src/
 │       ├── api/
 │       ├── ui/
 │       └── index.ts
+│   └── manage-fishing-article/
+│       ├── api/
+│       ├── ui/
+│       └── index.ts
 ├── entities/                # доменні моделі: fishing-spot, catch, user, guide
 │   ├── fishing-spot/
 │       ├── model/
@@ -94,6 +104,9 @@ src/
 │   └── fishing-article/
 │       ├── model/
 │       ├── ui/
+│       └── index.ts
+│   └── admin/
+│       ├── model/
 │       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── api/firebase/
@@ -132,8 +145,9 @@ src/
 серверний маршрут і створює його метадані в Firestore.
 `entities/fishing-article` містить двомовні редакційні матеріали й картки,
 `views/articles` показує бібліотеку порад, а `views/article-details` — окрему
-сторінку кожного матеріалу. Поки це стартова редакційна добірка в коді; керування
-статтями через адмінпанель або Firestore можна додати окремо.
+сторінку кожного матеріалу. `features/manage-fishing-article` зберігає
+матеріали та чернетки у Firestore, а `entities/admin` перевіряє адміністраторський
+документ перед доступом до редакції.
 
 ## Правила
 

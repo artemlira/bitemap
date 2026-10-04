@@ -1,16 +1,32 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
-import { getFishingArticleTranslation, type FishingArticle } from "@/entities/fishing-article";
+import { getFishingArticleTranslation, useFishingArticle } from "@/entities/fishing-article";
 import { useLocale, useTranslations } from "next-intl";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./article-details-page.module.scss";
 
-type ArticleDetailsPageProps = { article: FishingArticle };
+type ArticleDetailsPageProps = { slug: string };
 
-export function ArticleDetailsPage({ article }: ArticleDetailsPageProps) {
+export function ArticleDetailsPage({ slug }: ArticleDetailsPageProps) {
   const locale = useLocale();
   const t = useTranslations("articles");
+  const { article, error, isLoading } = useFishingArticle(slug);
+
+  if (isLoading && !article) {
+    return <main className={styles.state} aria-live="polite">{t("loadingArticle")}</main>;
+  }
+
+  if (!article) {
+    return (
+      <main className={styles.state}>
+        <SiteHeader />
+        <h1>{error ? t("unavailableArticle") : t("notFound")}</h1>
+        <Link href="/articles">{t("back")}</Link>
+      </main>
+    );
+  }
+
   const content = getFishingArticleTranslation(article, locale);
 
   return (

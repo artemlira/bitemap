@@ -20,3 +20,12 @@ export type FishingArticle = {
     en: FishingArticleTranslation;
   };
 };
+
+export type FishingArticleStatus = "draft" | "published";
+
+export type ManagedFishingArticle = FishingArticle & {
+  status: FishingArticleStatus;
+  authorId: string;
+  updatedAt?: number;
+  isBuiltIn?: boolean;
+};

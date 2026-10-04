@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { useAuth } from "@/shared/lib/auth";
+import { useAdminStatus } from "@/entities/admin";
 import { useTheme } from "@/shared/lib/theme";
 import { LanguageSwitcher } from "@/widgets/language-switcher";
 import styles from "./site-header.module.scss";
@@ -10,6 +11,7 @@ import styles from "./site-header.module.scss";
 export function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdminStatus();
   const t = useTranslations("navigation");
   const userName = user?.displayName ?? user?.email?.split("@")[0];
   const navigation = [
@@ -18,13 +20,14 @@ export function SiteHeader() {
     { href: "/articles", label: t("articles") },
     { href: "/#how-it-works", label: t("howItWorks") },
   ];
-  const navigationItems = user
-    ? [
+  const navigationItems = [
         ...navigation,
+        ...(isAdmin ? [{ href: "/admin/articles", label: t("manageArticles") }] : []),
+        ...(user ? [
         { href: "/favorites", label: t("favorites") },
         { href: "/my-spots", label: t("mySpots") },
-      ]
-    : navigation;
+        ] : []),
+      ];
 
   return (
     <header className={styles.header}>

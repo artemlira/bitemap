@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { getFishingArticleBySlug, getFishingArticleTranslation, fishingArticles } from "@/entities/fishing-article";
 import { ArticleDetailsPage } from "@/views/article-details";
 
@@ -19,9 +18,5 @@ export async function generateMetadata(props: PageProps<"/[locale]/articles/[slu
 
 export default async function Page(props: PageProps<"/[locale]/articles/[slug]">) {
   const { slug } = await props.params;
-  const article = getFishingArticleBySlug(slug);
-
-  if (!article) notFound();
-
-  return <ArticleDetailsPage article={article} />;
+  return <ArticleDetailsPage slug={slug} />;
 }

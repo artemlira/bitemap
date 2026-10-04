@@ -1,13 +1,14 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { fishingArticles, FishingArticleCard } from "@/entities/fishing-article";
+import { FishingArticleCard, useFishingArticles } from "@/entities/fishing-article";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./articles-page.module.scss";
 
 export function ArticlesPage() {
   const locale = useLocale();
   const t = useTranslations("articles");
+  const { articles, error, isLoading } = useFishingArticles();
 
   return (
     <main className={styles.page}>
@@ -25,10 +26,12 @@ export function ArticlesPage() {
             <p className={styles.sectionLabel}>{t("section")}</p>
             <h2 id="articles-title">{t("sectionTitle")}</h2>
           </div>
-          <p className={styles.count}>{fishingArticles.length}</p>
+          <p className={styles.count}>{t("count", { count: articles.length })}</p>
         </div>
+        {error ? <p role="status">{t("loadError")}</p> : null}
+        {isLoading ? <p aria-live="polite">{t("loadingArticles")}</p> : null}
         <div className={styles.grid}>
-          {fishingArticles.map((article) => (
+          {articles.map((article) => (
             <FishingArticleCard
               key={article.slug}
               article={article}
