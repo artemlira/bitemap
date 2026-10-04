@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { fishingSpots, getFishingSpotText } from "@/entities/fishing-spot";
 import { FishingReportCard, useCommunityFishingReports } from "@/entities/fishing-report";
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
+import { ReportDiscussion } from "@/features/discuss-report";
+import { ContentReactionButton } from "@/features/react-to-content";
 import { getUserSpotText, type UserSpot } from "@/entities/user-spot";
 import styles from "./community-reports.module.scss";
 
@@ -58,7 +60,7 @@ export function CommunityReports({ spots }: CommunityReportsProps) {
       {visibleReports.length > 0 ? (
         <ol className={styles.list} aria-label={t("listLabel")}>
           {visibleReports.map(({ report, target }) => (
-            <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} report={report} target={target} /></li>
+            <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} discussion={<ReportDiscussion report={report} />} reaction={<ContentReactionButton targetType="report" targetId={report.id} />} report={report} target={target} /></li>
           ))}
         </ol>
       ) : null}

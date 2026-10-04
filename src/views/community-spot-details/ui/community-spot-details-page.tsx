@@ -7,6 +7,7 @@ import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { ManageSpotImageActions } from "@/features/manage-spot-image";
+import { ContentReactionButton } from "@/features/react-to-content";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SpotReports } from "@/widgets/spot-reports";
 import { SpotWeather } from "@/widgets/spot-weather";
@@ -74,6 +75,7 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
         <section className={styles.gallery} aria-labelledby="community-gallery-title">
           <div><p className={styles.sectionLabel}>{t("galleryEyebrow")}</p><h2 id="community-gallery-title">{t("galleryTitle")}</h2></div>
           <SpotImageGallery
+            renderReaction={(image) => <ContentReactionButton targetType="image" targetId={image.id} />}
             renderActions={(image) => (
               <ManageSpotImageActions image={image} targetType="user-spot" targetId={spot.id} />
             )}

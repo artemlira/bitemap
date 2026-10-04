@@ -51,7 +51,7 @@ export function AdminArticleEditorPage({ slug }: AdminArticleEditorPageProps) {
           </div>
         ) : null}
         {!isLoading && isAdmin && user && (!slug || article) ? (
-          <FishingArticleEditor article={article ?? undefined} authorId={user.uid} labels={t.raw("editor") as Record<string, string>} />
+          <FishingArticleEditor article={article ?? undefined} authorId={user.uid} labels={t.raw("editor") as Record<string, string>} user={user} />
         ) : null}
       </section>
     </main>

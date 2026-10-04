@@ -25,6 +25,29 @@
 .secondary { border-color: var(--color-line); background: var(--color-surface); color: var(--color-ink); }
 .danger { border-color: rgb(180 46 30 / 35%); background: transparent; color: #b42e1e; }
 .status { width: fit-content; min-height: 3rem; padding: $space-12 $space-16; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-page); color: var(--color-ink); }
+.readingTime { display: grid; align-content: center; gap: $space-8; color: var(--color-muted); font-size: 0.875rem; }
+.readingTime strong { color: var(--color-water); font-size: 1.15rem; }
+.readingTime small { font-size: 0.78rem; }
+.richField { display: grid; gap: $space-8; }
+.richLabel { color: var(--color-ink); font-size: 0.875rem; font-weight: 750; }
+.editorShell { overflow: hidden; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-page); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: $space-8; border-bottom: 1px solid var(--color-line); background: var(--color-surface); }
+.toolbar button { min-width: 2.4rem; min-height: 2.4rem; padding: 0.35rem 0.55rem; border: 1px solid transparent; border-radius: 0.65rem; background: transparent; color: var(--color-ink); font-size: 0.82rem; font-weight: 750; }
+.toolbar button:hover,
+.toolbar button[aria-pressed="true"] { border-color: var(--color-line); background: var(--color-page); }
+.toolbar button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.toolbar button:disabled { cursor: not-allowed; opacity: 0.45; }
+.hiddenFileInput { display: none; }
+.richContent :global(.tiptap) { min-height: 18rem; padding: $space-20; color: var(--color-ink); line-height: 1.7; outline: none; }
+.richContent :global(.tiptap p + p),
+.richContent :global(.tiptap ul),
+.richContent :global(.tiptap ol),
+.richContent :global(.tiptap blockquote) { margin-top: $space-16; }
+.richContent :global(.tiptap ul),
+.richContent :global(.tiptap ol) { padding-left: 1.5rem; }
+.richContent :global(.tiptap blockquote) { padding-left: $space-16; border-left: 3px solid var(--color-sun); color: var(--color-muted); }
+.richContent :global(.tiptap img) { display: block; max-width: 100%; height: auto; margin-block: $space-20; border-radius: 1rem; }
+.richContent :global(.tiptap img.ProseMirror-selectednode) { outline: 3px solid var(--color-focus); }
 .message { color: var(--color-water); font-weight: 700; }
 .error { color: #b42e1e; font-weight: 700; }
 

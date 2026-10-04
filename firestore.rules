@@ -48,6 +48,17 @@ service cloud.firestore {
         || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
     }
 
+    function isPublicReport(reportId) {
+      return get(/databases/$(database)/documents/fishing-reports/$(reportId)).data.isPublic == true;
+    }
+
+    function isPublicImage(imageId) {
+      let image = get(/databases/$(database)/documents/spot-images/$(imageId));
+      return image.data.targetType == "catalog"
+        || (image.data.targetType == "user-spot"
+          && userSpot(image.data.targetId).data.visibility == "published");
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;
@@ -67,6 +78,20 @@ service cloud.firestore {
     match /admins/{userId} {
       allow get: if isOwner(userId);
       allow list, create, update, delete: if false;
+    }
+
+    match /angler-follows/{followId} {
+      allow get, list: if true;
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(["followerId", "followedId", "createdAt"])
+        && request.resource.data.keys().hasOnly(["followerId", "followedId", "createdAt"])
+        && request.resource.data.followerId == request.auth.uid
+        && request.resource.data.followedId is string
+        && request.resource.data.followedId != request.auth.uid
+        && request.resource.data.createdAt is timestamp
+        && followId == request.auth.uid + "__" + request.resource.data.followedId;
+      allow update: if false;
+      allow delete: if isSignedIn() && resource.data.followerId == request.auth.uid;
     }
 
     match /articles/{slug} {
@@ -111,6 +136,21 @@ service cloud.firestore {
         && request.resource.data.targetId == resource.data.targetId
         && request.resource.data.targetType == resource.data.targetType;
       allow delete: if isOwner(resource.data.ownerId);
+
+      match /reactions/{userId} {
+        allow get, list: if isPublicImage(imageId);
+        allow create: if isSignedIn()
+          && isPublicImage(imageId)
+          && userId == request.auth.uid
+          && request.resource.data.keys().hasAll(["userId", "createdAt"])
+          && request.resource.data.keys().hasOnly(["userId", "createdAt"])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.createdAt is timestamp;
+        allow update: if false;
+        allow delete: if isSignedIn()
+          && userId == request.auth.uid
+          && resource.data.userId == request.auth.uid;
+      }
     }
 
     match /fishing-reports/{reportId} {
@@ -132,6 +172,39 @@ service cloud.firestore {
         && request.resource.data.targetType == resource.data.targetType
         && request.resource.data.isPublic == resource.data.isPublic;
       allow delete: if isOwner(resource.data.authorId);
+
+      match /comments/{commentId} {
+        allow get, list: if isPublicReport(reportId);
+        allow create: if isSignedIn()
+          && isPublicReport(reportId)
+          && request.resource.data.keys().hasAll(["authorId", "authorName", "body", "createdAt"])
+          && request.resource.data.keys().hasOnly(["authorId", "authorName", "body", "createdAt"])
+          && request.resource.data.authorId == request.auth.uid
+          && request.resource.data.authorName is string
+          && request.resource.data.authorName.size() > 0
+          && request.resource.data.authorName.size() <= 100
+          && request.resource.data.body is string
+          && request.resource.data.body.size() > 0
+          && request.resource.data.body.size() <= 1200
+          && request.resource.data.createdAt is timestamp;
+        allow update: if false;
+        allow delete: if isOwner(resource.data.authorId);
+      }
+
+      match /reactions/{userId} {
+        allow get, list: if isPublicReport(reportId);
+        allow create: if isSignedIn()
+          && isPublicReport(reportId)
+          && userId == request.auth.uid
+          && request.resource.data.keys().hasAll(["userId", "createdAt"])
+          && request.resource.data.keys().hasOnly(["userId", "createdAt"])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.createdAt is timestamp;
+        allow update: if false;
+        allow delete: if isSignedIn()
+          && userId == request.auth.uid
+          && resource.data.userId == request.auth.uid;
+      }
     }
   }
 }

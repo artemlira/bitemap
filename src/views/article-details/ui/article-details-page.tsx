@@ -3,6 +3,7 @@
 import { Link } from "@/shared/lib/i18n";
 import { getFishingArticleTranslation, useFishingArticle } from "@/entities/fishing-article";
 import { useLocale, useTranslations } from "next-intl";
+import DOMPurify from "isomorphic-dompurify";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./article-details-page.module.scss";
 
@@ -56,10 +57,12 @@ export function ArticleDetailsPage({ slug }: ArticleDetailsPageProps) {
           {content.sections.map((section, index) => (
             <section className={styles.section} id={`article-section-${index + 1}`} key={`${article.slug}-section-${index + 1}`}>
               <h2>{section.heading}</h2>
-              {section.paragraphs.map((paragraph, paragraphIndex) => (
+              {section.contentHtml ? (
+                <div className={styles.richContent} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(section.contentHtml) }} />
+              ) : section.paragraphs?.map((paragraph, paragraphIndex) => (
                 <p key={`${article.slug}-section-${index + 1}-paragraph-${paragraphIndex + 1}`}>{paragraph}</p>
               ))}
-              {section.tips ? (
+              {section.tips && !section.contentHtml ? (
                 <ul className={styles.tips}>
                   {section.tips.map((tip, tipIndex) => <li key={`${article.slug}-section-${index + 1}-tip-${tipIndex + 1}`}>{tip}</li>)}
                 </ul>

@@ -5,6 +5,7 @@ import { collection, onSnapshot, query, where, type Timestamp } from "firebase/f
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 import { useAdminStatus } from "@/entities/admin";
 import { fishingArticles } from "./article-data";
+import { calculateFishingArticleReadMinutes } from "./localization";
 import type { FishingArticleStatus, ManagedFishingArticle } from "./types";
 
 type ArticleRecord = Omit<ManagedFishingArticle, "slug" | "updatedAt"> & {
@@ -15,6 +16,7 @@ function toManagedArticle(slug: string, data: ArticleRecord): ManagedFishingArti
   return {
     ...data,
     slug,
+    readMinutes: calculateFishingArticleReadMinutes(data.translations),
     status: data.status === "draft" ? "draft" : "published",
     updatedAt: typeof data.updatedAt === "number" ? data.updatedAt : data.updatedAt?.toMillis(),
   };
@@ -62,12 +64,26 @@ export function useFishingArticles() {
       authorId: "bitemap",
     }),
     isBuiltIn: true,
+    readMinutes: calculateFishingArticleReadMinutes((persistedBySlug.get(article.slug) ?? article).translations),
   }));
   const builtInSlugs = new Set(fishingArticles.map(({ slug }) => slug));
   const custom = persistedArticles.filter((article) => !builtInSlugs.has(article.slug));
+  const editorialOrder = [
+    "feeder-paternoster-rig",
+    "flat-feeder-hair-rig",
+    "shock-leader-to-mainline",
+    "weather-and-fishing-plan",
+    "accurate-feeder-groundbaiting",
+    "choose-a-fishing-spot",
+  ];
+  const builtInOrder = new Map(editorialOrder.map((slug, index) => [slug, index]));
   const articles = [...builtIn, ...custom]
     .filter((article) => isAdmin || article.status === "published")
-    .sort((first, second) => (second.updatedAt ?? 0) - (first.updatedAt ?? 0));
+    .sort((first, second) => {
+      if (first.isBuiltIn && second.isBuiltIn) return (builtInOrder.get(first.slug) ?? 0) - (builtInOrder.get(second.slug) ?? 0);
+      if (first.isBuiltIn !== second.isBuiltIn) return first.isBuiltIn ? 1 : -1;
+      return (second.updatedAt ?? 0) - (first.updatedAt ?? 0);
+    });
 
   return { articles, error: (errorState?.userId === userId && errorState.hasError) || adminError, isAdmin, isLoading, user };
 }

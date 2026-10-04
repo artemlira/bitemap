@@ -4,7 +4,11 @@ import Image from "next/image";
 import { FishingReportCard, usePublicFishingReportsByAuthor } from "@/entities/fishing-report";
 import { usePublicUserProfile } from "@/entities/user";
 import { UserSpotCard, usePublishedUserSpotsByOwner } from "@/entities/user-spot";
+import { AnglerSpotPhotoStrip } from "./angler-spot-photo-strip";
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
+import { ReportDiscussion } from "@/features/discuss-report";
+import { ContentReactionButton } from "@/features/react-to-content";
+import { AnglerFollowControl } from "@/features/follow-angler";
 import { Link } from "@/shared/lib/i18n";
 import { SiteHeader } from "@/widgets/site-header";
 import { useTranslations } from "next-intl";
@@ -52,10 +56,13 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
               <p>{t("lead")}</p>
             </div>
           </div>
-          <dl className={styles.stats}>
-            <div><dt>{t("spotsStat")}</dt><dd>{areSpotsLoading ? "—" : spots.length}</dd></div>
-            <div><dt>{t("reportsStat")}</dt><dd>{areReportsLoading ? "—" : reports.length}</dd></div>
-          </dl>
+          <div className={styles.profileActions}>
+            <AnglerFollowControl anglerId={userId} />
+            <dl className={styles.stats}>
+              <div><dt>{t("spotsStat")}</dt><dd>{areSpotsLoading ? "—" : spots.length}</dd></div>
+              <div><dt>{t("reportsStat")}</dt><dd>{areReportsLoading ? "—" : reports.length}</dd></div>
+            </dl>
+          </div>
         </div>
       </section>
 
@@ -69,7 +76,12 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
         {!areSpotsLoading && !spotsError && spots.length === 0 ? <p className={styles.stateText}>{t("spotsEmpty")}</p> : null}
         {spots.length > 0 ? (
           <ul className={styles.spotGrid} aria-label={t("spotsList")}>
-            {spots.map((spot) => <li key={spot.id}><UserSpotCard spot={spot} href={`/community/${spot.id}`} actionLabel={t("openSpot")} showVisibility={false} /></li>)}
+            {spots.map((spot) => (
+              <li className={styles.spotItem} key={spot.id}>
+                <UserSpotCard spot={spot} href={`/community/${spot.id}`} actionLabel={t("openSpot")} showVisibility={false} />
+                <AnglerSpotPhotoStrip spotId={spot.id} />
+              </li>
+            ))}
           </ul>
         ) : null}
       </section>
@@ -84,7 +96,7 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
         {!areReportsLoading && !reportsError && reports.length === 0 ? <p className={styles.stateText}>{t("reportsEmpty")}</p> : null}
         {reports.length > 0 ? (
           <ol className={styles.reportList} aria-label={t("reportsList")}>
-            {reports.map((report) => <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} report={report} showAuthor={false} /></li>)}
+            {reports.map((report) => <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} discussion={<ReportDiscussion report={report} />} reaction={<ContentReactionButton targetType="report" targetId={report.id} />} report={report} showAuthor={false} /></li>)}
           </ol>
         ) : null}
       </section>

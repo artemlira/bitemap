@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { useAuth } from "@/shared/lib/auth";
@@ -9,6 +10,7 @@ import { LanguageSwitcher } from "@/widgets/language-switcher";
 import styles from "./site-header.module.scss";
 
 export function SiteHeader() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdminStatus();
@@ -22,6 +24,7 @@ export function SiteHeader() {
   ];
   const navigationItems = [
         ...navigation,
+        ...(user ? [{ href: "/feed", label: t("feed") }] : []),
         ...(isAdmin ? [{ href: "/admin/articles", label: t("manageArticles") }] : []),
         ...(user ? [
         { href: "/favorites", label: t("favorites") },
@@ -65,6 +68,56 @@ export function SiteHeader() {
         >
           <span aria-hidden="true">{theme === "light" ? "◐" : "◑"}</span>
         </button>
+      </div>
+
+      <button
+        className={styles.menuButton}
+        type="button"
+        aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
+        aria-expanded={isMenuOpen}
+        aria-controls="site-header-menu"
+        onClick={() => setIsMenuOpen((open) => !open)}
+      >
+        <span aria-hidden="true" className={isMenuOpen ? styles.menuIconOpen : styles.menuIcon}>
+          <span />
+          <span />
+          <span />
+        </span>
+      </button>
+
+      <div className={styles.mobileMenu} id="site-header-menu" hidden={!isMenuOpen}>
+          <nav className={styles.mobileNavigation} aria-label={t("main")}>
+            {navigationItems.map((item) => (
+              <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className={styles.mobileControls}>
+            {user ? (
+              <>
+                <Link className={styles.userName} href={`/anglers/${user.uid}`} onClick={() => setIsMenuOpen(false)}>
+                  {userName}
+                </Link>
+                <button className={styles.signOutButton} type="button" onClick={() => { setIsMenuOpen(false); void signOut(); }}>
+                  {t("signOut")}
+                </button>
+              </>
+            ) : (
+              <Link className={styles.loginLink} href="/login" onClick={() => setIsMenuOpen(false)}>
+                {t("logIn")}
+              </Link>
+            )}
+            <LanguageSwitcher />
+            <button
+              className={styles.themeButton}
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === "light" ? t("enableDarkTheme") : t("enableLightTheme")}
+            >
+              <span aria-hidden="true">{theme === "light" ? "◐" : "◑"}</span>
+            </button>
+          </div>
       </div>
     </header>
   );

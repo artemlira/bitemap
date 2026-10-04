@@ -1,6 +1,7 @@
 export type FishingArticleSection = {
   heading: string;
-  paragraphs: readonly string[];
+  paragraphs?: readonly string[];
+  contentHtml?: string;
   tips?: readonly string[];
 };
 

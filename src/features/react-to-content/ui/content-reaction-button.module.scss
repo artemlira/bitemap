@@ -1,0 +1,12 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.wrapper { display: flex; flex-wrap: wrap; align-items: center; gap: $space-8; }
+.button, .guest { display: inline-flex; align-items: center; gap: $space-8; min-height: 2.25rem; padding: $space-8 $space-12; border: 1px solid var(--color-line); border-radius: $radius-full; background: var(--color-surface); color: var(--color-water); font-size: 0.85rem; font-weight: 800; }
+.button { cursor: pointer; transition: background 160ms ease, color 160ms ease, border-color 160ms ease; }
+.button[aria-pressed="true"] { border-color: color-mix(in srgb, var(--color-sun) 65%, var(--color-line)); background: color-mix(in srgb, var(--color-sun) 16%, var(--color-surface)); color: #b64d28; }
+.button span:first-child, .guest > span:first-child { font-size: 1.1rem; line-height: 1; }
+.button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.button:disabled { cursor: wait; opacity: 0.65; }
+.guest a { color: var(--color-water); text-decoration: underline; text-underline-offset: 0.15em; }
+.state, .error { color: var(--color-muted); font-size: 0.8rem; }
+.error { color: #b42e1e; }

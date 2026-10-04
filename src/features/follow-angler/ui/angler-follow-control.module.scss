@@ -1,0 +1,59 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.control {
+  display: grid;
+  justify-items: start;
+  gap: $space-8;
+  margin-top: $space-20;
+}
+
+.button,
+.followingButton {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $space-20;
+  border: 1px solid var(--color-sun);
+  border-radius: $radius-full;
+  background: var(--color-sun);
+  color: var(--color-forest);
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.followingButton {
+  border-color: rgb(255 253 248 / 42%);
+  background: rgb(255 253 248 / 10%);
+  color: #fffdf8;
+}
+
+.button:disabled,
+.followingButton:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.error {
+  color: #ffb4a8;
+  font-size: 0.85rem;
+}
+
+.followers {
+  color: rgb(255 253 248 / 78%);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover,
+  .followingButton:hover {
+    transform: translateY(-1px);
+  }
+
+  .followingButton:hover {
+    background: rgb(255 253 248 / 20%);
+  }
+}

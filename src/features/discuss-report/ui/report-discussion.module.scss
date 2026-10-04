@@ -1,0 +1,27 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.discussion { display: grid; gap: $space-12; padding-top: $space-16; border-top: 1px solid var(--color-line); }
+.toggle { display: inline-flex; justify-self: start; align-items: center; gap: $space-8; min-height: 2.5rem; padding: $space-8 $space-16; border: 1px solid var(--color-line); border-radius: $radius-full; background: transparent; color: var(--color-water); font-weight: 800; transition: background 160ms ease, border-color 160ms ease; }
+.toggle:hover { border-color: var(--color-water); background: color-mix(in srgb, var(--color-water) 7%, transparent); }
+.count { display: grid; min-width: 1.4rem; min-height: 1.4rem; place-items: center; padding-inline: 0.3rem; border-radius: $radius-full; background: color-mix(in srgb, var(--color-water) 12%, transparent); font-size: 0.75rem; }
+.panel { display: grid; gap: $space-16; padding: $space-20; border-radius: $radius-lg; background: var(--color-page); }
+.panel[hidden] { display: none; }
+.panel h3 { margin: 0; color: var(--color-ink); font-size: 1.05rem; }
+.state, .signIn, .success, .error { margin: 0; color: var(--color-muted); font-size: 0.875rem; }
+.list { display: grid; gap: $space-12; margin: 0; padding: 0; list-style: none; }
+.comment { display: grid; gap: $space-8; padding: $space-16; border: 1px solid var(--color-line); border-radius: $radius-lg; background: var(--color-surface); }
+.commentMeta { display: flex; flex-wrap: wrap; align-items: baseline; gap: $space-8; }
+.commentMeta a { color: var(--color-ink); font-size: 0.875rem; font-weight: 800; }
+.commentMeta time { color: var(--color-muted); font-size: 0.75rem; }
+.comment > p { margin: 0; color: var(--color-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+.delete { justify-self: start; padding: 0; border: 0; background: transparent; color: #b42e1e; font-size: 0.8rem; font-weight: 750; }
+.delete:disabled { cursor: progress; opacity: 0.65; }
+.form { display: grid; gap: $space-8; padding-top: $space-16; border-top: 1px solid var(--color-line); }
+.form label { color: var(--color-ink); font-size: 0.875rem; font-weight: 800; }
+.form textarea { width: 100%; min-height: 6rem; padding: $space-12; border: 1px solid var(--color-line); border-radius: $radius-lg; background: var(--color-surface); color: var(--color-ink); font: inherit; resize: vertical; }
+.form textarea:focus-visible, .toggle:focus-visible, .delete:focus-visible, .formFooter button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.formFooter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: $space-12; color: var(--color-muted); font-size: 0.75rem; }
+.formFooter button { min-height: 2.5rem; padding-inline: $space-16; border: 0; border-radius: $radius-full; background: var(--color-water); color: #fffdf8; font-weight: 800; }
+.formFooter button:disabled { cursor: not-allowed; opacity: 0.55; }
+.success { color: var(--color-water); font-weight: 750; }
+.error { color: #b42e1e; font-weight: 750; }

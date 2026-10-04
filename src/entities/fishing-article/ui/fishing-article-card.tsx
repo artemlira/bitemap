@@ -31,5 +31,14 @@ export function FishingArticleCard({ article, locale, readTimeLabel, actionLabel
 }
 
 function fishingArticlesIndex(slug: string) {
-  return fishingArticles.findIndex((article) => article.slug === slug) + 1;
+  const newestFirst = [
+    "feeder-paternoster-rig",
+    "flat-feeder-hair-rig",
+    "shock-leader-to-mainline",
+    "weather-and-fishing-plan",
+    "accurate-feeder-groundbaiting",
+    "choose-a-fishing-spot",
+  ];
+  const editorialIndex = newestFirst.indexOf(slug);
+  return editorialIndex >= 0 ? editorialIndex + 1 : fishingArticles.findIndex((article) => article.slug === slug) + 1;
 }

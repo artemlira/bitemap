@@ -32,6 +32,19 @@
 .section { scroll-margin-top: $space-32; }
 .section h2 { color: var(--color-ink); font-size: clamp(1.8rem, 3.5vw, 2.7rem); letter-spacing: -0.065em; line-height: 1; }
 .section p { margin-top: $space-20; color: var(--color-muted); font-size: 1.05rem; line-height: 1.8; }
+.richContent { color: var(--color-muted); font-size: 1.05rem; line-height: 1.8; }
+.richContent p,
+.richContent h2,
+.richContent h3,
+.richContent ul,
+.richContent ol,
+.richContent blockquote { margin-top: $space-20; }
+.richContent h2,
+.richContent h3 { color: var(--color-ink); line-height: 1.2; }
+.richContent ul,
+.richContent ol { padding-left: 1.5rem; }
+.richContent blockquote { padding-left: $space-20; border-left: 3px solid var(--color-sun); }
+.richContent img { display: block; max-width: 100%; height: auto; margin-block: $space-24; border-radius: $radius-lg; }
 .tips { display: grid; gap: $space-12; margin-top: $space-24; padding: $space-24; border-left: 3px solid var(--color-sun); border-radius: 0 $radius-lg $radius-lg 0; background: var(--color-surface); color: var(--color-ink); }
 .tips li { margin-left: $space-20; padding-left: $space-8; }
 .footer { @include container; padding-bottom: clamp($space-48, 8vw, $space-96); }

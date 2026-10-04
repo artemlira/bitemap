@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { FishingReportList, type FishingReportTargetType } from "@/entities/fishing-report";
 import { CreateFishingReportForm } from "@/features/create-fishing-report";
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
+import { ReportDiscussion } from "@/features/discuss-report";
+import { ContentReactionButton } from "@/features/react-to-content";
 import styles from "./spot-reports.module.scss";
 
 type SpotReportsProps = {
@@ -22,7 +24,13 @@ export function SpotReports({ isPublic, targetId, targetType }: SpotReportsProps
         <p>{t("eyebrow")}</p>
         <h2 id={`spot-reports-title-${targetType}-${targetId}`}>{t("title")}</h2>
       </div>
-      <FishingReportList renderActions={(report) => <ManageFishingReportActions report={report} />} targetType={targetType} targetId={targetId} />
+      <FishingReportList
+        renderActions={(report) => <ManageFishingReportActions report={report} />}
+        renderDiscussion={(report) => <ReportDiscussion report={report} />}
+        renderReaction={(report) => <ContentReactionButton targetType="report" targetId={report.id} />}
+        targetType={targetType}
+        targetId={targetId}
+      />
       <CreateFishingReportForm isPublic={reportIsPublic} targetType={targetType} targetId={targetId} />
     </section>
   );

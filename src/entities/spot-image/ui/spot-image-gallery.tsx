@@ -9,11 +9,12 @@ import styles from "./spot-image-gallery.module.scss";
 
 type SpotImageGalleryProps = {
   renderActions?: (image: SpotImage) => ReactNode;
+  renderReaction?: (image: SpotImage) => ReactNode;
   targetId: string;
   targetType: SpotImageTargetType;
 };
 
-export function SpotImageGallery({ renderActions, targetId, targetType }: SpotImageGalleryProps) {
+export function SpotImageGallery({ renderActions, renderReaction, targetId, targetType }: SpotImageGalleryProps) {
   const locale = useLocale();
   const t = useTranslations("gallery");
   const { hasError, images } = useSpotImages(targetType, targetId);
@@ -41,6 +42,7 @@ export function SpotImageGallery({ renderActions, targetId, targetType }: SpotIm
           </div>
           <figcaption>{locale === "en" ? image.caption.en || image.caption.uk : image.caption.uk}</figcaption>
           {renderActions ? <div className={styles.actions}>{renderActions(image)}</div> : null}
+          {renderReaction ? <div className={styles.actions}>{renderReaction(image)}</div> : null}
         </figure>
       ))}
     </div>
