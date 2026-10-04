@@ -9,7 +9,8 @@
     "lint": "eslint",
     "emulators": "firebase emulators:start --only auth,firestore --project demo-bitemap",
     "test": "tsc --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --outDir node_modules/.cache/bitemap-tests src/entities/weather-forecast/model/fishing-activity.ts && node --test tests/weather-forecast.test.mjs",
-    "test:rules": "firebase emulators:exec --only firestore --project demo-bitemap \"node --test tests/firestore-rules.test.mjs\""
+    "test:e2e": "node scripts/run-emulator-tests.mjs e2e",
+    "test:rules": "node scripts/run-emulator-tests.mjs rules"
   },
   "dependencies": {
     "@tiptap/extension-image": "^3.31.4",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.2",
+    "@playwright/test": "^1.63.0",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
     "@types/react": "^19",
