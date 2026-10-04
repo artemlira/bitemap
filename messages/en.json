@@ -7,6 +7,7 @@
     "home": "BiteMap — home",
     "spots": "Fishing spots",
     "community": "Community",
+    "articles": "Fishing tips",
     "howItWorks": "How it works",
     "favorites": "Saved",
     "mySpots": "My spots",
@@ -256,6 +257,21 @@
     "loading": "Loading the latest reports…",
     "error": "Could not load the latest reports.",
     "empty": "There are no public reports yet. Share the first experience from a fishing spot."
+  },
+  "articles": {
+    "pageTitle": "Fishing tips and guides — BiteMap",
+    "pageDescription": "Practical articles about choosing a fishing spot, feeder fishing and planning a trip.",
+    "eyebrow": "Knowledge from the water",
+    "title": "Make your next trip count.",
+    "lead": "Practical guides to fishing spots, tackle and technique — clear, useful advice to take with you to the water.",
+    "section": "Angler’s library",
+    "sectionTitle": "Find your next useful read",
+    "readTime": "{minutes} min read",
+    "readArticle": "Read article",
+    "back": "All fishing tips",
+    "notFound": "Article not found.",
+    "contents": "In this article",
+    "publishedLabel": "A BiteMap guide"
   },
   "favorites": {
     "eyebrow": "Your collection",

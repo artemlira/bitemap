@@ -38,6 +38,12 @@ src/
 │   └── community-spot-details/
 │       ├── ui/
 │       └── index.ts
+│   ├── articles/
+│   │   ├── ui/
+│   │   └── index.ts
+│   └── article-details/
+│       ├── ui/
+│       └── index.ts
 ├── widgets/                 # великі, самодостатні та повторно використовувані блоки
 │   └── site-header/
 │       ├── ui/
@@ -85,6 +91,10 @@ src/
 │       ├── model/
 │       ├── ui/
 │       └── index.ts
+│   └── fishing-article/
+│       ├── model/
+│       ├── ui/
+│       └── index.ts
 └── shared/                  # незалежний від домену код: UI-kit, config, api, lib
     ├── api/firebase/
     ├── lib/auth/
@@ -120,6 +130,10 @@ src/
 `published`. `entities/spot-image` тримає галереї окремо від карток водойм, а
 `features/upload-spot-image` завантажує файл у Cloudinary через підписаний
 серверний маршрут і створює його метадані в Firestore.
+`entities/fishing-article` містить двомовні редакційні матеріали й картки,
+`views/articles` показує бібліотеку порад, а `views/article-details` — окрему
+сторінку кожного матеріалу. Поки це стартова редакційна добірка в коді; керування
+статтями через адмінпанель або Firestore можна додати окремо.
 
 ## Правила
 

@@ -1,0 +1,73 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: 0 1rem 2.5rem rgb(8 44 55 / 7%);
+  color: var(--color-ink);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  @include hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1.25rem 3rem rgb(8 44 55 / 12%);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+}
+
+.visual {
+  position: relative;
+  display: flex;
+  min-height: 13rem;
+  align-items: end;
+  overflow: hidden;
+  padding: $space-24;
+  background: linear-gradient(135deg, #5d9da7, #0c5369);
+  color: #fffdf8;
+
+  &[data-tone="sunset"] { background: linear-gradient(135deg, #d6a35a, #657250); }
+  &[data-tone="river"] { background: linear-gradient(135deg, #7b9d80, #145c58); }
+
+  &::before,
+  &::after {
+    position: absolute;
+    right: -2rem;
+    bottom: -7rem;
+    width: 18rem;
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 253 248 / 32%);
+    border-radius: 50%;
+    content: "";
+  }
+
+  &::after {
+    right: 1.5rem;
+    bottom: -4rem;
+    width: 10rem;
+  }
+}
+
+.category,
+.number { position: relative; z-index: 1; }
+.category { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.number { margin-left: auto; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.08em; opacity: 0.45; }
+
+.content { display: grid; flex: 1; align-content: start; gap: $space-16; padding: $space-24; }
+.meta { color: var(--color-muted); font-size: 0.8rem; font-weight: 650; }
+.title { font-size: clamp(1.4rem, 2.5vw, 1.8rem); letter-spacing: -0.055em; line-height: 1.05; }
+.excerpt { color: var(--color-muted); }
+.action { align-self: end; margin-top: auto; color: var(--color-water); font-size: 0.875rem; font-weight: 800; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}

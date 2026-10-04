@@ -15,6 +15,7 @@ export function SiteHeader() {
   const navigation = [
     { href: "/spots", label: t("spots") },
     { href: "/community", label: t("community") },
+    { href: "/articles", label: t("articles") },
     { href: "/#how-it-works", label: t("howItWorks") },
   ];
   const navigationItems = user
