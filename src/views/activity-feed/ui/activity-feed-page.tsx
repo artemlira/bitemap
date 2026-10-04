@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { FishingReportCard } from "@/entities/fishing-report";
-import { useFollowingActivity, type FeedActivity } from "@/entities/activity-feed";
+import { useActivityNotifications, useFollowingActivity, type FeedActivity } from "@/entities/activity-feed";
 import { UserSpotCard } from "@/entities/user-spot";
 import { ReportDiscussion } from "@/features/discuss-report";
 import { ContentReactionButton } from "@/features/react-to-content";
@@ -66,6 +66,8 @@ function ActivityItem({ activity }: { activity: FeedActivity }) {
 export function ActivityFeedPage() {
   const t = useTranslations("activityFeed");
   const { activities, hasError, isAuthLoading, isLoading, user } = useFollowingActivity();
+  const notifications = useActivityNotifications(user?.uid, activities, isLoading);
+  const locale = useLocale();
 
   return (
     <main className={styles.page}>
@@ -79,6 +81,32 @@ export function ActivityFeedPage() {
       </section>
 
       <section className={styles.content} aria-labelledby="activity-feed-title">
+        {user ? (
+          <section className={styles.notifications} aria-labelledby="notifications-title">
+            <div className={styles.notificationsHeading}>
+              <div><p className={styles.sectionLabel}>{t("notificationsEyebrow")}</p><h2 id="notifications-title">{t("notificationsTitle")}</h2></div>
+              {!notifications.isLoading && !notifications.hasError ? <span className={styles.unreadCount}>{t("unreadCount", { count: notifications.unreadCount })}</span> : null}
+            </div>
+            {notifications.unreadCount > 0 ? <button className={styles.readButton} disabled={notifications.isLoading} onClick={notifications.markAllRead} type="button">{t("markAllRead")}</button> : null}
+            {notifications.isLoading ? <p className={styles.state} aria-live="polite">{t("notificationsLoading")}</p> : null}
+            {!notifications.isLoading && notifications.hasError ? <p className={styles.error} role="alert">{t("notificationsError")}</p> : null}
+            {!notifications.isLoading && notifications.hasSyncError ? <p className={styles.error} role="status">{t("notificationReadSyncError")}</p> : null}
+            {!notifications.isLoading && !notifications.hasError && notifications.notifications.length === 0 ? <p className={styles.notificationsEmpty}>{t("notificationsEmpty")}</p> : null}
+            {!notifications.isLoading && !notifications.hasError && notifications.notifications.length > 0 ? (
+              <ol className={styles.notificationList} aria-label={t("notificationsTitle")}>
+                {notifications.notifications.map((notification) => (
+                  <li key={notification.id}>
+                    <Link className={styles.notification} data-unread={notification.isUnread || undefined} href={notification.href}>
+                      {notification.isUnread ? <span className={styles.notificationDot} aria-hidden="true" /> : null}
+                      <span><strong>{notification.actorName === "BiteMap" ? t("unknownAngler") : notification.actorName}</strong> {t(`notificationKinds.${notification.kind}`)}</span>
+                      <time dateTime={new Date(notification.createdAt).toISOString()}>{new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(notification.createdAt))}</time>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            ) : null}
+          </section>
+        ) : null}
         <div className={styles.heading}>
           <div><p className={styles.sectionLabel}>{t("section")}</p><h2 id="activity-feed-title">{t("sectionTitle")}</h2></div>
           {!isLoading && !hasError && user ? <p className={styles.count}>{t("count", { count: activities.length })}</p> : null}

@@ -27,6 +27,7 @@ function getInitialValues(report: FishingReport): FishingReportEditValues {
     baitEn: english?.bait ?? "",
     catchLengthCm: report.catchLengthCm?.toString() ?? "",
     catchWeightKg: report.catchWeightKg?.toString() ?? "",
+    waterTemperatureC: report.waterTemperatureC?.toString() ?? "",
     conditions: report.conditions ?? "",
     conditionsEn: english?.conditions ?? "",
     fish: report.fish.join(", "),
@@ -190,6 +191,10 @@ export function ManageFishingReportActions({ report }: ManageFishingReportAction
           <label>
             <span>{t("conditions")}</span>
             <input onChange={(event) => updateValue("conditions", event.target.value)} placeholder={t("conditionsPlaceholder")} value={values.conditions} />
+          </label>
+          <label>
+            <span>{t("waterTemperature")}</span>
+            <input max="40" min="-2" onChange={(event) => updateValue("waterTemperatureC", event.target.value)} placeholder={t("waterTemperaturePlaceholder")} step="0.1" type="number" value={values.waterTemperatureC} />
           </label>
           <label className={styles.photoField}>
             <span>{t("photo")}</span>

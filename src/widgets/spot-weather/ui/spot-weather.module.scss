@@ -28,6 +28,16 @@
 .activity { margin-top: $space-16; padding: $space-8; border-radius: $radius-full; background: color-mix(in srgb, var(--color-water) 10%, transparent); color: var(--color-water); font-size: 0.72rem; font-weight: 800; text-align: center; }
 .activity[data-level="excellent"] { background: color-mix(in srgb, var(--color-forest) 18%, transparent); color: var(--color-forest); }
 .activity[data-level="low"] { background: color-mix(in srgb, var(--color-sun) 18%, transparent); color: var(--color-focus); }
+.method { padding: $space-16 $space-20; border: 1px solid var(--color-line); border-radius: $radius-lg; background: var(--color-surface); color: var(--color-muted); }
+.method summary { color: var(--color-water); font-weight: 800; cursor: pointer; }
+.method p { max-width: 68rem; margin-top: $space-12; line-height: 1.65; }
+.community { display: grid; gap: $space-16; padding: clamp($space-20, 4vw, $space-32); border: 1px solid var(--color-line); border-radius: $radius-lg; background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.community h3 { color: var(--color-ink); font-size: clamp(1.35rem, 2.6vw, 1.9rem); letter-spacing: -0.04em; }
+.community > div > p, .communityState { margin-top: $space-8; color: var(--color-muted); }
+.speciesList { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: $space-12; margin: 0; padding: 0; list-style: none; }
+.speciesList li { display: grid; gap: $space-8; min-width: 0; padding: $space-16; border-radius: $radius-lg; background: color-mix(in srgb, var(--color-water) 6%, var(--color-surface)); }
+.speciesList strong { color: var(--color-water); }
+.speciesList span { color: var(--color-muted); font-size: 0.85rem; }
 .disclaimer { color: var(--color-muted); font-size: 0.82rem; }
 
 @include media-max(tablet) { .dailyList { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

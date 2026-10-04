@@ -11,6 +11,7 @@ export type FishingReportEditValues = {
   baitEn: string;
   catchLengthCm: string;
   catchWeightKg: string;
+  waterTemperatureC: string;
   conditions: string;
   conditionsEn: string;
   fish: string;
@@ -44,12 +45,17 @@ export async function updateFishingReport(reportId: string, values: FishingRepor
   };
   const weight = Number(values.catchWeightKg);
   const length = Number(values.catchLengthCm);
+  const waterTemperature = Number(values.waterTemperatureC);
+  if (values.waterTemperatureC.trim() && (!Number.isFinite(waterTemperature) || waterTemperature < -2 || waterTemperature > 40)) {
+    throw new Error("invalid-water-temperature");
+  }
 
   await updateDoc(doc(getFirebaseFirestore(), "fishing-reports", reportId), {
     activity: values.activity,
     bait: values.bait.trim(),
     catchWeightKg: Number.isFinite(weight) && weight > 0 ? weight : null,
     catchLengthCm: Number.isFinite(length) && length > 0 ? length : null,
+    waterTemperatureC: values.waterTemperatureC.trim() && Number.isFinite(waterTemperature) && waterTemperature >= -2 && waterTemperature <= 40 ? waterTemperature : null,
     conditions: values.conditions.trim(),
     fish: toFishList(values.fish),
     impression: values.impression.trim(),

@@ -48,6 +48,12 @@ service cloud.firestore {
         || (targetType == "user-spot" && userSpot(targetId).data.visibility == "published");
     }
 
+    function hasValidWaterTemperature(data) {
+      let value = data.get("waterTemperatureC", null);
+      return value == null
+        || ((value is int || value is float) && value >= -2 && value <= 40);
+    }
+
     function isPublicReport(reportId) {
       return get(/databases/$(database)/documents/fishing-reports/$(reportId)).data.isPublic == true;
     }
@@ -221,6 +227,7 @@ service cloud.firestore {
         || isOwner(resource.data.authorId);
       allow create: if isSignedIn()
         && request.resource.data.authorId == request.auth.uid
+        && hasValidWaterTemperature(request.resource.data)
         && canContributeToReport(
           request.resource.data.targetType,
           request.resource.data.targetId,
@@ -233,6 +240,7 @@ service cloud.firestore {
           && request.resource.data.authorId == resource.data.authorId
           && request.resource.data.targetId == resource.data.targetId
           && request.resource.data.targetType == resource.data.targetType
+          && hasValidWaterTemperature(request.resource.data)
           && request.resource.data.isPublic == resource.data.isPublic
           && request.resource.data.get("moderationStatus", "") == resource.data.get("moderationStatus", ""))
         || (isAdmin()

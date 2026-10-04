@@ -35,11 +35,31 @@
   transform: scale(1.25);
 }
 
+.clusterMarker {
+  display: grid;
+  place-items: center;
+  border: 2px solid #fffdf8;
+  border-radius: 50%;
+  background: var(--color-water);
+  color: #fffdf8;
+  box-shadow: 0 3px 12px rgb(10 48 62 / 34%);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
 .popup {
   display: grid;
   gap: 0.35rem;
   min-width: 9rem;
 }
+
+.popupSpot + .popupSpot {
+  margin-top: 0.35rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.popupSpot { display: grid; gap: 0.35rem; }
 
 .popup span {
   color: var(--color-muted);

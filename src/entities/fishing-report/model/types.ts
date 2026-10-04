@@ -19,6 +19,7 @@ export type FishingReport = {
   fish: string[];
   catchLengthCm?: number;
   catchWeightKg?: number;
+  waterTemperatureC?: number;
   id: string;
   impression: string;
   method: string;

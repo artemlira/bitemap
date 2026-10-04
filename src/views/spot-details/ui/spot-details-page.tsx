@@ -80,7 +80,7 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           locationLabel={`${getFishingSpotText(spot, "name", locale)}, ${getFishingSpotText(spot, "region", locale)}`}
         />
 
-        <SpotWeather id={spot.id} latitude={spot.latitude} longitude={spot.longitude} />
+        <SpotWeather id={spot.id} latitude={spot.latitude} longitude={spot.longitude} targetType="catalog" />
 
         <div className={styles.fishSection}>
           <div>

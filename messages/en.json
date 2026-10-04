@@ -79,7 +79,8 @@
     "mapTitle": "Fishing spots across Ukraine",
     "mapCount": "On the map: {count}",
     "mapMissingCoordinates": "{count} spots do not have coordinates yet; they are still available in the list below.",
-    "openMapSpot": "Open fishing spot"
+    "openMapSpot": "Open fishing spot",
+    "clusterTitle": "Fishing spot group: {count}"
   },
   "auth": {
     "login": {
@@ -129,7 +130,7 @@
     "galleryEyebrow": "Community photos",
     "galleryTitle": "Fishing through anglers’ eyes",
     "mvp": "MVP data",
-    "mvpText": "This is a starter profile for the location. Water temperature and more community observations will be added next."
+    "mvpText": "Find the location coordinates, weather forecast, and planning calendar here. Add trip reports to grow the community observations."
   },
   "reports": {
     "eyebrow": "Community experience",
@@ -156,10 +157,10 @@
     "rating": "Overall rating",
     "activity": "Fish activity",
     "activityOption": {
-      "excellent": "High",
-      "good": "Good",
-      "fair": "Moderate",
-      "low": "Low"
+      "excellent": "Favorable",
+      "good": "Mostly favorable",
+      "fair": "Mixed",
+      "low": "Challenging"
     },
     "ratingOption": "{rating} out of 5",
     "ratingValue": "Rating: {rating} out of 5",
@@ -171,6 +172,9 @@
     "baitPlaceholder": "For example, sweetcorn, bloodworm or a wobbler",
     "catchWeight": "Catch weight, kg (optional)",
     "catchLength": "Fish length, cm (optional)",
+    "waterTemperature": "Measured water temperature, °C (optional)",
+    "waterTemperaturePlaceholder": "For example, 18.5",
+    "waterTemperatureValue": "{value} °C · angler measurement",
     "weightValue": "{value} kg",
     "lengthValue": "{value} cm",
     "rodSetup": "Rod or rig setup (optional)",
@@ -319,6 +323,23 @@
     "lead": "New fishing spots, photos and reports — together in one feed, so you can keep up with your community.",
     "section": "Latest updates",
     "sectionTitle": "Your following feed",
+    "notificationsEyebrow": "Your community",
+    "notificationsTitle": "Notifications",
+    "unreadCount": "Unread: {count}",
+    "markAllRead": "Mark all as read",
+    "notificationsLoading": "Checking for new activity…",
+    "notificationsError": "Could not load notifications.",
+    "notificationReadSyncError": "Could not sync read status across devices. Please try again later.",
+    "notificationsEmpty": "There is no new activity yet.",
+    "unknownAngler": "BiteMap member",
+    "notificationKinds": {
+      "followedReport": "shared a fishing report",
+      "followedSpot": "published a fishing spot",
+      "followedPhoto": "added a photo",
+      "newFollower": "started following you",
+      "newComment": "commented on your report",
+      "newReaction": "reacted to your post"
+    },
     "count": "Posts: {count}",
     "loading": "Gathering updates…",
     "error": "Could not load the feed. Try refreshing the page.",
@@ -606,14 +627,28 @@
     "windValue": "{value} km/h",
     "updated": "Updated",
     "calendar": "Bite calendar",
-    "calendarLead": "An estimated fish-activity level for each day.",
+    "calendarLead": "A rough weather-conditions index for planning a trip—not a catch forecast.",
     "precipitation": "Precipitation",
-    "disclaimer": "Activity is calculated from season, temperature, wind and precipitation. It is a guide, not a bite guarantee.",
+    "indexValue": "index {value}/100",
+    "methodTitle": "How the index is calculated",
+    "method": "This is a heuristic, not a model trained on catch reports: it starts at 50. Season: spring +4, summer +2, autumn +4, winter −4. Average forecast air temperature: 10–22°C +8, 5–28°C +3, otherwise −6. Maximum wind: up to 15 km/h +8, up to 25 +3, up to 40 −4, above 40 −12. Precipitation probability up to 20% adds 3; 70% or higher subtracts 8. A thunderstorm forecast caps the index at 30. The result is clamped to 0–100.",
+    "disclaimer": "The index is not a percentage or a probability of a bite. It uses air temperature, not water temperature; conditions and fish responses vary by species and waterbody.",
+    "communityTitle": "Angler observations",
+    "communityLead": "Aggregated public reports from the past year. These are observations, not a forecast.",
+    "communityLoading": "Gathering community observations…",
+    "communityUnavailable": "Community observations are unavailable right now.",
+    "communityTooFew": "There are not enough reports to summarize yet. At least 3 reports mentioning a catch are needed.",
+    "communityReportCount": "{count} reports",
+    "communityActivity": "Average reported activity: {value} of 4",
+    "communityWaterTemperature": "Average measured water temperature: {value} °C ({count} readings)",
+    "communityFish": {
+      "carp": "Carp", "pike": "Pike", "perch": "Perch", "zander": "Zander", "bream": "Bream", "catfish": "Catfish", "roach": "Roach", "crucian": "Crucian carp", "tench": "Tench", "trout": "Trout", "chub": "Chub", "eel": "Eel", "grassCarp": "Grass carp", "silverCarp": "Silver carp"
+    },
     "activity": {
-      "excellent": "High",
-      "good": "Good",
-      "fair": "Moderate",
-      "low": "Low"
+      "excellent": "Favorable",
+      "good": "Mostly favorable",
+      "fair": "Mixed",
+      "low": "Challenging"
     },
     "conditions": {
       "clear": "Clear",

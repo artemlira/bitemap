@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { Link } from "@/shared/lib/i18n";
 import { getFishingReportFish, getFishingReportText } from "../model/localization";
-import { useFishingReports } from "../model/use-fishing-reports";
+import { useFishingReports } from "@/entities/fishing-report";
 import type { FishingReport, FishingReportTargetType } from "../model/types";
 import styles from "./fishing-report-list.module.scss";
 
@@ -52,6 +52,7 @@ export function FishingReportCard({ actions, discussion, hideAuthor = false, rea
         <div><dt>{t("activity")}</dt><dd><span className={styles.activity} data-level={activity}>{t(`activityOption.${activity}`)}</span></dd></div>
         {report.catchWeightKg ? <div><dt>{t("catchWeight")}</dt><dd>{t("weightValue", { value: report.catchWeightKg })}</dd></div> : null}
         {report.catchLengthCm ? <div><dt>{t("catchLength")}</dt><dd>{t("lengthValue", { value: report.catchLengthCm })}</dd></div> : null}
+        {typeof report.waterTemperatureC === "number" ? <div><dt>{t("waterTemperature")}</dt><dd>{t("waterTemperatureValue", { value: report.waterTemperatureC })}</dd></div> : null}
         {getFishingReportText(report, "rodSetup", locale) ? <div><dt>{t("rodSetup")}</dt><dd>{getFishingReportText(report, "rodSetup", locale)}</dd></div> : null}
         {getFishingReportText(report, "conditions", locale) ? <div><dt>{t("conditions")}</dt><dd>{getFishingReportText(report, "conditions", locale)}</dd></div> : null}
       </dl>

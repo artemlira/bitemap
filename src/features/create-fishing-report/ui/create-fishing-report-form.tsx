@@ -28,6 +28,7 @@ const initialValues: FishingReportFormValues = {
   baitEn: "",
   catchLengthCm: "",
   catchWeightKg: "",
+  waterTemperatureC: "",
   conditions: "",
   conditionsEn: "",
   fish: "",
@@ -186,6 +187,10 @@ function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, 
           <label>
             <span>{t("conditions")}</span>
             <input onChange={(event) => updateValue("conditions", event.target.value)} placeholder={t("conditionsPlaceholder")} value={values.conditions} />
+          </label>
+          <label>
+            <span>{t("waterTemperature")}</span>
+            <input max="40" min="-2" onChange={(event) => updateValue("waterTemperatureC", event.target.value)} placeholder={t("waterTemperaturePlaceholder")} step="0.1" type="number" value={values.waterTemperatureC} />
           </label>
           <label className={styles.photoField}>
             <span>{t("photo")}</span>
