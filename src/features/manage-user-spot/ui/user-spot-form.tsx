@@ -134,8 +134,15 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
         });
         setIsGettingLocation(false);
       },
-      () => {
-        setLocationError(t("currentLocationError"));
+      (error) => {
+        const errorMessage = error.code === error.PERMISSION_DENIED
+          ? t("currentLocationPermissionDenied")
+          : error.code === error.POSITION_UNAVAILABLE
+            ? t("currentLocationUnavailable")
+            : error.code === error.TIMEOUT
+              ? t("currentLocationTimeout")
+              : t("currentLocationError");
+        setLocationError(errorMessage);
         setIsGettingLocation(false);
       },
       { enableHighAccuracy: true, maximumAge: 60_000, timeout: 10_000 },

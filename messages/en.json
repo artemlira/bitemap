@@ -73,7 +73,12 @@
     "loading": "Adding community fishing spots…",
     "communityLoadError": "Could not load community fishing spots.",
     "openCommunitySpot": "Open",
-    "open": "Open"
+    "open": "Open",
+    "mapEyebrow": "Find on the map",
+    "mapTitle": "Fishing spots across Ukraine",
+    "mapCount": "On the map: {count}",
+    "mapMissingCoordinates": "{count} spots do not have coordinates yet; they are still available in the list below.",
+    "openMapSpot": "Open fishing spot"
   },
   "auth": {
     "login": {
@@ -560,6 +565,9 @@
     "useCurrentLocation": "Use my current location",
     "gettingCurrentLocation": "Finding your location…",
     "currentLocationError": "Could not determine your location. Allow location access in your browser or choose a point on the map.",
+    "currentLocationPermissionDenied": "Location access was denied. Allow it in your browser settings or choose a point on the map.",
+    "currentLocationUnavailable": "Your device could not determine its location. Check GPS or choose a point on the map.",
+    "currentLocationTimeout": "Finding your location took too long. Try again or choose a point on the map.",
     "coordinates": "Coordinates",
     "coordinatesEmpty": "No point selected yet.",
     "validationLocation": "Pin the fishing spot on the map."

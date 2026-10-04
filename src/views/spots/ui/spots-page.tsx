@@ -5,7 +5,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { FishingSpotCard, fishingSpots, getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { UserSpotCard, getUserSpotFish, getUserSpotText, usePublishedUserSpots, type UserSpot } from "@/entities/user-spot";
 import { SpotFilterBar, useSpotFilters, type FilterableSpot, type SpotFilters } from "@/features/filter-spots";
+import { getSpotCoordinates } from "@/entities/spot-location";
 import { SiteHeader } from "@/widgets/site-header";
+import { SpotsMap } from "./spots-map";
 import styles from "./spots-page.module.scss";
 
 type SpotsPageProps = {
@@ -65,6 +67,36 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
     resetFilters,
     setFilter,
   } = useSpotFilters(catalogSpots, getFilterableSpot, initialFilters);
+  const mapSpots = useMemo(
+    () => filteredSpots.flatMap((entry) => {
+      if (entry.kind === "catalog") {
+        const coordinates = getSpotCoordinates(entry.spot);
+        if (!coordinates) return [];
+
+        return [{
+          ...coordinates,
+          href: `/spots/${entry.spot.slug}`,
+          id: `catalog-${entry.spot.id}`,
+          name: getFishingSpotText(entry.spot, "name", locale),
+          region: getFishingSpotText(entry.spot, "region", locale),
+        }];
+      }
+
+      const coordinates = getSpotCoordinates(entry.spot);
+      if (!coordinates) return [];
+
+      return [{
+        ...coordinates,
+        href: `/community/${entry.spot.id}`,
+        id: `community-${entry.spot.id}`,
+        name: getUserSpotText(entry.spot, "name", locale),
+        region: entry.spot.settlement
+          ? `${entry.spot.region} · ${entry.spot.settlement}`
+          : entry.spot.region,
+      }];
+    }),
+    [filteredSpots, locale],
+  );
 
   return (
     <main className={styles.page}>
@@ -95,6 +127,20 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
           onChange={setFilter}
           onReset={resetFilters}
         />
+
+        <section className={styles.mapSection} aria-labelledby="spots-map-title">
+          <div className={styles.mapHeading}>
+            <div>
+              <p className={styles.sectionLabel}>{t("mapEyebrow")}</p>
+              <h3 id="spots-map-title">{t("mapTitle")}</h3>
+            </div>
+            <p>{t("mapCount", { count: mapSpots.length })}</p>
+          </div>
+          <SpotsMap spots={mapSpots} />
+          {mapSpots.length < filteredSpots.length ? (
+            <p className={styles.mapNote}>{t("mapMissingCoordinates", { count: filteredSpots.length - mapSpots.length })}</p>
+          ) : null}
+        </section>
 
         {error ? <p className={styles.error} role="alert">{t("communityLoadError")}</p> : null}
 

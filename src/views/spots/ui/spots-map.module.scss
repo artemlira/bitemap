@@ -1,0 +1,59 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.map {
+  overflow: hidden;
+  min-height: 26rem;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+}
+
+.map :global(.leaflet-container) {
+  height: 26rem;
+  color: var(--color-ink);
+  font-family: inherit;
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+}
+
+.marker span {
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid #fffdf8;
+  border-radius: 50%;
+  background: var(--color-sun);
+  box-shadow: 0 2px 10px rgb(10 48 62 / 40%);
+  transition: transform 160ms ease;
+}
+
+.marker:hover span {
+  transform: scale(1.25);
+}
+
+.popup {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 9rem;
+}
+
+.popup span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.popup a {
+  margin-top: 0.2rem;
+  color: var(--color-water);
+  font-weight: 750;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker span {
+    transition: none;
+  }
+}
