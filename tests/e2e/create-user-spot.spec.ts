@@ -1,14 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-test("рибалка реєструється та зберігає приватну водойму", async ({ page }) => {
-  await page.route(
-    /https:\/\/(identitytoolkit|securetoken|firestore)\.googleapis\.com\//,
-    (route) => route.abort(),
-  );
+const password = "Bitemap-E2E-Only-2026!";
 
+async function registerAngler(page: import("@playwright/test").Page) {
   const email = `bitemap-e2e-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.test`;
-  const password = "Bitemap-E2E-Only-2026!";
-  const spotName = `E2E Pond ${Date.now()}`;
 
   await page.goto("/uk/register");
   await page.getByRole("textbox", { name: "Електронна пошта" }).fill(email);
@@ -16,6 +11,20 @@ test("рибалка реєструється та зберігає приват
   await page.getByRole("textbox", { name: "Повтори пароль" }).fill(password);
   await page.getByRole("button", { name: "Створити акаунт" }).click();
   await expect(page.getByRole("status")).toContainText("Акаунт");
+}
+
+function blockProductionFirebase(page: import("@playwright/test").Page) {
+  return page.route(
+    /https:\/\/(identitytoolkit|securetoken|firestore)\.googleapis\.com\//,
+    (route) => route.abort(),
+  );
+}
+
+test("рибалки публікують звіт, коментують його та бачать у стрічці підписок", async ({ page, browser }) => {
+  await blockProductionFirebase(page);
+  await registerAngler(page);
+
+  const spotName = `E2E Pond ${Date.now()}`;
 
   await page.goto("/uk/my-spots/new");
   await page.getByRole("textbox", { name: "Назва водойми", exact: true }).fill(spotName);
@@ -45,4 +54,44 @@ test("рибалка реєструється та зберігає приват
 
   await page.reload();
   await expect(page.getByRole("heading", { name: spotName })).toBeVisible();
+
+  const reportText = `E2E fishing report ${Date.now()}`;
+  await page.goto("/uk/spots/blue-lake");
+  await page.getByRole("button", { name: "Додати звіт" }).click();
+  await page.getByLabel("Враження та умови").fill(reportText);
+  await page.getByLabel("Що вдалося зловити").fill("Короп");
+  await page.getByLabel("На що ловилося").fill("Фідер");
+  await page.getByRole("button", { name: "Опублікувати звіт" }).click();
+  await expect(page.getByRole("status")).toContainText("Звіт опубліковано.");
+
+  const reportCard = page.getByRole("article").filter({ hasText: reportText });
+  await expect(reportCard).toBeVisible();
+  const authorProfilePath = await reportCard.getByRole("link").first().getAttribute("href");
+
+  if (!authorProfilePath) {
+    throw new Error("У створеному звіті немає посилання на профіль автора.");
+  }
+
+  const followerContext = await browser.newContext();
+  try {
+    const followerPage = await followerContext.newPage();
+    await blockProductionFirebase(followerPage);
+    await registerAngler(followerPage);
+    await followerPage.goto(authorProfilePath);
+
+    await followerPage.getByRole("button", { name: "Стежити" }).click();
+    await expect(followerPage.getByRole("button", { name: "Не стежити" })).toBeVisible();
+
+    const profileReport = followerPage.getByRole("article").filter({ hasText: reportText });
+    await profileReport.getByRole("button", { name: "Коментарі" }).click();
+    await followerPage.getByLabel("Твій коментар").fill("Дякую за звіт! Візьму цю водойму до уваги.");
+    await profileReport.getByRole("button", { name: "Надіслати" }).click();
+    await expect(profileReport.getByRole("status")).toContainText("Коментар додано.");
+
+    await followerPage.goto("/uk/feed");
+    const feed = followerPage.getByRole("list", { name: "Оновлення рибалок, на яких ви підписані" });
+    await expect(feed.locator(":scope > li > article").filter({ hasText: reportText })).toBeVisible();
+  } finally {
+    await followerContext.close();
+  }
 });
