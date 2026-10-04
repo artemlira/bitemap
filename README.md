@@ -131,7 +131,11 @@ npm run dev
 npm run lint
 npm test
 npm run test:rules
+npm run test:e2e
 npm run build
 ```
 
-`npm run test:rules` потребує Java Runtime для Firebase Emulator.
+`npm run test:rules` і `npm run test:e2e` потребують Java 21 для Firebase
+Emulator; для браузерного тесту встанови Chromium командою
+`npx playwright install chromium`. На push у `main` та pull request перевірки
+автоматично запускаються у GitHub Actions без доступу до production Firebase.
