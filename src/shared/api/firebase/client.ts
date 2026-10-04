@@ -1,6 +1,6 @@
 import { getApp, getApps, initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,6 +11,9 @@ const firebaseConfig: FirebaseOptions = {
 };
 
 const requiredConfigKeys = ["apiKey", "authDomain", "projectId", "appId"] as const;
+const useFirebaseEmulators = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === "true";
+const emulatorProjectId = "demo-bitemap";
+let emulatorConnectedFirestore: ReturnType<typeof getFirestore> | null = null;
 
 export class FirebaseConfigurationError extends Error {
   constructor() {
@@ -28,13 +31,30 @@ export function getFirebaseApp(): FirebaseApp {
     throw new FirebaseConfigurationError();
   }
 
+  if (useFirebaseEmulators && firebaseConfig.projectId !== emulatorProjectId) {
+    throw new Error(`Firebase Emulator mode requires NEXT_PUBLIC_FIREBASE_PROJECT_ID=${emulatorProjectId}.`);
+  }
+
   return getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 }
 
 export function getFirebaseAuth() {
-  return getAuth(getFirebaseApp());
+  const auth = getAuth(getFirebaseApp());
+
+  if (useFirebaseEmulators && !auth.emulatorConfig) {
+    connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
+  }
+
+  return auth;
 }
 
 export function getFirebaseFirestore() {
-  return getFirestore(getFirebaseApp());
+  const firestore = getFirestore(getFirebaseApp());
+
+  if (useFirebaseEmulators && emulatorConnectedFirestore !== firestore) {
+    connectFirestoreEmulator(firestore, "127.0.0.1", 8080);
+    emulatorConnectedFirestore = firestore;
+  }
+
+  return firestore;
 }

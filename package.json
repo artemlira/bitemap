@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "emulators": "firebase emulators:start --only auth,firestore --project demo-bitemap",
     "test": "tsc --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --outDir node_modules/.cache/bitemap-tests src/entities/weather-forecast/model/fishing-activity.ts && node --test tests/weather-forecast.test.mjs",
     "test:rules": "firebase emulators:exec --only firestore --project demo-bitemap \"node --test tests/firestore-rules.test.mjs\""
   },

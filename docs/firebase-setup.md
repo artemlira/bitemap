@@ -18,6 +18,39 @@
 Firebase web configuration є клієнтською конфігурацією; приватні ключі
 сервісного акаунта сюди не додавай.
 
+## Локальна перевірка через Firebase Emulator
+
+Щоб тестувати реєстрацію, вхід і створення водойм без записів у production:
+
+1. Запусти `npm run emulators` в окремому терміналі. Він підніме лише локальні
+   Firebase Auth (`127.0.0.1:9099`) і Firestore (`127.0.0.1:8080`). Якщо macOS
+   не знаходить JDK 21, спершу встанови `JAVA_HOME` для Homebrew OpenJDK:
+
+   ```sh
+   export JAVA_HOME="/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
+   export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+   ```
+
+   Потім виконай `npm run emulators` у тому самому терміналі.
+2. Створи `.env.development.local` у корені проєкту з рядками:
+
+   ```env
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=demo-bitemap
+   NEXT_PUBLIC_USE_FIREBASE_EMULATORS=true
+   ```
+
+   Решта Firebase Web config береться з `.env.local`. Файл
+   `.env.development.local` ігнорується Git.
+3. Перезапусти `npm run dev`, щоб Next.js підхопив локальні змінні.
+4. Зареєструй окремий тестовий акаунт на `/uk/register`. У режимі Emulator
+   email і пароль обробляються локально; ці дані не створюють акаунт у
+   Firebase Authentication production.
+
+Клієнтський код навмисно відмовляється вмикати Emulator, якщо project ID не
+`demo-bitemap`. Для повернення до звичайного Firebase прибери ці два рядки з
+`.env.development.local` і перезапусти dev-сервер. Не вмикай Emulator-прапорець
+у production build.
+
 ## Cloudinary для фотографій
 
 Фото зберігаються у Cloudinary, тому Firebase Storage і тариф Blaze не потрібні.
