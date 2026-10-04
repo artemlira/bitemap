@@ -23,7 +23,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
-      - run: npx tsc --noEmit
+      - name: Generate route types and check TypeScript
+        run: npx next typegen && npx tsc --noEmit
       - run: npm run build
         env:
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: demo-bitemap
