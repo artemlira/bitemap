@@ -70,6 +70,16 @@
   color: var(--color-muted);
 }
 
+.photo {
+  position: relative;
+  width: min(100%, 42rem);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  margin: 0;
+  border-radius: $radius-lg;
+  background: var(--color-page);
+}
+
 .targetLink {
   align-self: start;
   color: var(--color-water);

@@ -4,7 +4,8 @@ import type { SpotImageTargetType } from "@/entities/spot-image";
 
 export const runtime = "nodejs";
 
-const validTargetTypes: Array<SpotImageTargetType | "article"> = ["catalog", "user-spot", "article"];
+type MediaTargetType = SpotImageTargetType | "article" | "fishing-report";
+const validTargetTypes: MediaTargetType[] = ["catalog", "user-spot", "article", "fishing-report"];
 const validTargetId = /^[a-zA-Z0-9_-]{1,128}$/;
 
 type FirebaseLookupResponse = {
@@ -25,8 +26,8 @@ function getBearerToken(request: Request) {
   return header?.startsWith("Bearer ") ? header.slice("Bearer ".length) : null;
 }
 
-function isMediaUploadTargetType(value: unknown): value is SpotImageTargetType | "article" {
-  return typeof value === "string" && validTargetTypes.includes(value as SpotImageTargetType);
+function isMediaUploadTargetType(value: unknown): value is MediaTargetType {
+  return typeof value === "string" && validTargetTypes.includes(value as MediaTargetType);
 }
 
 function isValidTargetId(value: unknown): value is string {
@@ -105,6 +106,7 @@ export async function POST(request: Request) {
   }
 
   const isArticleUpload = payload.targetType === "article";
+  const isFishingReportUpload = payload.targetType === "fishing-report";
   if (!isMediaUploadTargetType(payload.targetType) || !isValidTargetId(payload.targetId)) {
     return Response.json({ error: "Некоректна ціль фотографії." }, { status: 400 });
   }
@@ -133,7 +135,9 @@ export async function POST(request: Request) {
 
   const folder = isArticleUpload
     ? `bitemap/articles/${payload.targetId}/${userId}`
-    : `bitemap/spot-images/${payload.targetType}/${payload.targetId}/${userId}`;
+    : isFishingReportUpload
+      ? `bitemap/fishing-reports/${payload.targetId}/${userId}`
+      : `bitemap/spot-images/${payload.targetType}/${payload.targetId}/${userId}`;
   const timestamp = Math.floor(Date.now() / 1000);
   const signature = cloudinary.utils.api_sign_request({ folder, timestamp }, apiSecret);
 

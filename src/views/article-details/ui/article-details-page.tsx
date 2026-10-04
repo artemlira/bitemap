@@ -5,6 +5,7 @@ import { getFishingArticleTranslation, useFishingArticle } from "@/entities/fish
 import { useLocale, useTranslations } from "next-intl";
 import DOMPurify from "isomorphic-dompurify";
 import { SiteHeader } from "@/widgets/site-header";
+import { ReportContentAction } from "@/features/content-report";
 import styles from "./article-details-page.module.scss";
 
 type ArticleDetailsPageProps = { slug: string };
@@ -72,6 +73,7 @@ export function ArticleDetailsPage({ slug }: ArticleDetailsPageProps) {
         </article>
       </div>
       <div className={styles.footer}>
+        <ReportContentAction authorId={article.authorId} targetType="article" targetId={article.slug} />
         <Link className={styles.footerLink} href="/articles">{t("back")} <span aria-hidden="true">↗</span></Link>
       </div>
     </main>

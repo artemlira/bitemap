@@ -6,6 +6,7 @@ import { CreateFishingReportForm } from "@/features/create-fishing-report";
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
 import { ReportDiscussion } from "@/features/discuss-report";
 import { ContentReactionButton } from "@/features/react-to-content";
+import { ReportContentAction } from "@/features/content-report";
 import styles from "./spot-reports.module.scss";
 
 type SpotReportsProps = {
@@ -25,7 +26,7 @@ export function SpotReports({ isPublic, targetId, targetType }: SpotReportsProps
         <h2 id={`spot-reports-title-${targetType}-${targetId}`}>{t("title")}</h2>
       </div>
       <FishingReportList
-        renderActions={(report) => <ManageFishingReportActions report={report} />}
+        renderActions={(report) => <><ManageFishingReportActions report={report} /><ReportContentAction authorId={report.authorId} contextType={report.targetType} parentId={report.targetId} targetType="fishing-report" targetId={report.id} /></>}
         renderDiscussion={(report) => <ReportDiscussion report={report} />}
         renderReaction={(report) => <ContentReactionButton targetType="report" targetId={report.id} />}
         targetType={targetType}

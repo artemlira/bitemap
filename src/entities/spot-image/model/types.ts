@@ -1,4 +1,5 @@
 export type SpotImageTargetType = "catalog" | "user-spot";
+export type MediaUploadTargetType = SpotImageTargetType | "article" | "fishing-report";
 
 export type SpotImage = {
   caption: {

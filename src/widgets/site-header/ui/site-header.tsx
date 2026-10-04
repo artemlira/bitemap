@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { useAuth } from "@/shared/lib/auth";
@@ -9,8 +10,16 @@ import { useTheme } from "@/shared/lib/theme";
 import { LanguageSwitcher } from "@/widgets/language-switcher";
 import styles from "./site-header.module.scss";
 
+const subscribeToDocument = () => () => {};
+const getPortalRoot = () => document.body;
+const getServerPortalRoot = () => null;
+
 export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const portalRoot = useSyncExternalStore(subscribeToDocument, getPortalRoot, getServerPortalRoot);
+  const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0, width: 0 });
+  const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdminStatus();
@@ -26,14 +35,64 @@ export function SiteHeader() {
         ...navigation,
         ...(user ? [{ href: "/feed", label: t("feed") }] : []),
         ...(isAdmin ? [{ href: "/admin/articles", label: t("manageArticles") }] : []),
+        ...(isAdmin ? [{ href: "/admin/moderation", label: t("moderation") }] : []),
         ...(user ? [
         { href: "/favorites", label: t("favorites") },
         { href: "/my-spots", label: t("mySpots") },
         ] : []),
       ];
 
+  useLayoutEffect(() => {
+    if (!isMenuOpen) return;
+
+    function updateMenuPosition() {
+      if (window.innerWidth > 1040) {
+        setIsMenuOpen(false);
+        return;
+      }
+
+      const header = headerRef.current;
+      if (!header) return;
+
+      const bounds = header.getBoundingClientRect();
+      setMenuPosition({
+        left: bounds.left,
+        top: bounds.bottom + 12,
+        width: bounds.width,
+      });
+    }
+
+    updateMenuPosition();
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setIsMenuOpen(false);
+      menuButtonRef.current?.focus();
+    }
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isMenuOpen]);
+
+  const mobileMenuStyle = {
+    "--mobile-menu-left": `${menuPosition.left}px`,
+    "--mobile-menu-top": `${menuPosition.top}px`,
+    "--mobile-menu-width": `${menuPosition.width}px`,
+  } as CSSProperties;
+
   return (
-    <header className={styles.header}>
+    <header className={styles.header} ref={headerRef}>
       <Link className={styles.logo} href="/" aria-label={t("home")}>
         Bite<span>Map</span>
       </Link>
@@ -72,10 +131,11 @@ export function SiteHeader() {
 
       <button
         className={styles.menuButton}
+        ref={menuButtonRef}
         type="button"
         aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
         aria-expanded={isMenuOpen}
-        aria-controls="site-header-menu"
+        aria-controls={portalRoot ? "site-header-menu" : undefined}
         onClick={() => setIsMenuOpen((open) => !open)}
       >
         <span aria-hidden="true" className={isMenuOpen ? styles.menuIconOpen : styles.menuIcon}>
@@ -85,7 +145,8 @@ export function SiteHeader() {
         </span>
       </button>
 
-      <div className={styles.mobileMenu} id="site-header-menu" hidden={!isMenuOpen}>
+      {portalRoot ? createPortal(
+        <div className={styles.mobileMenu} id="site-header-menu" hidden={!isMenuOpen} style={mobileMenuStyle}>
           <nav className={styles.mobileNavigation} aria-label={t("main")}>
             {navigationItems.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)}>
@@ -118,7 +179,9 @@ export function SiteHeader() {
               <span aria-hidden="true">{theme === "light" ? "◐" : "◑"}</span>
             </button>
           </div>
-      </div>
+        </div>,
+        portalRoot,
+      ) : null}
     </header>
   );
 }

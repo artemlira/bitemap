@@ -1,0 +1,15 @@
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.disclosure { position: relative; color: var(--color-muted); font-size: 0.88rem; }
+.disclosure summary { width: fit-content; cursor: pointer; color: var(--color-water); font-weight: 800; }
+.form { display: grid; width: min(22rem, calc(100vw - 3rem)); gap: $space-8; margin-top: $space-12; padding: $space-16; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-surface); box-shadow: 0 12px 32px rgb(7 48 59 / 12%); }
+.form label { margin-top: $space-8; color: var(--color-ink); font-size: 0.8rem; font-weight: 800; }
+.form select,
+.form textarea { width: 100%; min-height: 2.8rem; padding: $space-12; border: 1px solid var(--color-line); border-radius: 0.7rem; background: var(--color-page); color: var(--color-ink); }
+.form textarea { min-height: 5rem; resize: vertical; }
+.form button { width: fit-content; min-height: 2.7rem; margin-top: $space-8; padding-inline: $space-16; border: 0; border-radius: $radius-full; background: var(--color-water); color: white; font-weight: 800; cursor: pointer; }
+.note,
+.success,
+.error { margin-top: $space-8; }
+.success { color: #167044; }
+.error { color: #b42e1e; }

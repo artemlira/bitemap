@@ -79,7 +79,7 @@ function isImageDocument(fields: FirestoreDocument["fields"]): fields is ImageFi
   );
 }
 
-async function resolveImageContext(request: Request, imageId: string): Promise<ImageContext | Response> {
+async function resolveImageContext(request: Request, imageId: string, allowAdmin = false): Promise<ImageContext | Response> {
   const idToken = getBearerToken(request);
   const environment = getEnvironment();
 
@@ -114,7 +114,13 @@ async function resolveImageContext(request: Request, imageId: string): Promise<I
     return Response.json({ error: "invalid-image" }, { status: 422 });
   }
 
-  if (document.fields.ownerId.stringValue !== userId) {
+  if (document.fields.ownerId.stringValue !== userId && allowAdmin) {
+    const adminResponse = await fetch(
+      `https://firestore.googleapis.com/v1/projects/${environment.projectId}/databases/(default)/documents/admins/${userId}`,
+      { headers: { Authorization: `Bearer ${idToken}` } },
+    );
+    if (!adminResponse.ok) return Response.json({ error: "forbidden" }, { status: 403 });
+  } else if (document.fields.ownerId.stringValue !== userId) {
     return Response.json({ error: "forbidden" }, { status: 403 });
   }
 
@@ -141,7 +147,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return Response.json({ error: "invalid-image" }, { status: 400 });
   }
 
-  const context = await resolveImageContext(request, imageId);
+  const context = await resolveImageContext(request, imageId, true);
 
   if (isResponse(context)) {
     return context;

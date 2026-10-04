@@ -47,7 +47,7 @@
 .richContent img { display: block; max-width: 100%; height: auto; margin-block: $space-24; border-radius: $radius-lg; }
 .tips { display: grid; gap: $space-12; margin-top: $space-24; padding: $space-24; border-left: 3px solid var(--color-sun); border-radius: 0 $radius-lg $radius-lg 0; background: var(--color-surface); color: var(--color-ink); }
 .tips li { margin-left: $space-20; padding-left: $space-8; }
-.footer { @include container; padding-bottom: clamp($space-48, 8vw, $space-96); }
+.footer { @include container; display: flex; flex-wrap: wrap; align-items: center; gap: $space-20; padding-bottom: clamp($space-48, 8vw, $space-96); }
 .footerLink { display: inline-flex; align-items: center; gap: $space-12; min-height: 3.25rem; padding-inline: $space-24; border-radius: $radius-full; background: var(--color-water); color: #fffdf8; font-weight: 800; }
 
 @include media-max(tablet) { .articleLayout { grid-template-columns: 1fr; } .contents { position: static; } }

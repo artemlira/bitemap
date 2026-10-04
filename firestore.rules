@@ -80,6 +80,63 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+    match /content-reports/{reportId} {
+      allow get, list: if isAdmin();
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll([
+          "targetType", "targetId", "parentId", "contextType", "contextId", "reporterId", "reason", "details", "status", "createdAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "targetType", "targetId", "parentId", "contextType", "contextId", "reporterId", "reason", "details", "status", "createdAt"
+        ])
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.targetType is string
+        && request.resource.data.targetId is string
+        && request.resource.data.contextType is string
+        && request.resource.data.targetType in ["user-spot", "spot-image", "fishing-report", "comment", "article"]
+        && request.resource.data.contextType in ["", "catalog", "user-spot"]
+        && request.resource.data.contextId is string
+        && request.resource.data.parentId is string
+        && reportId == request.auth.uid + "__" + request.resource.data.targetType + "__"
+          + request.resource.data.contextType + "__" + request.resource.data.contextId + "__"
+          + request.resource.data.parentId + "__" + request.resource.data.targetId
+        && request.resource.data.reason in ["spam", "abuse", "inaccurate", "privacy", "other"]
+        && request.resource.data.details is string
+        && request.resource.data.details.size() <= 1200
+        && request.resource.data.status == "open"
+        && request.resource.data.createdAt is timestamp
+        && ((request.resource.data.targetType == "user-spot"
+              && userSpot(request.resource.data.targetId).data.visibility == "published")
+          || (request.resource.data.targetType == "spot-image"
+              && request.resource.data.parentId is string
+              && request.resource.data.contextType in ["catalog", "user-spot"]
+              && get(/databases/$(database)/documents/spot-images/$(request.resource.data.targetId)).data.targetId == request.resource.data.parentId
+              && get(/databases/$(database)/documents/spot-images/$(request.resource.data.targetId)).data.targetType == request.resource.data.contextType
+              && isPublicImage(request.resource.data.targetId))
+          || (request.resource.data.targetType == "fishing-report"
+              && request.resource.data.parentId is string
+              && request.resource.data.contextType in ["catalog", "user-spot"]
+              && get(/databases/$(database)/documents/fishing-reports/$(request.resource.data.targetId)).data.targetId == request.resource.data.parentId
+              && get(/databases/$(database)/documents/fishing-reports/$(request.resource.data.targetId)).data.targetType == request.resource.data.contextType
+              && get(/databases/$(database)/documents/fishing-reports/$(request.resource.data.targetId)).data.isPublic == true)
+          || (request.resource.data.targetType == "comment"
+              && request.resource.data.parentId is string
+              && request.resource.data.contextId == get(/databases/$(database)/documents/fishing-reports/$(request.resource.data.parentId)).data.targetId
+              && request.resource.data.contextType == get(/databases/$(database)/documents/fishing-reports/$(request.resource.data.parentId)).data.targetType
+              && isPublicReport(request.resource.data.parentId)
+              && exists(/databases/$(database)/documents/fishing-reports/$(request.resource.data.parentId)/comments/$(request.resource.data.targetId)))
+          || (request.resource.data.targetType == "article"
+              && get(/databases/$(database)/documents/articles/$(request.resource.data.targetId)).data.status == "published"));
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "status", "reviewedAt", "reviewedBy"
+        ])
+        && request.resource.data.status in ["dismissed", "actioned"]
+        && request.resource.data.reviewedBy == request.auth.uid
+        && request.resource.data.reviewedAt is timestamp;
+      allow delete: if false;
+    }
+
     match /angler-follows/{followId} {
       allow get, list: if true;
       allow create: if isSignedIn()
@@ -113,10 +170,16 @@ service cloud.firestore {
       allow get, list: if isPublishedSpot()
         || isOwner(resource.data.ownerId);
       allow update: if isSignedIn()
-        && resource.data.ownerId == request.auth.uid
-        && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if isSignedIn()
-        && resource.data.ownerId == request.auth.uid;
+        && ((resource.data.ownerId == request.auth.uid
+            && request.resource.data.ownerId == resource.data.ownerId
+            && request.resource.data.get("moderationStatus", "") == resource.data.get("moderationStatus", "")
+            && !(resource.data.get("moderationStatus", "") == "hidden"
+              && request.resource.data.visibility == "published"))
+          || (isAdmin()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["visibility", "moderationStatus"])
+            && request.resource.data.visibility == "private"
+            && request.resource.data.moderationStatus == "hidden"));
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
     }
 
     match /spot-images/{imageId} {
@@ -135,7 +198,7 @@ service cloud.firestore {
         && request.resource.data.ownerId == resource.data.ownerId
         && request.resource.data.targetId == resource.data.targetId
         && request.resource.data.targetType == resource.data.targetType;
-      allow delete: if isOwner(resource.data.ownerId);
+      allow delete: if isOwner(resource.data.ownerId) || isAdmin();
 
       match /reactions/{userId} {
         allow get, list: if isPublicImage(imageId);
@@ -166,11 +229,16 @@ service cloud.firestore {
           request.resource.data.targetType,
           request.resource.data.targetId,
         );
-      allow update: if isOwner(resource.data.authorId)
-        && request.resource.data.authorId == resource.data.authorId
-        && request.resource.data.targetId == resource.data.targetId
-        && request.resource.data.targetType == resource.data.targetType
-        && request.resource.data.isPublic == resource.data.isPublic;
+      allow update: if (isOwner(resource.data.authorId)
+          && request.resource.data.authorId == resource.data.authorId
+          && request.resource.data.targetId == resource.data.targetId
+          && request.resource.data.targetType == resource.data.targetType
+          && request.resource.data.isPublic == resource.data.isPublic
+          && request.resource.data.get("moderationStatus", "") == resource.data.get("moderationStatus", ""))
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["isPublic", "moderationStatus"])
+          && request.resource.data.isPublic == false
+          && request.resource.data.moderationStatus == "hidden");
       allow delete: if isOwner(resource.data.authorId);
 
       match /comments/{commentId} {
@@ -188,7 +256,7 @@ service cloud.firestore {
           && request.resource.data.body.size() <= 1200
           && request.resource.data.createdAt is timestamp;
         allow update: if false;
-        allow delete: if isOwner(resource.data.authorId);
+        allow delete: if isOwner(resource.data.authorId) || isAdmin();
       }
 
       match /reactions/{userId} {

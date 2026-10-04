@@ -8,6 +8,7 @@ import { SpotLocationPanel } from "@/entities/spot-location";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
 import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { ContentReactionButton } from "@/features/react-to-content";
+import { ReportContentAction } from "@/features/content-report";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SpotReports } from "@/widgets/spot-reports";
 import { SpotWeather } from "@/widgets/spot-weather";
@@ -51,6 +52,7 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
               <p className={styles.description}>{getUserSpotText(spot, "description", locale)}</p>
               <div className={styles.shareAction}>
                 <ShareUserSpotButton spotId={spot.id} spotName={getUserSpotText(spot, "name", locale)} />
+                <ReportContentAction authorId={spot.ownerId} targetType="user-spot" targetId={spot.id} />
               </div>
             </div>
             <div className={styles.visual} data-tone={spot.tone} aria-hidden="true"><span /><span /><span /></div>
@@ -77,7 +79,10 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
           <SpotImageGallery
             renderReaction={(image) => <ContentReactionButton targetType="image" targetId={image.id} />}
             renderActions={(image) => (
-              <ManageSpotImageActions image={image} targetType="user-spot" targetId={spot.id} />
+              <>
+                <ManageSpotImageActions image={image} targetType="user-spot" targetId={spot.id} />
+                <ReportContentAction authorId={image.ownerId} contextType="user-spot" parentId={spot.id} targetType="spot-image" targetId={image.id} />
+              </>
             )}
             targetType="user-spot"
             targetId={spot.id}

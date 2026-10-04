@@ -7,6 +7,7 @@ import { useFollowingActivity, type FeedActivity } from "@/entities/activity-fee
 import { UserSpotCard } from "@/entities/user-spot";
 import { ReportDiscussion } from "@/features/discuss-report";
 import { ContentReactionButton } from "@/features/react-to-content";
+import { ReportContentAction } from "@/features/content-report";
 import { Link } from "@/shared/lib/i18n";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./activity-feed-page.module.scss";
@@ -37,7 +38,7 @@ function ActivityItem({ activity }: { activity: FeedActivity }) {
       </div>
 
       {activity.type === "report" ? (
-        <FishingReportCard discussion={<ReportDiscussion report={activity.report} />} hideAuthor reaction={<ContentReactionButton targetType="report" targetId={activity.report.id} />} report={activity.report} target={{ href: activity.targetHref, label: activity.targetName }} />
+        <FishingReportCard actions={<ReportContentAction authorId={activity.report.authorId} contextType={activity.report.targetType} parentId={activity.report.targetId} targetType="fishing-report" targetId={activity.report.id} />} discussion={<ReportDiscussion report={activity.report} />} hideAuthor reaction={<ContentReactionButton targetType="report" targetId={activity.report.id} />} report={activity.report} target={{ href: activity.targetHref, label: activity.targetName }} />
       ) : null}
 
       {activity.type === "spot" ? (

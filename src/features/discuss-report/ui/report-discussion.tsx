@@ -7,6 +7,7 @@ import type { FishingReport } from "@/entities/fishing-report";
 import { Link } from "@/shared/lib/i18n";
 import { useAuth } from "@/shared/lib/auth";
 import { createReportComment, deleteReportComment } from "../api/report-comments";
+import { ReportContentAction } from "@/features/content-report";
 import styles from "./report-discussion.module.scss";
 
 type ReportDiscussionProps = {
@@ -106,6 +107,7 @@ export function ReportDiscussion({ report }: ReportDiscussionProps) {
                       {deletingCommentId === comment.id ? t("deleting") : t("delete")}
                     </button>
                   ) : null}
+                  {user?.uid !== comment.authorId ? <ReportContentAction contextId={report.targetId} contextType={report.targetType} parentId={report.id} targetType="comment" targetId={comment.id} /> : null}
                 </li>
               );
             })}

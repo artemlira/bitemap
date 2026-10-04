@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/shared/lib/i18n";
 import {
   authenticateWithGoogle,
   authenticateWithEmailPassword,
@@ -23,6 +24,7 @@ const emptyValues: AuthFormValues = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const t = useTranslations("auth");
+  const router = useRouter();
   const [values, setValues] = useState<AuthFormValues>(emptyValues);
   const [errors, setErrors] = useState<AuthFormErrors>({});
   const [submissionError, setSubmissionError] = useState("");
@@ -62,6 +64,11 @@ export function AuthForm({ mode }: AuthFormProps) {
         password: values.password,
       });
 
+      if (!isRegistration) {
+        router.replace("/");
+        return;
+      }
+
       setSuccessMessage(
         isRegistration
           ? t("accountCreated", { email: credential.user.email ?? "" })
@@ -80,9 +87,8 @@ export function AuthForm({ mode }: AuthFormProps) {
     setSubmissionMethod("google");
 
     try {
-      const credential = await authenticateWithGoogle();
-
-      setSuccessMessage(t("signedInAs", { email: credential.user.email ?? "user" }));
+      await authenticateWithGoogle();
+      router.replace("/");
     } catch (error) {
       setSubmissionError(getAuthErrorMessage(error));
     } finally {

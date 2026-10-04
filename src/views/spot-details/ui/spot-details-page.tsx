@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
 import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { ContentReactionButton } from "@/features/react-to-content";
+import { ReportContentAction } from "@/features/content-report";
 import { SpotImageUpload } from "@/features/upload-spot-image";
 import { SpotReports } from "@/widgets/spot-reports";
 import { SpotWeather } from "@/widgets/spot-weather";
@@ -101,7 +102,10 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <SpotImageGallery
             renderReaction={(image) => <ContentReactionButton targetType="image" targetId={image.id} />}
             renderActions={(image) => (
-              <ManageSpotImageActions image={image} targetType="catalog" targetId={spot.id} />
+              <>
+                <ManageSpotImageActions image={image} targetType="catalog" targetId={spot.id} />
+                <ReportContentAction authorId={image.ownerId} contextType="catalog" parentId={spot.id} targetType="spot-image" targetId={image.id} />
+              </>
             )}
             targetType="catalog"
             targetId={spot.id}

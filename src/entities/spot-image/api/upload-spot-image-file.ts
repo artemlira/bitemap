@@ -1,6 +1,6 @@
 "use client";
 
-import type { SpotImageTargetType } from "../model/types";
+import type { MediaUploadTargetType } from "../model/types";
 
 const maxImageSize = 5 * 1024 * 1024;
 
@@ -21,7 +21,7 @@ type UploadSpotImageFileParams = {
   file: File;
   idToken: string;
   targetId: string;
-  targetType: SpotImageTargetType;
+  targetType: MediaUploadTargetType;
 };
 
 export type UploadedSpotImage = {
@@ -29,7 +29,7 @@ export type UploadedSpotImage = {
   url: string;
 };
 
-async function requestUploadSignature(idToken: string, targetType: SpotImageTargetType, targetId: string) {
+async function requestUploadSignature(idToken: string, targetType: MediaUploadTargetType, targetId: string) {
   const response = await fetch("/api/media/signature", {
     body: JSON.stringify({ targetId, targetType }),
     headers: {

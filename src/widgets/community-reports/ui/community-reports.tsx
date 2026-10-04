@@ -6,6 +6,7 @@ import { FishingReportCard, useCommunityFishingReports } from "@/entities/fishin
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
 import { ReportDiscussion } from "@/features/discuss-report";
 import { ContentReactionButton } from "@/features/react-to-content";
+import { ReportContentAction } from "@/features/content-report";
 import { getUserSpotText, type UserSpot } from "@/entities/user-spot";
 import styles from "./community-reports.module.scss";
 
@@ -60,7 +61,7 @@ export function CommunityReports({ spots }: CommunityReportsProps) {
       {visibleReports.length > 0 ? (
         <ol className={styles.list} aria-label={t("listLabel")}>
           {visibleReports.map(({ report, target }) => (
-            <li key={report.id}><FishingReportCard actions={<ManageFishingReportActions report={report} />} discussion={<ReportDiscussion report={report} />} reaction={<ContentReactionButton targetType="report" targetId={report.id} />} report={report} target={target} /></li>
+            <li key={report.id}><FishingReportCard actions={<><ManageFishingReportActions report={report} /><ReportContentAction authorId={report.authorId} contextType={report.targetType} parentId={report.targetId} targetType="fishing-report" targetId={report.id} /></>} discussion={<ReportDiscussion report={report} />} reaction={<ContentReactionButton targetType="report" targetId={report.id} />} report={report} target={target} /></li>
           ))}
         </ol>
       ) : null}

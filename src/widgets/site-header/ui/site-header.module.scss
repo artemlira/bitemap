@@ -152,17 +152,23 @@
   }
 
   .mobileMenu {
-    position: absolute;
-    top: calc(100% + $space-12);
-    right: 0;
-    left: 0;
+    position: fixed;
+    z-index: $z-header + 1;
+    top: var(--mobile-menu-top);
+    left: var(--mobile-menu-left);
     display: grid;
     gap: $space-20;
+    box-sizing: border-box;
+    width: min(var(--mobile-menu-width), calc(100vw - 2rem));
+    max-height: calc(100dvh - var(--mobile-menu-top) - 1rem);
+    overflow-y: auto;
     padding: $space-24;
     border: 1px solid rgb(255 253 248 / 18%);
     border-radius: $radius-lg;
     background: var(--color-forest);
     box-shadow: 0 18px 48px rgb(0 0 0 / 20%);
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
 
   .mobileMenu[hidden] {

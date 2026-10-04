@@ -1,12 +1,13 @@
 "use client";
 
 import type { User } from "firebase/auth";
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { FishingActivity, FishingReportTargetType } from "@/entities/fishing-report";
 import { useAuth } from "@/shared/lib/auth";
 import { Link } from "@/shared/lib/i18n";
-import { createFishingReport, type FishingReportFormValues } from "../api/create-fishing-report";
+import { uploadSpotImageFile } from "@/entities/spot-image";
+import { createFishingReport, createFishingReportId, type FishingReportFormValues } from "../api/create-fishing-report";
 import styles from "./create-fishing-report-form.module.scss";
 
 type CreateFishingReportFormProps = {
@@ -25,12 +26,18 @@ const initialValues: FishingReportFormValues = {
   activity: "good",
   bait: "",
   baitEn: "",
+  catchLengthCm: "",
+  catchWeightKg: "",
+  conditions: "",
+  conditionsEn: "",
   fish: "",
   fishEn: "",
   impression: "",
   impressionEn: "",
   method: "",
   methodEn: "",
+  rodSetup: "",
+  rodSetupEn: "",
   rating: 5,
   tripDate: "",
 };
@@ -64,12 +71,17 @@ function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, 
   const [error, setError] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [photo, setPhoto] = useState<File | null>(null);
   const [success, setSuccess] = useState("");
   const [values, setValues] = useState<FishingReportFormValues>({ ...initialValues, tripDate: getLocalDate() });
   const formId = `fishing-report-form-${targetType}-${targetId}`;
 
   function updateValue<Key extends keyof FishingReportFormValues>(key: Key, value: FishingReportFormValues[Key]) {
     setValues((currentValues) => ({ ...currentValues, [key]: value }));
+  }
+
+  function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
+    setPhoto(event.target.files?.[0] ?? null);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -80,15 +92,26 @@ function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, 
     setIsSubmitting(true);
 
     try {
+      const reportId = createFishingReportId();
+      const uploadedPhoto = photo ? await uploadSpotImageFile({
+        file: photo,
+        idToken: await user.getIdToken(),
+        targetId: reportId,
+        targetType: "fishing-report",
+      }) : null;
+
       await createFishingReport({
         ...values,
         authorId: user.uid,
         authorName: user.displayName || user.email?.split("@")[0] || t("defaultAuthor"),
         isPublic,
+        photo: uploadedPhoto,
+        reportId,
         targetId,
         targetType,
       });
       setValues({ ...initialValues, tripDate: getLocalDate() });
+      setPhoto(null);
       setSuccess(t("success"));
       setIsOpen(false);
     } catch {
@@ -146,6 +169,29 @@ function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, 
             <span>{t("bait")}</span>
             <input onChange={(event) => updateValue("bait", event.target.value)} placeholder={t("baitPlaceholder")} value={values.bait} />
           </label>
+          <div className={styles.grid}>
+            <label>
+              <span>{t("catchWeight")}</span>
+              <input min="0.01" onChange={(event) => updateValue("catchWeightKg", event.target.value)} placeholder="2.4" step="0.01" type="number" value={values.catchWeightKg} />
+            </label>
+            <label>
+              <span>{t("catchLength")}</span>
+              <input min="1" onChange={(event) => updateValue("catchLengthCm", event.target.value)} placeholder="58" step="1" type="number" value={values.catchLengthCm} />
+            </label>
+          </div>
+          <label>
+            <span>{t("rodSetup")}</span>
+            <input onChange={(event) => updateValue("rodSetup", event.target.value)} placeholder={t("rodSetupPlaceholder")} value={values.rodSetup} />
+          </label>
+          <label>
+            <span>{t("conditions")}</span>
+            <input onChange={(event) => updateValue("conditions", event.target.value)} placeholder={t("conditionsPlaceholder")} value={values.conditions} />
+          </label>
+          <label className={styles.photoField}>
+            <span>{t("photo")}</span>
+            <input accept="image/jpeg,image/png,image/webp" onChange={handlePhotoChange} type="file" />
+            <small>{photo?.name ?? t("photoHelp")}</small>
+          </label>
           <label>
             <span>{t("impression")}</span>
             <textarea onChange={(event) => updateValue("impression", event.target.value)} required value={values.impression} />
@@ -164,6 +210,14 @@ function AuthenticatedCreateFishingReportForm({ isPublic, targetId, targetType, 
             <label>
               <span>{t("baitEn")}</span>
               <input onChange={(event) => updateValue("baitEn", event.target.value)} placeholder={t("baitPlaceholderEn")} value={values.baitEn} />
+            </label>
+            <label>
+              <span>{t("rodSetupEn")}</span>
+              <input onChange={(event) => updateValue("rodSetupEn", event.target.value)} value={values.rodSetupEn} />
+            </label>
+            <label>
+              <span>{t("conditionsEn")}</span>
+              <input onChange={(event) => updateValue("conditionsEn", event.target.value)} value={values.conditionsEn} />
             </label>
             <label>
               <span>{t("impressionEn")}</span>
