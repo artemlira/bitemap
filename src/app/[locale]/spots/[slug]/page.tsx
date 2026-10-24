@@ -17,6 +17,14 @@ export async function generateMetadata(
     ? {
       title: `${getFishingSpotText(spot, "name", locale)} — BiteMap`,
       description: `${getFishingSpotText(spot, "region", locale)}. ${getFishingSpotText(spot, "description", locale)}`,
+      alternates: {
+        canonical: `/${locale}/spots/${slug}`,
+        languages: {
+          uk: `/uk/spots/${slug}`,
+          en: `/en/spots/${slug}`,
+          "x-default": `/uk/spots/${slug}`,
+        },
+      },
     }
     : { title: "BiteMap" };
 }
