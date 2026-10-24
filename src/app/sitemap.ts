@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
 import { fishingArticles } from "@/entities/fishing-article";
 import { fishingSpots } from "@/entities/fishing-spot";
+import { isSearchIndexingEnabled } from "@/shared/lib/seo";
 
 const siteUrl = "https://bitemap.artemlira.com";
 const locales = ["uk", "en"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!isSearchIndexingEnabled) return [];
+
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of locales) {
