@@ -119,3 +119,12 @@ Firebase Emulator для `test:rules` і `test:e2e` потребує Java 21; б
 перевіряє реєстрацію, створення приватної водойми, публікацію звіту, коментар,
 підписку та появу звіту у стрічці. GitHub Actions автоматично запускає
 перевірки для змін у `main` і pull request.
+
+## Розгортання
+
+BiteMap працює на Node.js-хостингу Hostinger за адресою
+[bitemap.artemlira.com](https://bitemap.artemlira.com/uk). GitHub Actions
+перевіряє pull request до `main` і кожен push у `main`. Після злиття PR
+Hostinger автоматично збирає та розгортає новий коміт з `main`.
+Налаштування середовища, перевірка збірки й обмеження цього процесу описані в
+[`docs/hostinger-deployment.md`](docs/hostinger-deployment.md).
