@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "@/shared/lib/auth";
+import { siteRobotsMetadata } from "@/shared/lib/seo";
 import { ThemeProvider } from "@/shared/lib/theme";
 import { PublicProfileSynchronizer } from "@/entities/user";
 import "@/app/styles/main.scss";
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bitemap.artemlira.com"),
   title: "Мапа водойм для риболовлі в Україні — BiteMap",
   description: "Знаходьте водойми, ведіть щоденник уловів і плануйте риболовлю.",
+  ...siteRobotsMetadata,
   openGraph: {
     type: "website",
     siteName: "BiteMap",
