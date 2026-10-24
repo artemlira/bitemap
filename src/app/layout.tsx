@@ -13,8 +13,18 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "BiteMap — риболовля ближче до природи",
+  metadataBase: new URL("https://bitemap.artemlira.com"),
+  title: "Мапа водойм для риболовлі в Україні — BiteMap",
   description: "Знаходьте водойми, ведіть щоденник уловів і плануйте риболовлю.",
+  openGraph: {
+    type: "website",
+    siteName: "BiteMap",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "BiteMap — мапа водойм для риболовлі" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [{ url: "/opengraph-image", alt: "BiteMap — мапа водойм для риболовлі" }],
+  },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

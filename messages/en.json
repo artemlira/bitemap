@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "BiteMap — fishing closer to nature",
+    "title": "Fishing spots map across Ukraine for anglers — BiteMap",
     "description": "A map and community for anglers: discover fishing spots, plan trips, and share photos and reports."
   },
   "navigation": {
@@ -55,6 +55,7 @@
     "catalog": "Fishing spot catalogue",
     "title": "Places that make you want to leave before dawn.",
     "lead": "Find locations by name, region, water type or fish. You will also find fishing spots shared by the community here.",
+    "seoTitle": "Fishing spots map across Ukraine for anglers — BiteMap",
     "direction": "Choose a direction",
     "all": "All fishing spots",
     "count": "Locations: {count}",

@@ -4,5 +4,5 @@ import { routing } from "@/shared/lib/i18n";
 export default createMiddleware(routing);
 
 export const config = {
-  matcher: "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
+  matcher: "/((?!api|trpc|_next|_vercel|opengraph-image|.*\\..*).*)",
 };

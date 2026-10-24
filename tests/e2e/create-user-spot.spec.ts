@@ -62,7 +62,7 @@ test("рибалки публікують звіт, коментують йог�
   await page.getByLabel("Що вдалося зловити").fill("Короп");
   await page.getByLabel("На що ловилося").fill("Фідер");
   await page.getByRole("button", { name: "Опублікувати звіт" }).click();
-  await expect(page.getByRole("status")).toContainText("Звіт опубліковано.");
+  await expect(page.getByText("Звіт опубліковано.", { exact: true })).toBeVisible();
 
   const reportCard = page.getByRole("article").filter({ hasText: reportText });
   await expect(reportCard).toBeVisible();
