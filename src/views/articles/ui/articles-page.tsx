@@ -1,14 +1,15 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { FishingArticleCard, useFishingArticles } from "@/entities/fishing-article";
+import { FishingArticleCard, useFishingArticles, type ManagedFishingArticle } from "@/entities/fishing-article";
 import { SiteHeader } from "@/widgets/site-header";
 import styles from "./articles-page.module.scss";
 
-export function ArticlesPage() {
+export function ArticlesPage({ extraArticles = [] }: { extraArticles?: readonly ManagedFishingArticle[] }) {
   const locale = useLocale();
   const t = useTranslations("articles");
-  const { articles, error, isLoading } = useFishingArticles();
+  const { articles: ownArticles, error, isLoading } = useFishingArticles();
+  const articles = [...extraArticles, ...ownArticles];
 
   return (
     <main className={styles.page}>

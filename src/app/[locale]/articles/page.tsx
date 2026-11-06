@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { getWordPressArticles } from "@/entities/fishing-article/server";
 import { ArticlesPage } from "@/views/articles";
 
 export async function generateMetadata(props: PageProps<"/[locale]/articles">): Promise<Metadata> {
@@ -30,6 +31,6 @@ export async function generateMetadata(props: PageProps<"/[locale]/articles">): 
   };
 }
 
-export default function Page() {
-  return <ArticlesPage />;
+export default async function Page() {
+  return <ArticlesPage extraArticles={await getWordPressArticles()} />;
 }
