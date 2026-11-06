@@ -1,0 +1,297 @@
+.scene {
+  --px: 0;
+  --py: 0;
+
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 74% 62%, rgb(94 224 200 / 22%), transparent 55%),
+    linear-gradient(180deg, #06202a 0%, #0a3540 48%, #0e5a5b 100%);
+  touch-action: pan-y;
+}
+
+.glow {
+  position: absolute;
+  inset: 40% -10% -10%;
+  background:
+    radial-gradient(circle at 20% 30%, rgb(94 224 200 / 16%), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgb(255 107 61 / 10%), transparent 36%);
+}
+
+.fishLayer {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.fish {
+  position: absolute;
+  left: 0;
+  aspect-ratio: 56 / 22;
+  height: auto;
+  fill: rgb(94 224 200 / 24%);
+  pointer-events: none;
+  transform: translate3d(-20vw, 0, 0);
+}
+
+.waterline {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.waveBack,
+.waveFront {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  max-width: none;
+  height: 4.5rem;
+}
+
+.waveBack {
+  top: calc(52% - 2.4rem);
+  fill: rgb(94 224 200 / 18%);
+}
+
+.waveFront {
+  top: calc(52% - 1.7rem);
+  fill: rgb(4 24 31 / 45%);
+}
+
+.floatWrap {
+  position: absolute;
+  top: 52%;
+  left: 71%;
+  width: 0;
+  height: 0;
+  transform: translate3d(calc(var(--px) * -14px), calc(var(--py) * -6px), 0);
+  transition: transform 500ms var(--ease-out);
+}
+
+.line {
+  position: absolute;
+  bottom: 1.4rem;
+  left: -0.5px;
+  width: 1px;
+  height: 60vh;
+  background: linear-gradient(to top, rgb(245 251 248 / 55%), transparent);
+}
+
+.float {
+  position: absolute;
+  bottom: -1.6rem;
+  left: -0.85rem;
+  display: flex;
+  width: 1.7rem;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 80%;
+}
+
+.floatTip {
+  width: 0.45rem;
+  height: 1rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background: #ff6b3d;
+}
+
+.floatBody {
+  width: 1.7rem;
+  height: 2.3rem;
+  border-radius: 50% 50% 55% 55%;
+  background: linear-gradient(90deg, #ff6b3d 0 50%, #f5fbf8 50%);
+  box-shadow: 0 6px 24px rgb(255 107 61 / 35%);
+}
+
+.biteRing {
+  position: absolute;
+  top: -0.3rem;
+  left: -2rem;
+  width: 4rem;
+  height: 1.1rem;
+  border: 1.5px solid rgb(245 251 248 / 55%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.ripples {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ripple,
+.rippleLarge {
+  position: absolute;
+  width: 3rem;
+  height: 1rem;
+  border: 1.5px solid rgb(94 224 200 / 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  animation: ripple-out 1.6s var(--ease-out) forwards;
+}
+
+.rippleLarge {
+  border-color: rgb(255 107 61 / 75%);
+  animation-duration: 2.2s;
+  box-shadow: 0 0 0 6px rgb(255 107 61 / 6%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .waveBack {
+    animation: wave-slide 16s linear infinite;
+  }
+
+  .waveFront {
+    animation: wave-slide 10s linear infinite reverse;
+  }
+
+  .glow {
+    animation: glow-drift 14s ease-in-out infinite alternate;
+  }
+
+  .fish {
+    animation: fish-swim linear infinite;
+
+    &[data-reverse="true"] {
+      animation-name: fish-swim-back;
+      fill: rgb(94 224 200 / 16%);
+    }
+  }
+
+  // One slow cycle: calm bobbing, then a bite that pulls the float under and sends rings out.
+  .float {
+    animation: float-cycle 9s ease-in-out infinite;
+  }
+
+  .biteRing {
+    animation: bite-ring 9s ease-out infinite;
+  }
+}
+
+@keyframes wave-slide {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes glow-drift {
+  to {
+    transform: translate3d(-4%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes fish-swim {
+  from {
+    transform: translate3d(-20vw, 0, 0);
+  }
+
+  to {
+    transform: translate3d(120vw, 0, 0);
+  }
+}
+
+@keyframes fish-swim-back {
+  from {
+    transform: translate3d(120vw, 0, 0) scaleX(-1);
+  }
+
+  to {
+    transform: translate3d(-20vw, 0, 0) scaleX(-1);
+  }
+}
+
+@keyframes float-cycle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  20% {
+    transform: translateY(5px) rotate(3deg);
+  }
+
+  40% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  60% {
+    transform: translateY(4px) rotate(2deg);
+  }
+
+  72% {
+    transform: translateY(0) rotate(0);
+  }
+
+  76% {
+    transform: translateY(26px) rotate(0);
+  }
+
+  84% {
+    transform: translateY(-4px) rotate(-5deg);
+  }
+
+  92% {
+    transform: translateY(3px) rotate(2deg);
+  }
+}
+
+@keyframes bite-ring {
+  0%,
+  74% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  76% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3.4);
+  }
+}
+
+@keyframes ripple-out {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(5);
+  }
+}
+
+@media (max-width: 760px) {
+  // On phones the float rests high on the right so it never sits behind the search field.
+  .floatWrap {
+    top: 23%;
+    left: 80%;
+  }
+
+  .waveBack {
+    top: calc(23% - 2.4rem);
+  }
+
+  .waveFront {
+    top: calc(23% - 1.7rem);
+  }
+
+  .waterline::after {
+    top: 23%;
+  }
+
+  .line {
+    height: 23svh;
+  }
+}

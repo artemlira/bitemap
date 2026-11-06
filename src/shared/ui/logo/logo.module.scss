@@ -1,0 +1,92 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.mark {
+  width: 2rem;
+  height: 2rem;
+  overflow: visible;
+}
+
+.ringOuter,
+.ringInner {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ringOuter {
+  opacity: 0.35;
+}
+
+.ringInner {
+  opacity: 0.7;
+}
+
+.line {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+  opacity: 0.6;
+}
+
+.floatTop {
+  fill: #ff6b3d;
+}
+
+.floatBody {
+  fill: #f5fbf8;
+}
+
+.name {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mark {
+    animation: bob 3.6s ease-in-out infinite;
+  }
+
+  .ringOuter {
+    animation: ring 3.6s ease-out infinite;
+  }
+
+  .ringInner {
+    animation: ring 3.6s ease-out 0.6s infinite;
+  }
+
+  a:hover > & .mark,
+  a:hover & .mark {
+    animation-duration: 1.4s;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(1.5px) rotate(2deg);
+  }
+}
+
+@keyframes ring {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.6);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}

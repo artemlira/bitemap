@@ -98,7 +98,7 @@ export function ActivityFeedPage() {
                   <li key={notification.id}>
                     <Link className={styles.notification} data-unread={notification.isUnread || undefined} href={notification.href}>
                       {notification.isUnread ? <span className={styles.notificationDot} aria-hidden="true" /> : null}
-                      <span><strong>{notification.actorName === "BiteMap" ? t("unknownAngler") : notification.actorName}</strong> {t(`notificationKinds.${notification.kind}`)}</span>
+                      <span><strong>{notification.actorName === "Rybomapa" ? t("unknownAngler") : notification.actorName}</strong> {t(`notificationKinds.${notification.kind}`)}</span>
                       <time dateTime={new Date(notification.createdAt).toISOString()}>{new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(notification.createdAt))}</time>
                     </Link>
                   </li>
@@ -122,7 +122,7 @@ export function ActivityFeedPage() {
           <div className={styles.empty}><p className={styles.sectionLabel}>{t("emptyEyebrow")}</p><h3>{t("emptyTitle")}</h3><p>{t("emptyText")}</p><Link href="/community">{t("findAnglers")}</Link></div>
         ) : null}
         {user && !isLoading && !hasError && activities.length > 0 ? (
-          <ol className={styles.list} aria-label={t("listLabel")}>
+          <ol className={styles.list} aria-label={t("listLabel")} data-stagger>
             {activities.map((activity) => <li key={activity.id}><ActivityItem activity={activity} /></li>)}
           </ol>
         ) : null}

@@ -2,14 +2,16 @@
 
 .map {
   overflow: hidden;
-  min-height: 26rem;
+  height: 100%;
+  min-height: 24rem;
   border: 1px solid var(--color-line);
   border-radius: $radius-lg;
   background: var(--color-surface);
 }
 
 .map :global(.leaflet-container) {
-  height: 26rem;
+  height: 100%;
+  min-height: 24rem;
   color: var(--color-ink);
   font-family: inherit;
 }
@@ -27,7 +29,8 @@
   border: 3px solid #fffdf8;
   border-radius: 50%;
   background: var(--color-sun);
-  box-shadow: 0 2px 10px rgb(10 48 62 / 40%);
+  box-shadow: 0 0 0 0 rgb(255 107 61 / 50%), 0 2px 10px rgb(10 48 62 / 40%);
+  animation: marker-pulse 2.8s ease-out infinite;
   transition: transform 160ms ease;
 }
 
@@ -74,6 +77,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .marker span {
+    animation: none;
     transition: none;
+  }
+}
+
+@keyframes marker-pulse {
+  to {
+    box-shadow: 0 0 0 12px rgb(255 107 61 / 0%), 0 2px 10px rgb(10 48 62 / 40%);
   }
 }

@@ -1,4 +1,5 @@
 import type { UserSpotFormValues } from "@/entities/user-spot";
+import { isWithinUkraine } from "@/shared/lib/geo/ukraine-bounds";
 
 export type UserSpotFormErrors = Partial<Record<keyof UserSpotFormValues, string>>;
 
@@ -11,6 +12,7 @@ export type UserSpotValidationMessages = {
   fish: string;
   description: string;
   location: string;
+  locationOutsideUkraine: string;
 };
 
 export function validateUserSpot(values: UserSpotFormValues, messages: UserSpotValidationMessages): UserSpotFormErrors {
@@ -46,6 +48,8 @@ export function validateUserSpot(values: UserSpotFormValues, messages: UserSpotV
 
   if (typeof values.latitude !== "number" || typeof values.longitude !== "number") {
     errors.latitude = messages.location;
+  } else if (!isWithinUkraine(values.latitude, values.longitude)) {
+    errors.latitude = messages.locationOutsideUkraine;
   }
 
   return errors;

@@ -2,7 +2,7 @@
 
 import { Link } from "@/shared/lib/i18n";
 import { useLocale, useTranslations } from "next-intl";
-import { getUserSpotFish, getUserSpotText, usePublishedUserSpot } from "@/entities/user-spot";
+import { getUserSpotAccessNote, getUserSpotFish, getUserSpotText, usePublishedUserSpot, type UserSpotAccessCategory, type UserSpotVerificationStatus } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { ShareUserSpotButton } from "@/features/share-user-spot";
@@ -21,6 +21,18 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
   const locale = useLocale();
   const t = useTranslations("communitySpotDetails");
   const { isLoading, spot } = usePublishedUserSpot(spotId);
+  const accessNote = spot ? getUserSpotAccessNote(spot, locale) : "";
+  const accessKey: Record<UserSpotAccessCategory, string> = {
+    free: "accessFree",
+    paid: "accessPaid",
+    restricted: "accessRestricted",
+    unknown: "accessUnknown",
+  };
+  const verificationKey: Record<UserSpotVerificationStatus, string> = {
+    "community-reported": "verificationCommunityReported",
+    verified: "verificationVerified",
+    unverified: "verificationUnverified",
+  };
 
   if (isLoading) {
     return <main className={styles.state} aria-live="polite">{t("loading")}</main>;
@@ -64,8 +76,12 @@ export function CommunitySpotDetailsPage({ spotId }: CommunitySpotDetailsPagePro
         <dl className={styles.facts}>
           <div><dt>{t("waterType")}</dt><dd>{getUserSpotText(spot, "waterType", locale)}</dd></div>
           <div><dt>{t("location")}</dt><dd>{spot.settlement || spot.community || spot.region}</dd></div>
-          <div><dt>{t("access")}</dt><dd>{getUserSpotText(spot, "access", locale)}</dd></div>
+          <div><dt>{t("access")}</dt><dd>{t(accessKey[spot.accessCategory ?? "unknown"])}{accessNote ? ` · ${accessNote}` : ""}</dd></div>
         </dl>
+        <p className={styles.dataStatus}>
+          <span>{t(verificationKey[spot.verificationStatus ?? "unverified"])}</span>
+          {spot.updatedAt ? <span>{t("updated", { date: new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(spot.updatedAt) })}</span> : null}
+        </p>
         <SpotLocationPanel
           id={spot.id}
           latitude={spot.latitude}

@@ -10,144 +10,195 @@
   border-radius: $radius-lg;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
-  transition: border-color 180ms ease, transform 180ms ease;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0));
+  transition: border-color 220ms ease, transform 260ms var(--ease-out), box-shadow 320ms ease;
+
+  // A soft light follows the pointer across the card.
+  &::after {
+    position: absolute;
+    z-index: 3;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgb(94 224 200 / 16%), transparent 55%);
+    content: "";
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms ease;
+  }
 
   @include hover {
-    border-color: color-mix(in srgb, var(--color-water) 42%, var(--color-line));
-    transform: translateY(-0.45rem);
+    --lift: -0.4rem;
+
+    border-color: var(--color-sonar);
+    box-shadow: 0 24px 60px rgb(20 163 141 / 20%);
+
+    &::after {
+      opacity: 1;
+    }
   }
 }
 
 .visual {
   position: relative;
   display: flex;
-  align-items: end;
-  min-height: 11rem;
+  flex: 0 0 11rem;
+  align-items: flex-end;
   overflow: hidden;
-  padding: $space-20;
-  color: rgb(255 253 248 / 68%);
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  margin: 0;
+  padding: $space-12 $space-16;
+  color: rgb(255 253 248 / 86%);
+  font-size: 0.78rem;
+  font-weight: 650;
 
-  &::before,
-  i {
+  &::after {
     position: absolute;
-    border: 1px solid rgb(255 253 248 / 30%);
-    border-radius: 50%;
-    content: "";
-    transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  &::before {
-    right: -11%;
-    bottom: -54%;
-    width: 75%;
-    aspect-ratio: 1;
-  }
-
-  i {
-    right: 17%;
-    bottom: -34%;
-    width: 46%;
-    aspect-ratio: 1;
-  }
-
-  span {
-    position: relative;
     z-index: 1;
+    background: linear-gradient(180deg, transparent 40%, rgb(4 24 31 / 55%));
+    content: "";
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .waterType,
+  .photoCredit {
+    position: relative;
+    z-index: 3;
   }
 }
 
-@include hover {
-  .card:hover .visual::before,
-  .card:hover .visual i {
-    transform: scale(1.06);
-  }
+.photo {
+  object-fit: cover;
+  transition: transform 500ms var(--ease-out);
 }
 
-.visual[data-tone="lagoon"] {
-  background: linear-gradient(145deg, #799aa2, #1a586b 65%, #0c2b3b);
+.card:hover .photo {
+  transform: scale(1.05);
 }
 
-.visual[data-tone="sunset"] {
-  background: linear-gradient(145deg, #d7a35d, #6b724a 48%, #1c4850);
+.waterType {
+  padding: 0.2rem 0.65rem;
+  border-radius: $radius-full;
+  background: rgb(4 24 31 / 55%);
+  backdrop-filter: blur(6px);
 }
 
-.visual[data-tone="river"] {
-  background: linear-gradient(145deg, #94a78d, #3d715a 48%, #123c50);
+.photoCredit {
+  margin-left: auto;
+  padding: 0.25rem 0.6rem;
+  border-radius: $radius-full;
+  background: rgb(4 24 31 / 60%);
+  font-size: 0.62rem;
+  font-weight: 500;
 }
 
-.visual[data-tone="reeds"] {
-  background: linear-gradient(145deg, #c8b66f, #7d8f54 44%, #234c48);
+.photoCredit a {
+  color: #fff;
+}
+
+// Without a photo the visual shrinks to a strip: a contour pattern, or the real outline of the water.
+.visual[data-no-photo="true"] {
+  flex-basis: 6.5rem;
+  background:
+    repeating-radial-gradient(circle at 84% 20%, transparent 0 14px, rgb(94 224 200 / 14%) 14px 15px),
+    linear-gradient(160deg, #06202a, #0b4048);
+}
+
+.silhouette {
+  position: absolute;
+  z-index: 0;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 55%;
+  height: calc(100% - 1rem);
 }
 
 .content {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: $space-20;
+  padding: $space-16 $space-20 $space-20;
 }
 
 .region {
   color: var(--color-muted);
-  font-size: 0.825rem;
+  font-size: 0.82rem;
 }
 
-.content h2 {
-  margin-top: $space-8;
+.content h3 {
+  margin-top: 0.3rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+// The whole card is one link: the title's link stretches over it.
+.link {
   color: var(--color-ink);
-  font-size: 1.35rem;
-  letter-spacing: -0.045em;
+
+  &::after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::after {
+      border-radius: $radius-lg;
+      outline: 3px solid var(--color-focus);
+      outline-offset: -3px;
+    }
+  }
 }
 
 .description {
-  margin-top: $space-12;
+  display: -webkit-box;
+  margin-top: $space-8;
+  overflow: hidden;
   color: var(--color-muted);
-  font-size: 0.925rem;
+  font-size: 0.9rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
-.fish {
-  margin-top: $space-16;
-  color: var(--color-water);
-  font-size: 0.8rem;
-  font-weight: 750;
-}
-
-.footer {
+.chips {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-12;
-  margin-top: auto;
-  padding-top: $space-24;
-  color: var(--color-muted);
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: auto 0 0;
+  padding: $space-16 0 0;
+  list-style: none;
+}
+
+.chip,
+.fishChip {
+  padding: 0.2rem 0.65rem;
+  border-radius: $radius-full;
   font-size: 0.75rem;
   font-weight: 650;
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: $space-8;
+.chip {
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
 }
 
-.footer a {
-  min-height: 2.35rem;
-  padding: 0 $space-12;
-  border-radius: $radius-full;
-  background: var(--color-water);
-  color: #fffdf8;
-  font-size: 0.8rem;
-  font-weight: 800;
-  line-height: 2.35rem;
-  transition: background 180ms ease, transform 180ms ease;
+.fishChip {
+  background: color-mix(in srgb, var(--color-sonar) 14%, transparent);
+  color: var(--color-water);
+}
 
-  @include hover {
-    background: var(--color-water-deep);
-    transform: translateY(-1px);
+@media (max-width: 600px) {
+  .visual {
+    flex-basis: 9rem;
+  }
+
+  .visual[data-no-photo="true"] {
+    flex-basis: 5.5rem;
   }
 }

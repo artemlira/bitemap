@@ -30,7 +30,7 @@ export function ArticlesPage() {
         </div>
         {error ? <p role="status">{t("loadError")}</p> : null}
         {isLoading ? <p aria-live="polite">{t("loadingArticles")}</p> : null}
-        <div className={styles.grid}>
+        <div className={styles.grid} data-stagger>
           {articles.map((article) => (
             <FishingArticleCard
               key={article.slug}

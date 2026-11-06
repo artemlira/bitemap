@@ -35,7 +35,7 @@ export function CommunityPage() {
         {isLoading ? (
           <div className={styles.loading} aria-live="polite">{t("searching")}</div>
         ) : spots.length > 0 ? (
-          <div className={styles.grid}>
+          <div className={styles.grid} data-stagger>
             {spots.map((spot) => (
               <UserSpotCard key={spot.id} spot={spot} href={`/community/${spot.id}`} actionLabel={t("open")} />
             ))}

@@ -11,7 +11,7 @@
   border-radius: 0 0 $radius-xl $radius-xl;
   background:
     radial-gradient(circle at 82% -18%, rgb(121 188 203 / 42%), transparent 25rem),
-    linear-gradient(145deg, var(--color-water-deep), var(--color-water));
+    var(--gradient-water);
   color: #fffdf8;
 }
 
@@ -26,8 +26,7 @@
   padding-bottom: clamp($space-64, 11vw, 9rem);
 }
 
-.eyebrow,
-.sectionLabel {
+.eyebrow {
   color: var(--color-sun);
   font-size: 0.75rem;
   font-weight: 800;
@@ -54,20 +53,6 @@
   padding-block: clamp($space-64, 9vw, 8rem);
 }
 
-.catalogHeading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: $space-24;
-}
-
-.catalogHeading h2 {
-  margin-top: $space-12;
-  font-size: clamp(2.3rem, 5vw, 4.5rem);
-  letter-spacing: -0.075em;
-  line-height: 0.95;
-}
-
 .counter {
   flex: none;
   color: var(--color-water);
@@ -82,26 +67,6 @@
   margin-top: $space-32;
 }
 
-.mapSection {
-  display: grid;
-  gap: $space-16;
-  margin-top: $space-32;
-}
-
-.mapHeading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: $space-16;
-}
-
-.mapHeading h3 {
-  margin-top: $space-8;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  letter-spacing: -0.055em;
-}
-
-.mapHeading > p,
 .mapNote {
   color: var(--color-muted);
   font-size: 0.875rem;
@@ -168,17 +133,186 @@
     border-radius: 0 0 $radius-lg $radius-lg;
   }
 
-  .catalogHeading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .mapHeading {
+.loadMore {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  color: var(--color-muted);
+
+  button {
+    min-height: 3rem;
+    padding-inline: 1.75rem;
+    border: 1px solid var(--color-water);
+    border-radius: 999px;
+    color: var(--color-water);
+    font-weight: 700;
+    transition: background 200ms ease, color 200ms ease, transform 200ms var(--ease-out);
+
+    &:hover {
+      background: var(--color-water);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.addSpot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 1.75rem 2rem;
+  border: 1px dashed var(--color-sonar);
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--color-sonar) 7%, transparent);
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    max-width: 38rem;
+    margin-top: 0.4rem;
+    color: var(--color-muted);
+  }
+
+  a {
+    flex: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 999px;
+    background: var(--color-sun);
+    color: #031017;
+    font-weight: 750;
+    transition: transform 200ms var(--ease-out);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 720px) {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+.dataSource {
+  margin-top: 1.25rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// Filters stay under the floating header while the list scrolls.
+.toolbar {
+  position: sticky;
+  z-index: 5;
+  top: 5.2rem;
+  margin-top: -2.5rem;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.viewToggle {
+  display: none;
+  padding: 0.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-surface);
+
+  button {
+    min-height: 2.25rem;
+    padding-inline: 1.1rem;
+    border-radius: 999px;
+    color: var(--color-muted);
+    font-weight: 700;
+    transition: background 200ms ease, color 200ms ease;
+
+    &[aria-pressed="true"] {
+      background: var(--color-water);
+      color: #fff;
+    }
+  }
+}
+
+// Two panes on wide screens: results on the left, a map that stays in view on the right.
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.workspace .grid {
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  margin-top: 0;
+}
+
+.mapPane {
+  position: sticky;
+  top: 9.5rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0.6rem;
+  height: calc(100svh - 11rem);
+  min-height: 24rem;
+}
+
+.mapPane .mapNote {
+  margin-top: 0;
+}
+
+@media (max-width: 1000px) {
+  .viewToggle {
+    display: inline-flex;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .mapPane {
+    position: relative;
+    top: 0;
+    height: 70svh;
+  }
+
+  // The hidden pane keeps its size so Leaflet never measures a collapsed container.
+  .workspace[data-view="list"] .mapPane {
+    position: absolute;
+    width: calc(100% - 2.5rem);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .workspace[data-view="map"] .listPane {
+    display: none;
+  }
+
+  .toolbar {
+    position: static;
+    margin-top: -1.5rem;
   }
 }

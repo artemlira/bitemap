@@ -1,0 +1,125 @@
+import type { FishingSpot, FishingSpotFacts, FishingSpotPhoto, FishingSpotShape, SpotTone } from "./types";
+
+export type WaterBodyType = "lake" | "reservoir" | "river" | "canal" | "pond";
+
+export type CatalogBase = {
+  id: string;
+  type: WaterBodyType;
+  name: { uk: string; en: string | null };
+  region: { uk: string; en: string };
+  latitude: number;
+  longitude: number;
+};
+
+export type CatalogDetails = {
+  qid: string;
+  facts?: FishingSpotFacts;
+  fish?: string[];
+  shape?: FishingSpotShape;
+  locationApprox?: boolean;
+  description: { uk: string | null; en: string | null };
+  wikipedia: { uk: string | null; en: string | null };
+  photo: { src: string; creator: string; pageUrl: string; license: string; licenseUrl: string } | null;
+};
+
+const WATER_TYPES: Record<WaterBodyType, { uk: string; en: string; tone: SpotTone }> = {
+  lake: { uk: "Озеро", en: "Lake", tone: "lagoon" },
+  reservoir: { uk: "Водосховище", en: "Reservoir", tone: "reeds" },
+  river: { uk: "Річка", en: "River", tone: "river" },
+  canal: { uk: "Канал", en: "Canal", tone: "sunset" },
+  pond: { uk: "Ставок", en: "Pond", tone: "reeds" },
+};
+
+export const catalogWaterTypes = WATER_TYPES;
+
+const FISH_EN: Record<string, string> = {
+  "Щука": "Pike", "Короп": "Carp", "Сазан": "Wild carp", "Лящ": "Bream", "Плітка": "Roach", "Окунь": "Perch",
+  "Судак": "Zander", "Сом": "Catfish", "Карась": "Crucian carp", "Лин": "Tench", "Жерех": "Asp", "Голавль": "Chub",
+  "Краснопірка": "Rudd", "Білий амур": "Grass carp", "Товстолоб": "Silver carp", "Форель": "Trout", "Харіус": "Grayling",
+  "Марена": "Barbel", "Уклея": "Bleak", "Йорж": "Ruffe", "В'юн": "Weatherfish", "Бичок": "Goby", "Осетер": "Sturgeon",
+  "Вугор": "Eel", "Підуст": "Nase", "Чехоня": "Sabrefish", "Білизна": "Asp (white)", "Гольян": "Minnow", "Лосось": "Salmon",
+  "Кефаль": "Mullet", "Бабець": "Bullhead", "Пічкур": "Gudgeon", "Скумбрія": "Mackerel", "Тарань": "Dried roach",
+};
+
+const num = (value: number) => value.toLocaleString("uk-UA", { maximumFractionDigits: 1 });
+const numEn = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 1 });
+
+/** A plain sentence built only from known facts, used when no article text exists. */
+function describeFromFacts(type: WaterBodyType, facts: FishingSpotFacts | undefined, lang: "uk" | "en"): string {
+  const label = WATER_TYPES[type][lang];
+  if (!facts) return "";
+  const parts: string[] = [];
+  if (lang === "uk") {
+    if (facts.lengthKm) parts.push(`завдовжки ${num(facts.lengthKm)} км`);
+    if (facts.areaKm2) parts.push(`площею ${num(facts.areaKm2)} км²`);
+    if (facts.maxDepthM) parts.push(`із максимальною глибиною ${num(facts.maxDepthM)} м`);
+    if (facts.basin) parts.push(`у басейні: ${facts.basin.uk}`);
+    if (facts.flowsInto) parts.push(`впадає в: ${facts.flowsInto.uk}`);
+  } else {
+    if (facts.lengthKm) parts.push(`${numEn(facts.lengthKm)} km long`);
+    if (facts.areaKm2) parts.push(`covering ${numEn(facts.areaKm2)} km²`);
+    if (facts.maxDepthM) parts.push(`up to ${numEn(facts.maxDepthM)} m deep`);
+    if (facts.basin) parts.push(`in the ${facts.basin.en} basin`);
+    if (facts.flowsInto) parts.push(`flowing into ${facts.flowsInto.en}`);
+  }
+  return parts.length ? `${label}, ${parts.join(", ")}.` : "";
+}
+
+/** Builds the app-level spot from an open-data catalog record. */
+export type CatalogExtras = { facts?: FishingSpotFacts; fish?: string[] };
+
+export function buildFishingSpot(
+  base: CatalogBase,
+  importedAt: string,
+  details?: CatalogDetails,
+  extras?: CatalogExtras,
+): FishingSpot {
+  const facts = details?.facts ?? extras?.facts;
+  const fishNames = details?.fish ?? extras?.fish ?? [];
+  const type = WATER_TYPES[base.type];
+  const photo: FishingSpotPhoto | undefined = details?.photo
+    ? {
+        src: details.photo.src,
+        alt: { uk: base.name.uk, en: base.name.en ?? base.name.uk },
+        creator: details.photo.creator,
+        sourceUrl: details.photo.pageUrl,
+        license: details.photo.license,
+        licenseUrl: details.photo.licenseUrl,
+      }
+    : undefined;
+
+  return {
+    id: base.id,
+    slug: base.id,
+    name: base.name.uk,
+    region: base.region.uk,
+    waterType: type.uk,
+    latitude: base.latitude,
+    longitude: base.longitude,
+    fish: fishNames,
+    facts,
+    shape: details?.shape,
+    locationApprox: details ? details.locationApprox : undefined,
+    fishSourceUrl: details?.fish?.length ? (details.wikipedia.uk ?? undefined) : undefined,
+    description: details?.description.uk ?? describeFromFacts(base.type, facts, "uk"),
+    access: "Умови доступу не перевірені",
+    accessCategory: "unknown",
+    verificationStatus: "verified",
+    verifiedAt: importedAt,
+    updatedAt: importedAt,
+    sourceUrl: details ? `https://www.wikidata.org/wiki/${details.qid}` : undefined,
+    descriptionSourceUrl: details?.description.uk ? (details.wikipedia.uk ?? undefined) : undefined,
+    photos: photo ? [photo] : undefined,
+    tone: type.tone,
+    translations: {
+      en: {
+        access: "Access conditions unverified",
+        description: details?.description.en ?? describeFromFacts(base.type, facts, "en") ?? "",
+        fish: fishNames.map((name) => FISH_EN[name] ?? name),
+        name: base.name.en ?? base.name.uk,
+        region: base.region.en,
+        waterType: type.en,
+      },
+    },
+  };
+}

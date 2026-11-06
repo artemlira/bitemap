@@ -15,9 +15,11 @@ type SpotLocationPanelProps = {
   latitude?: number;
   locationLabel: string;
   longitude?: number;
+  shape?: { kind: "area" | "line"; lines: [number, number][][] };
+  isApproximate?: boolean;
 };
 
-export function SpotLocationPanel({ id, latitude, locationLabel, longitude }: SpotLocationPanelProps) {
+export function SpotLocationPanel({ id, latitude, locationLabel, longitude, shape, isApproximate }: SpotLocationPanelProps) {
   const t = useTranslations("spotLocation");
   const coordinates = getSpotCoordinates({ latitude, longitude });
   const titleId = `spot-location-title-${id}`;
@@ -31,7 +33,8 @@ export function SpotLocationPanel({ id, latitude, locationLabel, longitude }: Sp
 
       {coordinates ? (
         <>
-          <SpotLocationMap coordinates={coordinates} />
+          <SpotLocationMap coordinates={coordinates} shape={shape} />
+          {isApproximate ? <p className={styles.coordinates}>{t("approxNote")}</p> : shape ? <p className={styles.coordinates}>{t("shapeNote")}</p> : null}
           <div className={styles.mapActions}>
             <a
               className={styles.coordinates}

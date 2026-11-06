@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { fishingSpots, getFishingSpotText } from "@/entities/fishing-spot";
+import { getFishingSpotText, useCatalogIndex } from "@/entities/fishing-spot";
 import { FishingReportCard, useCommunityFishingReports } from "@/entities/fishing-report";
 import { ManageFishingReportActions } from "@/features/manage-fishing-report";
 import { ReportDiscussion } from "@/features/discuss-report";
@@ -23,6 +23,7 @@ export function CommunityReports({ spots }: CommunityReportsProps) {
   const locale = useLocale();
   const t = useTranslations("communityReports");
   const { error, isLoading, reports } = useCommunityFishingReports();
+  const { spots: fishingSpots } = useCatalogIndex();
   const targets = new Map<string, ReportTarget>();
 
   fishingSpots.forEach((spot) => {

@@ -14,6 +14,8 @@ const initialFilters: SpotFilters = {
   region: "",
   waterType: "",
   fish: "",
+  access: "",
+  sort: "recommended",
 };
 
 function uniqueSorted(values: Iterable<string>) {
@@ -28,6 +30,7 @@ function getFilterOptions<TSpot>(
     region: uniqueSorted(spots.map((spot) => getSpot(spot).region)),
     waterType: uniqueSorted(spots.map((spot) => getSpot(spot).waterType)),
     fish: uniqueSorted(spots.flatMap((spot) => getSpot(spot).fish)),
+    access: ["free", "paid", "restricted", "unknown"],
   };
 }
 
@@ -35,7 +38,7 @@ function createFiltersUrl(filters: SpotFilters) {
   const searchParams = new URLSearchParams();
 
   for (const [name, value] of Object.entries(filters)) {
-    if (value) {
+    if (value && !(name === "sort" && value === "recommended")) {
       searchParams.set(name, value);
     }
   }
@@ -55,17 +58,28 @@ export function useSpotFilters<TSpot>(
   const options = useMemo(() => getFilterOptions(spots, getSpot), [getSpot, spots]);
   const [filters, setFilters] = useState<SpotFilters>(initialFilterValues);
 
-  const filteredSpots = useMemo(
-    () =>
-      spots.filter(
+  const filteredSpots = useMemo(() => {
+    const filtered = spots.filter(
         (spot) =>
           (filters.query === "" || getSpot(spot).searchText.toLocaleLowerCase().includes(filters.query.toLocaleLowerCase())) &&
           (filters.region === "" || getSpot(spot).region === filters.region) &&
           (filters.waterType === "" || getSpot(spot).waterType === filters.waterType) &&
-          (filters.fish === "" || getSpot(spot).fish.includes(filters.fish)),
-      ),
-    [filters, getSpot, spots],
-  );
+          (filters.fish === "" || getSpot(spot).fish.includes(filters.fish)) &&
+          (filters.access === "" || (getSpot(spot).accessCategory ?? "unknown") === filters.access),
+      );
+
+    if (filters.sort === "name") {
+      return filtered.sort((first, second) => getSpot(first).searchText.localeCompare(getSpot(second).searchText, "uk"));
+    }
+
+    if (filters.sort === "updated") {
+      return filtered.sort((first, second) =>
+        (getSpot(second).updatedAt?.getTime() ?? 0) - (getSpot(first).updatedAt?.getTime() ?? 0),
+      );
+    }
+
+    return filtered;
+  }, [filters, getSpot, spots]);
 
   const updateFilters = useCallback(
     (nextFilters: SpotFilters) => {
@@ -86,7 +100,9 @@ export function useSpotFilters<TSpot>(
     updateFilters(initialFilters);
   }, [updateFilters]);
 
-  const hasActiveFilters = Object.values(filters).some(Boolean);
+  const hasActiveFilters = Object.entries(filters).some(
+    ([name, value]) => Boolean(value) && !(name === "sort" && value === "recommended"),
+  );
 
   return {
     filters,

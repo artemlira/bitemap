@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getFishingSpotBySlug, getFishingSpotText, fishingSpots } from "@/entities/fishing-spot";
+import { getFishingSpotText } from "@/entities/fishing-spot";
+import { getFishingSpotBySlug, getNearbyFishingSpots } from "@/entities/fishing-spot/server";
 import { SpotDetailsPage } from "@/views/spot-details";
-
-export function generateStaticParams() {
-  return ["uk", "en"].flatMap((locale) => fishingSpots.map(({ slug }) => ({ locale, slug })));
-}
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/spots/[slug]">,
@@ -13,10 +10,10 @@ export async function generateMetadata(
   const { locale, slug } = await props.params;
   const spot = getFishingSpotBySlug(slug);
 
-  if (!spot) return { title: "BiteMap" };
+  if (!spot) return { title: "Rybomapa" };
 
-  const title = `${getFishingSpotText(spot, "name", locale)} — BiteMap`;
-  const description = `${getFishingSpotText(spot, "region", locale)}. ${getFishingSpotText(spot, "description", locale)}`;
+  const title = `${getFishingSpotText(spot, "name", locale)} — Rybomapa`;
+  const description = [getFishingSpotText(spot, "waterType", locale), getFishingSpotText(spot, "region", locale), getFishingSpotText(spot, "description", locale)].filter(Boolean).join(". ");
   const url = `/${locale}/spots/${slug}`;
 
   return {
@@ -34,7 +31,7 @@ export async function generateMetadata(
       title,
       description,
       type: "website",
-      siteName: "BiteMap",
+      siteName: "Rybomapa",
       url,
       images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
     },
@@ -55,5 +52,5 @@ export default async function SpotPage(props: PageProps<"/[locale]/spots/[slug]"
     notFound();
   }
 
-  return <SpotDetailsPage spot={spot} />;
+  return <SpotDetailsPage spot={spot} nearby={getNearbyFishingSpots(slug)} />;
 }

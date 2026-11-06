@@ -3,7 +3,7 @@
 import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, Timestamp, where } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import type { FeedActivity } from "./types";
-import { fishingSpots } from "@/entities/fishing-spot";
+import { getLoadedCatalogSpot, loadCatalogIndex } from "@/entities/fishing-spot";
 import type { FishingReport } from "@/entities/fishing-report";
 import type { SpotImage } from "@/entities/spot-image";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
@@ -27,7 +27,7 @@ function getMillis(value: TimestampLike) {
 
 function getTargetHref(targetType: "catalog" | "user-spot", targetId: string) {
   if (targetType === "user-spot") return `/community/${targetId}`;
-  const spot = fishingSpots.find((item) => item.id === targetId);
+  const spot = getLoadedCatalogSpot(targetId);
   return spot ? `/spots/${spot.slug}` : "/spots";
 }
 
@@ -61,6 +61,7 @@ export function useActivityNotifications(userId: string | undefined, activities:
 
     async function loadNotifications() {
       try {
+        await loadCatalogIndex().catch(() => undefined);
         const db = getFirebaseFirestore();
         const [followSnapshot, reportSnapshot, imageSnapshot, readStateSnapshot] = await Promise.all([
           getDocs(query(collection(db, "angler-follows"), where("followedId", "==", activeUserId), limit(40))),
@@ -130,7 +131,7 @@ export function useActivityNotifications(userId: string | undefined, activities:
         }));
 
         const items = recentDrafts
-          .map(({ actorId, ...event }) => ({ ...event, actorName: event.actorName || names.get(actorId) || "BiteMap" }))
+          .map(({ actorId, ...event }) => ({ ...event, actorName: event.actorName || names.get(actorId) || "Rybomapa" }))
           .sort((a, b) => b.createdAt - a.createdAt)
           .slice(0, 60);
         if (isActive) {

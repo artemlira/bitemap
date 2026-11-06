@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/shared/lib/i18n";
+import { SiteFooter } from "@/widgets/site-footer";
 
 type LocaleLayoutProps = LayoutProps<"/[locale]">;
 
@@ -20,14 +21,14 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
       locale: locale === "uk" ? "uk_UA" : "en_US",
       alternateLocale: locale === "uk" ? ["en_US"] : ["uk_UA"],
       type: "website",
-      siteName: "BiteMap",
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "BiteMap — fishing closer to nature" }],
+      siteName: "Rybomapa",
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Rybomapa — fishing closer to nature" }],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "BiteMap — fishing closer to nature" }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Rybomapa — fishing closer to nature" }],
     },
   };
 }
@@ -39,5 +40,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
+  return (
+    <NextIntlClientProvider>
+      {children}
+      <SiteFooter />
+    </NextIntlClientProvider>
+  );
 }

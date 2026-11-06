@@ -172,12 +172,20 @@ service cloud.firestore {
 
     match /user-spots/{spotId} {
       allow create: if isSignedIn()
-        && request.resource.data.ownerId == request.auth.uid;
+        && request.resource.data.ownerId == request.auth.uid
+        && (!request.resource.data.keys().hasAny(["accessCategory"])
+          || request.resource.data.accessCategory in ["free", "paid", "restricted", "unknown"])
+        && (!request.resource.data.keys().hasAny(["verificationStatus"])
+          || request.resource.data.verificationStatus == "community-reported");
       allow get, list: if isPublishedSpot()
         || isOwner(resource.data.ownerId);
       allow update: if isSignedIn()
         && ((resource.data.ownerId == request.auth.uid
             && request.resource.data.ownerId == resource.data.ownerId
+            && (!request.resource.data.keys().hasAny(["accessCategory"])
+              || request.resource.data.accessCategory in ["free", "paid", "restricted", "unknown"])
+            && request.resource.data.get("verificationStatus", "unverified")
+              == resource.data.get("verificationStatus", "unverified")
             && request.resource.data.get("moderationStatus", "") == resource.data.get("moderationStatus", "")
             && !(resource.data.get("moderationStatus", "") == "hidden"
               && request.resource.data.visibility == "published"))

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { SpotFilterName, SpotFilterOptionName, SpotFilterOptions, SpotFilters } from "../model/types";
 import styles from "./spot-filter-bar.module.scss";
@@ -20,6 +21,8 @@ export function SpotFilterBar({
   onReset,
 }: SpotFilterBarProps) {
   const t = useTranslations("spots");
+  const [isOpen, setIsOpen] = useState(false);
+  const activeCount = [filters.region, filters.waterType, filters.fish, filters.access].filter(Boolean).length;
   const filterFields: ReadonlyArray<{
     id: string;
     label: string;
@@ -29,7 +32,15 @@ export function SpotFilterBar({
     { id: "spot-filter-region", label: t("region"), name: "region", placeholder: t("allRegions") },
     { id: "spot-filter-water-type", label: t("waterType"), name: "waterType", placeholder: t("allWaterTypes") },
     { id: "spot-filter-fish", label: t("fish"), name: "fish", placeholder: t("allFish") },
+    { id: "spot-filter-access", label: t("access"), name: "access", placeholder: t("allAccess") },
   ];
+
+  const accessLabels: Record<string, string> = {
+    free: t("accessFree"),
+    paid: t("accessPaid"),
+    restricted: t("accessRestricted"),
+    unknown: t("accessUnknown"),
+  };
 
   return (
     <div className={styles.filters} role="group" aria-label={t("filterGroup")}>
@@ -44,6 +55,17 @@ export function SpotFilterBar({
           onChange={(event) => onChange("query", event.target.value)}
         />
       </label>
+      <button
+        className={styles.toggle}
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls="spot-filter-advanced"
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        {t("filters")}{activeCount > 0 ? ` (${activeCount})` : ""}
+      </button>
+
+      <div className={styles.advanced} id="spot-filter-advanced" data-open={isOpen}>
       {filterFields.map((field) => (
         <label className={styles.field} htmlFor={field.id} key={field.name}>
           <span>{field.label}</span>
@@ -56,12 +78,23 @@ export function SpotFilterBar({
             <option value="">{field.placeholder}</option>
             {options[field.name].map((option) => (
               <option key={option} value={option}>
-                {option}
+                {field.name === "access" ? (accessLabels[option] ?? option) : option}
               </option>
             ))}
           </select>
         </label>
       ))}
+
+      <label className={styles.field} htmlFor="spot-filter-sort">
+        <span>{t("sort")}</span>
+        <select id="spot-filter-sort" name="sort" value={filters.sort} onChange={(event) => onChange("sort", event.target.value)}>
+          <option value="recommended">{t("sortRecommended")}</option>
+          <option value="name">{t("sortName")}</option>
+          <option value="updated">{t("sortUpdated")}</option>
+        </select>
+      </label>
+
+      </div>
 
       <button className={styles.reset} type="button" onClick={onReset} disabled={!hasActiveFilters}>
         {t("reset")}

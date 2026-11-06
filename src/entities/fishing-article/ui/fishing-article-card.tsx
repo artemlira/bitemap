@@ -15,7 +15,7 @@ export function FishingArticleCard({ article, locale, readTimeLabel, actionLabel
   const content = getFishingArticleTranslation(article, locale);
 
   return (
-    <Link className={styles.card} href={`/articles/${article.slug}`}>
+    <Link className={styles.card} data-tilt href={`/articles/${article.slug}`}>
       <div className={styles.visual} data-tone={article.tone} aria-hidden="true">
         <span className={styles.category}>{content.category}</span>
         <span className={styles.number}>{String(fishingArticlesIndex(article.slug)).padStart(2, "0")}</span>

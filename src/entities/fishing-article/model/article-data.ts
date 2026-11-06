@@ -29,7 +29,7 @@ export const fishingArticles: readonly FishingArticle[] = [
           {
             heading: "Залишай корисні нотатки",
             paragraphs: [
-              "Збережи координати, час, погоду та те, що спрацювало. Якщо ділитимешся точкою в BiteMap, додай тільки ті деталі, які допоможуть іншим підготуватися, і поважай приватність та правила водойми.",
+              "Збережи координати, час, погоду та те, що спрацювало. Якщо ділитимешся точкою в Рибомапу, додай тільки ті деталі, які допоможуть іншим підготуватися, і поважай приватність та правила водойми.",
             ],
           },
           {
@@ -61,7 +61,7 @@ export const fishingArticles: readonly FishingArticle[] = [
           {
             heading: "Keep useful notes",
             paragraphs: [
-              "Save the coordinates, time, weather and what worked. When sharing a spot on BiteMap, include details that help others prepare, and respect privacy and local rules.",
+              "Save the coordinates, time, weather and what worked. When sharing a spot on Rybomapa, include details that help others prepare, and respect privacy and local rules.",
             ],
           },
           {
@@ -170,7 +170,7 @@ export const fishingArticles: readonly FishingArticle[] = [
           {
             heading: "Записуй фактичні спостереження",
             paragraphs: [
-              "Після виїзду занотуй погоду, час, активність риби та результат. Так власна історія спостережень стане кориснішою за загальний прогноз, а звіт допоможе спільноті BiteMap.",
+              "Після виїзду занотуй погоду, час, активність риби та результат. Так власна історія спостережень стане кориснішою за загальний прогноз, а звіт допоможе спільноті Рибомапа.",
             ],
           },
           {
@@ -201,7 +201,7 @@ export const fishingArticles: readonly FishingArticle[] = [
           {
             heading: "Record what actually happened",
             paragraphs: [
-              "After the trip, note the weather, time, fish activity and result. Your own observations become more useful than a general forecast, and your report can help the BiteMap community.",
+              "After the trip, note the weather, time, fish activity and result. Your own observations become more useful than a general forecast, and your report can help the Rybomapa community.",
             ],
           },
           {

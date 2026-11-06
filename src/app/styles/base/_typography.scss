@@ -1,9 +1,9 @@
 body {
   background: var(--color-page);
   color: var(--color-ink);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-family: var(--font-body), Arial, sans-serif;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -13,4 +13,25 @@ h2,
 h3,
 p {
   text-wrap: balance;
+}
+
+::selection {
+  background: var(--color-sonar);
+  color: #031017;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+html {
+  scrollbar-color: var(--color-water) var(--color-page);
+}
+
+// Never let a stray wide element create a horizontal scrollbar. `clip` (unlike `hidden`)
+// keeps position: sticky working.
+html,
+body {
+  overflow-x: clip;
 }

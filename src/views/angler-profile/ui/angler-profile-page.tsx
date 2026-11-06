@@ -59,7 +59,7 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
           </div>
           <div className={styles.profileActions}>
             <AnglerFollowControl anglerId={userId} />
-            <dl className={styles.stats}>
+            <dl className={styles.stats} data-stagger>
               <div><dt>{t("spotsStat")}</dt><dd>{areSpotsLoading ? "—" : spots.length}</dd></div>
               <div><dt>{t("reportsStat")}</dt><dd>{areReportsLoading ? "—" : reports.length}</dd></div>
             </dl>
@@ -76,7 +76,7 @@ export function AnglerProfilePage({ userId }: AnglerProfilePageProps) {
         {areSpotsLoading ? <p className={styles.stateText} aria-live="polite">{t("spotsLoading")}</p> : null}
         {!areSpotsLoading && !spotsError && spots.length === 0 ? <p className={styles.stateText}>{t("spotsEmpty")}</p> : null}
         {spots.length > 0 ? (
-          <ul className={styles.spotGrid} aria-label={t("spotsList")}>
+          <ul className={styles.spotGrid} aria-label={t("spotsList")} data-stagger>
             {spots.map((spot) => (
               <li className={styles.spotItem} key={spot.id}>
                 <UserSpotCard spot={spot} href={`/community/${spot.id}`} actionLabel={t("openSpot")} showVisibility={false} />

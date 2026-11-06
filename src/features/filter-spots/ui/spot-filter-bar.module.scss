@@ -3,15 +3,15 @@
 
 .filters {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr)) auto;
   align-items: end;
   gap: $space-12;
-  margin-top: $space-32;
-  padding: $space-16;
+  padding: $space-12;
   border: 1px solid var(--color-line);
   border-radius: $radius-lg;
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
   box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(16px) saturate(1.3);
 }
 
 .field {
@@ -19,10 +19,8 @@
   gap: $space-8;
   min-width: 0;
   color: var(--color-muted);
-  font-size: 0.75rem;
-  font-weight: 750;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 650;
 }
 
 .field input,
@@ -34,6 +32,7 @@
   border-radius: $radius-full;
   outline: none;
   background: var(--color-page);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
   color: var(--color-ink);
   font: inherit;
   font-size: 0.875rem;
@@ -42,7 +41,12 @@
 }
 
 .field input:focus-visible,
-.field select:focus-visible,
+.field select:focus-visible {
+  border-color: var(--color-sonar);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-sonar) 22%, transparent);
+  outline: none;
+}
+
 .reset:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
@@ -69,6 +73,12 @@
   opacity: 0.45;
 }
 
+@media (max-width: 1180px) {
+  .filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @include media-max(tablet) {
   .filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -83,5 +93,64 @@
   .filters {
     grid-template-columns: 1fr;
     padding: $space-12;
+  }
+}
+
+// Desktop: the wrapper is invisible to the grid. Phones: filters fold behind a toggle.
+.advanced {
+  display: contents;
+}
+
+.toggle {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .filters {
+    grid-template-columns: 1fr auto;
+  }
+
+  .field:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding-inline: $space-20;
+    border: 1px solid var(--color-line);
+    border-radius: $radius-full;
+    background: var(--color-page);
+    font-weight: 700;
+    transition: border-color 180ms ease;
+
+    &[aria-expanded="true"] {
+      border-color: var(--color-sonar);
+    }
+  }
+
+  .advanced {
+    display: none;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-12;
+
+    &[data-open="true"] {
+      display: grid;
+      animation: filters-open 260ms var(--ease-out);
+    }
+  }
+
+  .reset {
+    grid-column: auto;
+  }
+}
+
+@keyframes filters-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
   }
 }

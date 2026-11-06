@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
-import { FishingSpotCard, fishingSpots } from "@/entities/fishing-spot";
+import { FishingSpotCard, useCatalogIndex } from "@/entities/fishing-spot";
 import { useTranslations } from "next-intl";
 import { useFavoriteSpots } from "@/features/favorite-spot";
 import { SiteHeader } from "@/widgets/site-header";
@@ -10,6 +10,7 @@ import styles from "./favorites-page.module.scss";
 export function FavoritesPage() {
   const t = useTranslations("favorites");
   const { error, isAuthLoading, isLoading, spotIds, user } = useFavoriteSpots();
+  const { spots: fishingSpots } = useCatalogIndex();
   const favoriteSpots = fishingSpots.filter((spot) => spotIds.has(spot.id));
 
   if (!user && !isAuthLoading) {
@@ -63,7 +64,7 @@ export function FavoritesPage() {
             {t("loadingList")}
           </div>
         ) : favoriteSpots.length > 0 ? (
-          <div className={styles.grid}>
+          <div className={styles.grid} data-stagger>
             {favoriteSpots.map((spot) => (
               <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
             ))}
