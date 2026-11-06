@@ -34,6 +34,7 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
   const userName = user?.displayName ?? user?.email?.split("@")[0];
   const navigation = [
     { href: "/spots", label: t("spots") },
+    { href: "/regions", label: t("regions") },
     { href: "/community", label: t("community") },
     { href: "/articles", label: t("articles") },
     { href: "/#how-it-works", label: t("howItWorks") },

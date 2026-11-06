@@ -64,3 +64,45 @@ export function getCatalogStats() {
 export function getAllFishingSpotSlugs(): readonly string[] {
   return records.map((record) => record.id);
 }
+
+// ---- regions ---------------------------------------------------------------------------
+
+export type RegionSummary = {
+  slug: string;
+  name: { uk: string; en: string };
+  total: number;
+  byType: { [type: string]: number };
+};
+
+const regionSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+function groupByRegion() {
+  const groups = new Map<string, { summary: RegionSummary; records: Record[] }>();
+  for (const record of records) {
+    const slug = regionSlug(record.region.en);
+    const group = groups.get(slug) ?? { summary: { slug, name: record.region, total: 0, byType: {} }, records: [] };
+    group.summary.total += 1;
+    group.summary.byType[record.type] = (group.summary.byType[record.type] ?? 0) + 1;
+    group.records.push(record);
+    groups.set(slug, group);
+  }
+  return groups;
+}
+
+export function getRegions(): RegionSummary[] {
+  return [...groupByRegion().values()]
+    .map((group) => group.summary)
+    .sort((first, second) => first.name.uk.localeCompare(second.name.uk, "uk"));
+}
+
+/** A region with its most useful waters first (records are already ranked by the index builder). */
+export function getRegionBySlug(slug: string, count = 12) {
+  const group = groupByRegion().get(slug);
+  if (!group) return undefined;
+  return { summary: group.summary, spots: group.records.slice(0, count).map(toSpot) };
+}

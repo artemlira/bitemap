@@ -21,7 +21,8 @@
     "closeMenu": "Close menu",
     "enableDarkTheme": "Enable dark theme",
     "enableLightTheme": "Enable light theme",
-    "brand": "Rybomapa"
+    "brand": "Rybomapa",
+    "regions": "Regions"
   },
   "languageSwitcher": {
     "switchTo": "Switch language to {locale}"
@@ -870,5 +871,17 @@
     "data": "Data sources",
     "disclaimer": "Check current fishing rules and shore access before you go: data on the site can be out of date.",
     "backToTop": "Back to top"
+  },
+  "regions": {
+    "eyebrow": "Catalog by region",
+    "title": "Waters of Ukraine by region",
+    "lead": "Lakes, reservoirs, ponds and rivers of every region. Pick a region and see the most useful waters first.",
+    "listTitle": "List of regions",
+    "waterCount": "{count} waters",
+    "allRegions": "All regions",
+    "regionLead": "The catalog has {count} waters in this region. The best documented ones come first.",
+    "statsTitle": "Catalog breakdown",
+    "bestTitle": "Most useful waters: {name}",
+    "openCatalog": "All {count} in the catalog"
   }
 }

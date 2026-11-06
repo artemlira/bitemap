@@ -40,7 +40,11 @@ const records = dataset.records
   .map((record) => (PIN_OVERRIDES[record.id] ? { ...record, ...PIN_OVERRIDES[record.id] } : record))
   .map((record) => ({ ...record, photo: cleanPhoto(record.photo) }))
   .filter(inUkraine)
-  .map(({ geometryChecked, ...record }) => ({ ...record, ...(record.shape ? {} : { locationApprox: true }) }));
+  .map((record) => {
+    const copy = { ...record };
+    delete copy.geometryChecked; // import bookkeeping, not data
+    return { ...copy, ...(copy.shape ? {} : { locationApprox: true }) };
+  });
 
 // Rank so the default catalog order shows the most useful records first.
 const score = (record) =>
