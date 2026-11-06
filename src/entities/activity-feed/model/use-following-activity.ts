@@ -3,7 +3,7 @@
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
-import { fishingSpots, getFishingSpotText } from "@/entities/fishing-spot";
+import { getFishingSpotText, getLoadedCatalogSpot, loadCatalogIndex } from "@/entities/fishing-spot";
 import type { FishingReport } from "@/entities/fishing-report";
 import type { SpotImage } from "@/entities/spot-image";
 import { getUserSpotText, type UserSpot } from "@/entities/user-spot";
@@ -22,7 +22,7 @@ function toMillis(value: unknown, fallback = 0) {
 }
 
 function getCatalogTarget(targetId: string, locale: string) {
-  const spot = fishingSpots.find((item) => item.id === targetId);
+  const spot = getLoadedCatalogSpot(targetId);
   return spot ? { href: `/spots/${spot.slug}`, name: getFishingSpotText(spot, "name", locale) } : null;
 }
 
@@ -42,6 +42,7 @@ export function useFollowingActivity() {
 
     async function loadActivity() {
       try {
+        await loadCatalogIndex().catch(() => undefined);
         const db = getFirebaseFirestore();
         const followSnapshot = await getDocs(query(
           collection(db, "angler-follows"),

@@ -93,7 +93,14 @@
     "verificationVerified": "Checked against source",
     "verificationUnverified": "Unverified",
     "updated": "Updated {date}",
-    "sourceLink": "Source"
+    "sourceLink": "Source",
+    "loadMore": "Show more",
+    "shown": "Showing {shown} of {total}",
+    "addSpotTitle": "Can't find your water?",
+    "addSpotText": "The catalog is built from open Wikidata records. If something is missing, add it yourself: once published it appears in the community catalog.",
+    "addSpot": "Add a spot",
+    "catalogLoadError": "Could not load the water body catalog. Reloading the page may help.",
+    "dataSource": "Catalog data: Wikidata (CC0), descriptions: Wikipedia (CC BY-SA 4.0), photos: Wikimedia Commons."
   },
   "auth": {
     "login": {
@@ -139,7 +146,7 @@
     "access": "Access",
     "accessUnknown": "Not specified — check current rules before your trip",
     "verificationUnverified": "This directory information has not been verified yet.",
-    "verificationVerified": "Key details have been checked against a source.",
+    "verificationVerified": "Name, type and coordinates come from Wikidata (CC0). Access and fish are not verified yet.",
     "sourceLink": "Open source",
     "fishEyebrow": "What you may find",
     "fishTitle": "Fish in this spot",
@@ -151,7 +158,9 @@
     "galleryEyebrow": "Community photos",
     "galleryTitle": "Fishing through anglers’ eyes",
     "mvp": "MVP data",
-    "mvpText": "Find the location coordinates, weather forecast, and planning calendar here. Add trip reports to grow the community observations."
+    "mvpText": "Find the location coordinates, weather forecast, and planning calendar here. Add trip reports to grow the community observations.",
+    "descriptionSource": "Description: Wikipedia, CC BY-SA 4.0",
+    "noDescription": "No description yet. Add a report or photo to help other anglers."
   },
   "reports": {
     "eyebrow": "Community experience",

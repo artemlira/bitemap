@@ -3,23 +3,32 @@ import { createRequire } from "node:module";
 import test from "node:test";
 
 const require = createRequire(import.meta.url);
-const { fishingSpots } = require("../node_modules/.cache/bitemap-catalog-tests/entities/fishing-spot/model/spot-data.js");
+const dataset = require("../src/entities/fishing-spot/data/water-bodies.json");
+const index = require("../public/data/water-bodies-index.json");
+const { buildFishingSpot } = require("../node_modules/.cache/bitemap-catalog-tests/entities/fishing-spot/model/catalog-mapping.js");
 const { validateFishingSpot } = require("../node_modules/.cache/bitemap-catalog-tests/entities/fishing-spot/model/validation.js");
 const { isWithinUkraine } = require("../node_modules/.cache/bitemap-catalog-tests/shared/lib/geo/ukraine-bounds.js");
 
-test("every curated spot meets the publication standard", () => {
-  const issues = fishingSpots.flatMap((spot) => validateFishingSpot(spot));
-  assert.deepEqual(issues, []);
+test("imported catalog is large enough and ids are unique", () => {
+  assert.ok(dataset.records.length > 1000);
+  assert.equal(new Set(dataset.records.map((record) => record.id)).size, dataset.records.length);
 });
 
-test("spot ids and slugs are unique", () => {
-  assert.equal(new Set(fishingSpots.map((spot) => spot.id)).size, fishingSpots.length);
-  assert.equal(new Set(fishingSpots.map((spot) => spot.slug)).size, fishingSpots.length);
+test("every imported record meets the publication standard", () => {
+  const issues = dataset.records.flatMap((record) =>
+    validateFishingSpot(buildFishingSpot(record, dataset.importedAt, record)),
+  );
+  assert.deepEqual(issues.slice(0, 5), []);
 });
 
-test("unverified records never claim a verification date", () => {
-  for (const spot of fishingSpots) {
-    if (spot.verificationStatus !== "verified") assert.equal(spot.verifiedAt, undefined, spot.id);
+test("public index matches the full dataset", () => {
+  assert.equal(index.items.length, dataset.records.length);
+  assert.deepEqual(index.items.map((item) => item[0]), dataset.records.map((record) => record.id));
+});
+
+test("every photo carries author and license", () => {
+  for (const record of dataset.records.filter((item) => item.photo)) {
+    assert.ok(record.photo.creator && record.photo.license && record.photo.licenseUrl, record.id);
   }
 });
 

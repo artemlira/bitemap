@@ -41,7 +41,14 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
               <p className={styles.eyebrow}>{getFishingSpotText(spot, "waterType", locale)}</p>
               <h1>{getFishingSpotText(spot, "name", locale)}</h1>
               <p className={styles.region}>{getFishingSpotText(spot, "region", locale)}</p>
-              <p className={styles.description}>{getFishingSpotText(spot, "description", locale)}</p>
+              <p className={styles.description}>
+                {getFishingSpotText(spot, "description", locale) || t("noDescription")}
+              </p>
+              {spot.descriptionSourceUrl && getFishingSpotText(spot, "description", locale) ? (
+                <p className={styles.descriptionSource}>
+                  <a href={spot.descriptionSourceUrl} target="_blank" rel="noreferrer">{t("descriptionSource")}</a>
+                </p>
+              ) : null}
               <FavoriteSpotButton spot={spot} />
             </div>
             <div className={styles.waterVisual} data-tone={spot.tone}>

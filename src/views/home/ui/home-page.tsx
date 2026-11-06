@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
-import { FishingSpotCard, featuredFishingSpots } from "@/entities/fishing-spot";
+import { FishingSpotCard } from "@/entities/fishing-spot";
+import { getFeaturedFishingSpots } from "@/entities/fishing-spot/server";
 import { Reveal } from "@/shared/ui/reveal";
 import { SiteHeader } from "@/widgets/site-header";
 import { createContourPaths } from "../lib/contour-paths";
@@ -60,7 +61,7 @@ export function HomePage() {
 
         <Reveal delay={90}>
           <div className={styles.spotGrid}>
-            {featuredFishingSpots.map((spot) => (
+            {getFeaturedFishingSpots().map((spot) => (
               <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
             ))}
           </div>

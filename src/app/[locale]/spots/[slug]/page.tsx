@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getFishingSpotBySlug, getFishingSpotText, fishingSpots } from "@/entities/fishing-spot";
+import { getFishingSpotText } from "@/entities/fishing-spot";
+import { getFishingSpotBySlug } from "@/entities/fishing-spot/server";
 import { SpotDetailsPage } from "@/views/spot-details";
-
-export function generateStaticParams() {
-  return ["uk", "en"].flatMap((locale) => fishingSpots.map(({ slug }) => ({ locale, slug })));
-}
 
 export async function generateMetadata(
   props: PageProps<"/[locale]/spots/[slug]">,
@@ -16,7 +13,7 @@ export async function generateMetadata(
   if (!spot) return { title: "BiteMap" };
 
   const title = `${getFishingSpotText(spot, "name", locale)} — BiteMap`;
-  const description = `${getFishingSpotText(spot, "region", locale)}. ${getFishingSpotText(spot, "description", locale)}`;
+  const description = [getFishingSpotText(spot, "waterType", locale), getFishingSpotText(spot, "region", locale), getFishingSpotText(spot, "description", locale)].filter(Boolean).join(". ");
   const url = `/${locale}/spots/${slug}`;
 
   return {

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fishingArticles } from "@/entities/fishing-article";
-import { fishingSpots } from "@/entities/fishing-spot";
+import { getAllFishingSpotSlugs } from "@/entities/fishing-spot/server";
 import { isSearchIndexingEnabled } from "@/shared/lib/seo";
 
 const siteUrl = "https://bitemap.artemlira.com";
@@ -46,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const { slug } of fishingSpots) {
+    for (const slug of getAllFishingSpotSlugs()) {
       entries.push({
         url: `${siteUrl}/${locale}/spots/${slug}`,
         alternates: {

@@ -85,3 +85,14 @@ The catalogue now includes Rusanivskyi Canal and locally stored photographs for 
 - Added `validateFishingSpot` (Ukraine bounds, required fields, ISO dates, source required for any stated access category or verified status) with a unit test over the whole catalog (`npm test`).
 - Added the shared `isWithinUkraine` bounds check and applied it to the user-spot form, so swapped latitude/longitude is rejected before publishing.
 - Still open: structured price data, correction-report flow, settlement/community data for the remaining curated records, Firestore rules enforcing the same bounds server-side.
+
+## Open-data catalog (2026-11-06)
+
+The hardcoded list of 14 locations was replaced by an imported dataset:
+
+- **Source:** Wikidata (CC0) for names, types, coordinates and oblast; Wikipedia summaries (CC BY-SA 4.0) for descriptions; Wikimedia Commons for photos, with author and license stored per image.
+- **Pipeline:** `npm run catalog:import` runs `scripts/import-water-bodies.mjs` (fetch) and `scripts/build-catalog-index.mjs` (clean + build the compact public index). The generated files are committed, so the app never calls those APIs at runtime.
+- **Size:** about 2.7k lakes, reservoirs, ponds, canals and rivers. The full records (1.6 MB) stay server-side; the browser loads only `public/data/water-bodies-index.json` (about 60 KB gzipped).
+- **Known limits:** Wikidata has few ponds, so small fishing ponds are missing. Users can add them through "Add a spot". A river or reservoir that crosses several oblasts is listed under only one. Four major rivers (Dnipro, Desna, Western Bug, Donets) use a manually chosen pin inside Ukraine because Wikidata stores a source point abroad; other records outside Ukraine's bounds are dropped.
+- **Not verified:** access, price and fish. They stay "unknown" until a community member or an official source adds them.
+- **Next data step:** add OpenStreetMap (ODbL) named ponds and lakes to cover small fishing waters, with attribution.

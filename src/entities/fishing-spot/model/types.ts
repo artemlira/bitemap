@@ -38,6 +38,8 @@ export type FishingSpot = {
   description: string;
   access: string;
   sourceUrl?: string;
+  /** Where the description text comes from (e.g. a Wikipedia article, CC BY-SA 4.0). */
+  descriptionSourceUrl?: string;
   photos?: readonly FishingSpotPhoto[];
   tone: SpotTone;
   translations: {

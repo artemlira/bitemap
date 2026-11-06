@@ -16,7 +16,6 @@ export function validateFishingSpot(spot: FishingSpot): FishingSpotIssue[] {
   if (!isWithinUkraine(spot.latitude, spot.longitude)) report("coordinates", "coordinates are outside Ukraine");
   if (!spot.region.trim()) report("region", "region is required");
   if (!spot.waterType.trim()) report("waterType", "water type is required");
-  if (!spot.description.trim()) report("description", "description is required");
   if (!ACCESS_CATEGORIES.includes(spot.accessCategory ?? "unknown")) report("accessCategory", "unknown access category");
   if (!spot.updatedAt || !ISO_DATE.test(spot.updatedAt)) report("updatedAt", "updatedAt must be an ISO date");
   if (spot.verifiedAt && !ISO_DATE.test(spot.verifiedAt)) report("verifiedAt", "verifiedAt must be an ISO date");
