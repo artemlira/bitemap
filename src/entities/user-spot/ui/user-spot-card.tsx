@@ -39,7 +39,7 @@ export function UserSpotCard({
   };
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-tilt>
       <div className={styles.visual} data-tone={spot.tone} aria-hidden="true">
         <span>{getUserSpotText(spot, "waterType", locale)}</span>
         <i />

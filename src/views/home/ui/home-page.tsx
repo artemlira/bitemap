@@ -29,7 +29,7 @@ export function HomePage() {
     <main className={styles.page}>
       <section className={styles.hero}>
         <HeroWater />
-        <SiteHeader />
+        <SiteHeader backdrop={false} />
 
         <div className={styles.heroContent} data-page-hero>
           <h1>{t("title")}</h1>

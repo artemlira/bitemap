@@ -305,3 +305,13 @@
     text-decoration: underline;
   }
 }
+
+.facts > div {
+  transition: transform 260ms var(--ease-out), border-color 200ms ease, box-shadow 260ms ease;
+
+  @include hover {
+    border-color: var(--color-sonar);
+    box-shadow: 0 16px 40px rgb(20 163 141 / 14%);
+    transform: translateY(-4px);
+  }
+}

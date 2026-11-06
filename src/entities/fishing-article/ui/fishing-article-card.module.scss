@@ -11,10 +11,12 @@
   background: var(--color-surface);
   box-shadow: 0 1rem 2.5rem rgb(8 44 55 / 7%);
   color: var(--color-ink);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0));
+  transition: transform 260ms var(--ease-out), box-shadow 200ms ease;
 
   @include hover {
-    transform: translateY(-4px);
+    --lift: -4px;
+
     box-shadow: 0 1.25rem 3rem rgb(8 44 55 / 12%);
   }
 
@@ -69,5 +71,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card { transition: none; }
-  .card:hover { transform: none; }
+  .card:hover { --lift: 0; }
 }

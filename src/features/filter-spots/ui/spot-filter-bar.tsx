@@ -32,6 +32,13 @@ export function SpotFilterBar({
     { id: "spot-filter-access", label: t("access"), name: "access", placeholder: t("allAccess") },
   ];
 
+  const accessLabels: Record<string, string> = {
+    free: t("accessFree"),
+    paid: t("accessPaid"),
+    restricted: t("accessRestricted"),
+    unknown: t("accessUnknown"),
+  };
+
   return (
     <div className={styles.filters} role="group" aria-label={t("filterGroup")}>
       <label className={styles.field} htmlFor="spot-filter-query">
@@ -57,7 +64,7 @@ export function SpotFilterBar({
             <option value="">{field.placeholder}</option>
             {options[field.name].map((option) => (
               <option key={option} value={option}>
-                {option}
+                {field.name === "access" ? (accessLabels[option] ?? option) : option}
               </option>
             ))}
           </select>

@@ -74,7 +74,7 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <h2 id="details-title">{t("overviewTitle")}</h2>
         </div>
 
-        <dl className={styles.facts}>
+        <dl className={styles.facts} data-stagger>
           <div>
             <dt>{t("waterType")}</dt>
             <dd>{getFishingSpotText(spot, "waterType", locale)}</dd>

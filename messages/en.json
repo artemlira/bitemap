@@ -124,7 +124,10 @@
     "addSpotText": "The catalog is built from open Wikidata records. If something is missing, add it yourself: once published it appears in the community catalog.",
     "addSpot": "Add a spot",
     "catalogLoadError": "Could not load the water body catalog. Reloading the page may help.",
-    "dataSource": "Catalog data: Wikidata (CC0), descriptions: Wikipedia (CC BY-SA 4.0), photos: Wikimedia Commons."
+    "dataSource": "Catalog data: Wikidata (CC0), descriptions: Wikipedia (CC BY-SA 4.0), photos: Wikimedia Commons.",
+    "viewLabel": "Catalog view",
+    "viewList": "List",
+    "viewMap": "Map"
   },
   "auth": {
     "login": {

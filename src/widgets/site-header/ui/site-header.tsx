@@ -9,13 +9,19 @@ import { useAdminStatus } from "@/entities/admin";
 import { useTheme } from "@/shared/lib/theme";
 import { LanguageSwitcher } from "@/widgets/language-switcher";
 import { Logo } from "@/shared/ui/logo";
+import { HeroBackdrop } from "@/shared/ui/hero-backdrop";
 import styles from "./site-header.module.scss";
 
 const subscribeToDocument = () => () => {};
 const getPortalRoot = () => document.body;
 const getServerPortalRoot = () => null;
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  /** Inner pages get an animated water backdrop; the home page brings its own scene. */
+  backdrop?: boolean;
+};
+
+export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const portalRoot = useSyncExternalStore(subscribeToDocument, getPortalRoot, getServerPortalRoot);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0, width: 0 });
@@ -93,7 +99,8 @@ export function SiteHeader() {
   } as CSSProperties;
 
   return (
-    <div className={styles.slot}>
+    <div className={styles.slot} data-hero-slot={backdrop ? "page" : "plain"}>
+    {backdrop ? <HeroBackdrop /> : null}
     <header className={styles.header} ref={headerRef}>
       <Link className={styles.logo} href="/" aria-label={t("home")}>
         <Logo name={t("brand")} />
