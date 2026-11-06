@@ -5,6 +5,7 @@ import test from "node:test";
 const require = createRequire(import.meta.url);
 const dataset = require("../src/entities/fishing-spot/data/water-bodies.json");
 const index = require("../public/data/water-bodies-index.json");
+const osm = require("../src/entities/fishing-spot/data/osm-water.json");
 const { buildFishingSpot } = require("../node_modules/.cache/bitemap-catalog-tests/entities/fishing-spot/model/catalog-mapping.js");
 const { validateFishingSpot } = require("../node_modules/.cache/bitemap-catalog-tests/entities/fishing-spot/model/validation.js");
 const { isWithinUkraine } = require("../node_modules/.cache/bitemap-catalog-tests/shared/lib/geo/ukraine-bounds.js");
@@ -21,9 +22,18 @@ test("every imported record meets the publication standard", () => {
   assert.deepEqual(issues.slice(0, 5), []);
 });
 
-test("public index matches the full dataset", () => {
-  assert.equal(index.items.length, dataset.records.length);
-  assert.deepEqual(index.items.map((item) => item[0]), dataset.records.map((record) => record.id));
+test("public index contains the Wikidata records first, then the OpenStreetMap ones", () => {
+  assert.equal(index.items.length, dataset.records.length + osm.records.length);
+  assert.deepEqual(index.items.slice(0, dataset.records.length).map((item) => item[0]), dataset.records.map((record) => record.id));
+});
+
+test("OpenStreetMap records have unique ids, valid access categories and Ukrainian coordinates", () => {
+  const ids = new Set(osm.records.map((record) => record.id));
+  assert.equal(ids.size, osm.records.length);
+  for (const record of osm.records) {
+    assert.ok(["unknown", "free", "paid", "restricted"].includes(record.accessCategory), record.id);
+    assert.ok(isWithinUkraine(record.latitude, record.longitude), record.id);
+  }
 });
 
 test("every photo carries author and license", () => {

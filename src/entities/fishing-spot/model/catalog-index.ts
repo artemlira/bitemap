@@ -9,7 +9,7 @@ type RawIndex = {
   types: WaterBodyType[];
   regions: { uk: string; en: string }[];
   fishNames: string[];
-  items: [string, string, string, number, number, number, number, number, number, number[]][];
+  items: [string, string, string, number, number, number, number, number, number, number[], number?][];
 };
 
 let indexPromise: Promise<readonly FishingSpot[]> | null = null;
@@ -28,7 +28,7 @@ export function loadCatalogIndex(): Promise<readonly FishingSpot[]> {
       return response.json() as Promise<RawIndex>;
     })
     .then((raw) =>
-      raw.items.map(([id, nameUk, nameEn, typeIndex, regionIndex, latitude, longitude, lengthKm, areaKm2, fishIdx]) => {
+      raw.items.map(([id, nameUk, nameEn, typeIndex, regionIndex, latitude, longitude, lengthKm, areaKm2, fishIdx, accessIdx]) => {
         const base: CatalogBase = {
           id,
           type: raw.types[typeIndex],
@@ -38,6 +38,7 @@ export function loadCatalogIndex(): Promise<readonly FishingSpot[]> {
           longitude,
         };
         return buildFishingSpot(base, raw.importedAt, undefined, {
+          accessCategory: (["unknown", "free", "paid", "restricted"] as const)[accessIdx ?? 0],
           facts: lengthKm || areaKm2 ? { lengthKm: lengthKm || undefined, areaKm2: areaKm2 || undefined } : undefined,
           fish: (fishIdx ?? []).map((index) => raw.fishNames?.[index]).filter(Boolean),
         });

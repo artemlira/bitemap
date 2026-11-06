@@ -7,6 +7,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const FULL = new URL("../src/entities/fishing-spot/data/water-bodies.json", import.meta.url);
+const OSM = new URL("../src/entities/fishing-spot/data/osm-water.json", import.meta.url);
 const INDEX = new URL("../public/data/water-bodies-index.json", import.meta.url);
 
 const dataset = JSON.parse(await readFile(FULL, "utf8"));
@@ -38,7 +39,8 @@ const records = dataset.records
   .filter((record) => !isJunk(record))
   .map((record) => (PIN_OVERRIDES[record.id] ? { ...record, ...PIN_OVERRIDES[record.id] } : record))
   .map((record) => ({ ...record, photo: cleanPhoto(record.photo) }))
-  .filter(inUkraine);
+  .filter(inUkraine)
+  .map(({ geometryChecked, ...record }) => ({ ...record, ...(record.shape ? {} : { locationApprox: true }) }));
 
 // Rank so the default catalog order shows the most useful records first.
 const score = (record) =>
@@ -56,7 +58,17 @@ const regionIndex = (region) => {
   return index;
 };
 
-const items = records.map((record) => [
+// OpenStreetMap-only waters (ponds, small lakes) join the public index after the Wikidata ones.
+let osmRecords = [];
+try {
+  osmRecords = JSON.parse(await readFile(OSM, "utf8")).records;
+} catch {
+  /* no OSM file yet */
+}
+osmRecords.sort((a, b) => a.name.uk.localeCompare(b.name.uk, "uk"));
+const everything = [...records, ...osmRecords];
+const ACCESS = ["unknown", "free", "paid", "restricted"];
+const items = everything.map((record) => [
   record.id,
   record.name.uk,
   record.name.en ?? "",
@@ -67,9 +79,11 @@ const items = records.map((record) => [
   record.facts?.lengthKm ?? 0,
   record.facts?.areaKm2 ?? 0,
   (record.fish ?? []).map((name) => fishNames.indexOf(name)),
+  Math.max(0, ACCESS.indexOf(record.accessCategory ?? "unknown")),
 ]);
 
 await writeFile(FULL, `${JSON.stringify({ importedAt: dataset.importedAt, records })}\n`);
+
 await mkdir(new URL("../public/data/", import.meta.url), { recursive: true });
 await writeFile(INDEX, `${JSON.stringify({ importedAt: dataset.importedAt, types, regions, fishNames, items })}\n`);
 console.log(`Kept ${records.length} of ${dataset.records.length}; index ${JSON.stringify({ types, regions, fishNames, items }).length} bytes`);

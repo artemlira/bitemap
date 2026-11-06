@@ -1,10 +1,11 @@
 import dataset from "../data/water-bodies.json";
+import osmDataset from "../data/osm-water.json";
 import { buildFishingSpot, type CatalogBase, type CatalogDetails } from "./catalog-mapping";
 import type { FishingSpot } from "./types";
 
 type Record = CatalogBase & CatalogDetails;
 
-const records = dataset.records as unknown as Record[];
+const records = [...(dataset.records as unknown as Record[]), ...(osmDataset.records as unknown as Record[])];
 const byId = new Map(records.map((record) => [record.id, record]));
 
 const FEATURED_IDS = ["synevyr", "cuciurgan-reservoir", "lake-kahul"];
