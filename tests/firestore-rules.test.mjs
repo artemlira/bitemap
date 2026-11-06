@@ -5,7 +5,7 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from "@firebase/rules-unit-testing";
-import { doc, getDoc, getDocs, collection, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 
 const projectId = "demo-bitemap";
 const testUser = { uid: "angler-1" };
@@ -186,4 +186,26 @@ test("only admins can create, edit, and remove articles", async () => {
   await assertSucceeds(setDoc(doc(adminDb, "articles/new-article"), article));
   await assertSucceeds(updateDoc(doc(adminDb, "articles/new-article"), { status: "published" }));
   await assertFails(updateDoc(doc(userDb, "articles/new-article"), { status: "draft" }));
+});
+
+test("fish reports are public to read, bound to the signed-in angler and limited to known species", async () => {
+  const anonymous = environment.unauthenticatedContext().firestore();
+  const angler = environment.authenticatedContext(testUser.uid).firestore();
+  const vote = (overrides = {}) => ({
+    spotId: "lake-1",
+    userId: testUser.uid,
+    fish: ["Щука", "Короп"],
+    updatedAt: serverTimestamp(),
+    ...overrides,
+  });
+
+  await assertFails(setDoc(doc(anonymous, `spot-fish-votes/lake-1__${testUser.uid}`), vote()));
+  await assertSucceeds(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote()));
+  await assertSucceeds(getDocs(collection(anonymous, "spot-fish-votes")));
+
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${otherUser.uid}`), vote({ userId: otherUser.uid })));
+  await assertFails(setDoc(doc(angler, "spot-fish-votes/wrong-id"), vote()));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["Дракон"] })));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: [] })));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ extra: true })));
 });

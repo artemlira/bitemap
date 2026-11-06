@@ -65,6 +65,29 @@ service cloud.firestore {
           && userSpot(image.data.targetId).data.visibility == "published");
     }
 
+    // Community fish reports: one document per angler and water, "spotId__uid".
+    function validFishVote(voteId) {
+      let data = request.resource.data;
+      return isSignedIn()
+        && data.keys().hasOnly(['spotId', 'userId', 'fish', 'updatedAt'])
+        && data.spotId is string
+        && data.spotId.size() > 0
+        && data.spotId.size() <= 160
+        && data.userId == request.auth.uid
+        && voteId == data.spotId + '__' + request.auth.uid
+        && data.fish is list
+        && data.fish.size() > 0
+        && data.fish.size() <= 12
+        && data.fish.hasOnly(['Щука', 'Короп', 'Сазан', 'Лящ', 'Плітка', 'Окунь', 'Судак', 'Сом', 'Карась', 'Лин', 'Жерех', 'Голавль', 'Краснопірка', 'Білий амур', 'Товстолоб', 'Форель', 'Харіус', 'Марена', 'Уклея', 'Йорж', 'В'юн', 'Бичок', 'Осетер', 'Вугор', 'Підуст', 'Чехоня', 'Білизна', 'Гольян', 'Лосось', 'Кефаль', 'Бабець', 'Пічкур', 'Скумбрія', 'Тарань'])
+        && data.updatedAt == request.time;
+    }
+
+    match /spot-fish-votes/{voteId} {
+      allow read: if true;
+      allow create, update: if validFishVote(voteId);
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;

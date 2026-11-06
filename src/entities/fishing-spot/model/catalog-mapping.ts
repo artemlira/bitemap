@@ -1,3 +1,4 @@
+import { FISH_EN } from "./fish-species";
 import type { FishingSpot, FishingSpotFacts, FishingSpotPhoto, FishingSpotShape, SpotTone } from "./types";
 
 export type WaterBodyType = "lake" | "reservoir" | "river" | "canal" | "pond";
@@ -36,14 +37,6 @@ const WATER_TYPES: Record<WaterBodyType, { uk: string; en: string; tone: SpotTon
 
 export const catalogWaterTypes = WATER_TYPES;
 
-const FISH_EN: Record<string, string> = {
-  "Щука": "Pike", "Короп": "Carp", "Сазан": "Wild carp", "Лящ": "Bream", "Плітка": "Roach", "Окунь": "Perch",
-  "Судак": "Zander", "Сом": "Catfish", "Карась": "Crucian carp", "Лин": "Tench", "Жерех": "Asp", "Голавль": "Chub",
-  "Краснопірка": "Rudd", "Білий амур": "Grass carp", "Товстолоб": "Silver carp", "Форель": "Trout", "Харіус": "Grayling",
-  "Марена": "Barbel", "Уклея": "Bleak", "Йорж": "Ruffe", "В'юн": "Weatherfish", "Бичок": "Goby", "Осетер": "Sturgeon",
-  "Вугор": "Eel", "Підуст": "Nase", "Чехоня": "Sabrefish", "Білизна": "Asp (white)", "Гольян": "Minnow", "Лосось": "Salmon",
-  "Кефаль": "Mullet", "Бабець": "Bullhead", "Пічкур": "Gudgeon", "Скумбрія": "Mackerel", "Тарань": "Dried roach",
-};
 
 const num = (value: number) => value.toLocaleString("uk-UA", { maximumFractionDigits: 1 });
 const numEn = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 1 });
