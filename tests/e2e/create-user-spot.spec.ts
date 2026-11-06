@@ -56,7 +56,7 @@ test("рибалки публікують звіт, коментують йог�
   await expect(page.getByRole("heading", { name: spotName })).toBeVisible();
 
   const reportText = `E2E fishing report ${Date.now()}`;
-  await page.goto("/uk/spots/blue-lake");
+  await page.goto("/uk/spots/synevyr");
   await page.getByRole("button", { name: "Додати звіт" }).click();
   await page.getByLabel("Враження та умови").fill(reportText);
   await page.getByLabel("Що вдалося зловити").fill("Короп");
