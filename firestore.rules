@@ -79,7 +79,7 @@ service cloud.firestore {
         && data.fish.size() > 0
         && data.fish.size() <= 12
         && data.fish.toSet().size() == data.fish.size()
-        && data.fish.hasOnly(['Щука', 'Короп', 'Сазан', 'Лящ', 'Плітка', 'Окунь', 'Судак', 'Сом', 'Карась', 'Лин', 'Жерех', 'Голавль', 'Краснопірка', 'Білий амур', 'Товстолоб', 'Форель', 'Харіус', 'Марена', 'Уклея', 'Йорж', 'В'юн', 'Бичок', 'Осетер', 'Вугор', 'Підуст', 'Чехоня', 'Білизна', 'Гольян', 'Лосось', 'Кефаль', 'Бабець', 'Пічкур', 'Скумбрія', 'Тарань'])
+        && data.fish.hasOnly(['pike', 'carp', 'wild-carp', 'bream', 'roach', 'perch', 'zander', 'catfish', 'crucian', 'tench', 'asp', 'chub', 'rudd', 'grass-carp', 'silver-carp', 'trout', 'grayling', 'barbel', 'bleak', 'ruffe', 'weatherfish', 'goby', 'sturgeon', 'eel', 'nase', 'sabrefish', 'white-asp', 'minnow', 'salmon', 'mullet', 'bullhead', 'gudgeon', 'mackerel', 'taran'])
         && data.updatedAt == request.time;
     }
 
