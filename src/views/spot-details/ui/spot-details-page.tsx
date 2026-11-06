@@ -9,6 +9,7 @@ import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { useLocale, useTranslations } from "next-intl";
 import { FavoriteSpotButton } from "@/features/favorite-spot";
+import { FishVotes } from "@/features/vote-fish";
 import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { ContentReactionButton } from "@/features/react-to-content";
 import { ReportContentAction } from "@/features/content-report";
@@ -183,10 +184,12 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
             <div className={styles.fishEmpty}>
               <h3>{t("fishEmptyTitle")}</h3>
               <p>{t("fishEmptyText")}</p>
-              <a href="#spot-reports" data-ripple>{t("fishEmptyAction")}</a>
+              <a href="#spot-fish-votes" data-ripple>{t("fishEmptyAction")}</a>
             </div>
           )}
         </div>
+
+        <FishVotes spotId={spot.id} />
 
         {nearby.length > 0 ? (
           <section className={styles.nearby} aria-labelledby="nearby-title">

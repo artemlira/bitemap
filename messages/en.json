@@ -883,5 +883,19 @@
     "statsTitle": "Catalog breakdown",
     "bestTitle": "Most useful waters: {name}",
     "openCatalog": "All {count} in the catalog"
+  },
+  "fishVotes": {
+    "title": "What anglers catch here",
+    "empty": "Nobody has reported what they caught here yet.",
+    "legend": "Highlighted species were reported by at least {count} anglers.",
+    "pick": "What did you catch here? Choose up to 12 species.",
+    "add": "Report my catch",
+    "edit": "Edit my report",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "signIn": "Sign in to report",
+    "loadError": "Could not load the reports.",
+    "saveError": "Could not save. Please try again."
   }
 }

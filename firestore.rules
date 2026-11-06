@@ -65,6 +65,33 @@ service cloud.firestore {
           && userSpot(image.data.targetId).data.visibility == "published");
     }
 
+    // Community fish reports: one document per angler and water, "spotId__uid".
+    function validFishVote(voteId) {
+      let data = request.resource.data;
+      return isSignedIn()
+        && data.keys().hasOnly(['spotId', 'userId', 'fish', 'updatedAt'])
+        && data.spotId is string
+        && data.spotId.size() > 0
+        && data.spotId.size() <= 160
+        && data.userId == request.auth.uid
+        && voteId == data.spotId + '__' + request.auth.uid
+        && data.fish is list
+        && data.fish.size() > 0
+        && data.fish.size() <= 12
+        && data.fish.toSet().size() == data.fish.size()
+        && data.fish.hasOnly(['pike', 'carp', 'wild-carp', 'bream', 'roach', 'perch', 'zander', 'catfish', 'crucian', 'tench', 'asp', 'chub', 'rudd', 'grass-carp', 'silver-carp', 'trout', 'grayling', 'barbel', 'bleak', 'ruffe', 'weatherfish', 'goby', 'sturgeon', 'eel', 'nase', 'sabrefish', 'white-asp', 'minnow', 'salmon', 'mullet', 'bullhead', 'gudgeon', 'mackerel', 'taran'])
+        && data.updatedAt == request.time;
+    }
+
+    match /spot-fish-votes/{voteId} {
+      // Reports are public like fishing reports (author and water are already public there), but
+      // list queries must be bounded so the collection cannot be scraped in one request.
+      allow get: if true;
+      allow list: if request.query.limit <= 500;
+      allow create, update: if validFishVote(voteId);
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
     match /users/{userId} {
       allow create, get, update, delete: if isOwner(userId);
       allow list: if false;
