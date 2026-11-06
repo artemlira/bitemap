@@ -99,3 +99,19 @@ Storage.
 Під час деплою це також мають бути серверні environment variables на хостингу:
 маршрут підпису не працюватиме в статичному export. Не використовуй префікс
 `NEXT_PUBLIC_` для Cloudinary API Secret.
+
+
+## Який Firebase використовує `npm run dev`
+
+За замовчуванням `npm run dev` працює з твоїм справжнім Firebase-проєктом із `.env.local`, тож вхід
+через Google працює без Java й емуляторів.
+
+Щоб розробляти проти локальних емуляторів, скопіюй приклад і запусти їх:
+
+```bash
+cp .env.development.local.emulators .env.development.local
+npm run emulators
+```
+
+Видали `.env.development.local`, щоб повернутись до справжнього Firebase. Тести (`npm run test:e2e`,
+`npm run test:rules`) самі вмикають емулятори й від цього файлу не залежать.
