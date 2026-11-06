@@ -29,6 +29,7 @@ export function SpotFilterBar({
     { id: "spot-filter-region", label: t("region"), name: "region", placeholder: t("allRegions") },
     { id: "spot-filter-water-type", label: t("waterType"), name: "waterType", placeholder: t("allWaterTypes") },
     { id: "spot-filter-fish", label: t("fish"), name: "fish", placeholder: t("allFish") },
+    { id: "spot-filter-access", label: t("access"), name: "access", placeholder: t("allAccess") },
   ];
 
   return (
@@ -62,6 +63,15 @@ export function SpotFilterBar({
           </select>
         </label>
       ))}
+
+      <label className={styles.field} htmlFor="spot-filter-sort">
+        <span>{t("sort")}</span>
+        <select id="spot-filter-sort" name="sort" value={filters.sort} onChange={(event) => onChange("sort", event.target.value)}>
+          <option value="recommended">{t("sortRecommended")}</option>
+          <option value="name">{t("sortName")}</option>
+          <option value="updated">{t("sortUpdated")}</option>
+        </select>
+      </label>
 
       <button className={styles.reset} type="button" onClick={onReset} disabled={!hasActiveFilters}>
         {t("reset")}

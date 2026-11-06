@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { FishingSpotCard, fishingSpots, getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
+import { FishingSpotCard, fishingSpots, getFishingSpotFish, getFishingSpotSettlement, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { UserSpotCard, getUserSpotFish, getUserSpotText, usePublishedUserSpots, type UserSpot } from "@/entities/user-spot";
 import { SpotFilterBar, useSpotFilters, type FilterableSpot, type SpotFilters } from "@/features/filter-spots";
 import { getSpotCoordinates } from "@/entities/spot-location";
@@ -37,10 +37,14 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
         const region = getFishingSpotText(spot, "region", locale);
 
         return {
+          accessCategory: spot.accessCategory ?? "unknown",
           fish: getFishingSpotFish(spot, locale),
           region,
-          searchText: [name, region, spot.name, spot.region].join(" "),
+          searchText: [name, region, spot.name, spot.region, spot.settlement, getFishingSpotSettlement(spot, "en")]
+            .filter(Boolean)
+            .join(" "),
           waterType: getFishingSpotText(spot, "waterType", locale),
+          updatedAt: spot.updatedAt ? new Date(spot.updatedAt) : undefined,
         };
       }
 
@@ -49,12 +53,14 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
       const waterType = getUserSpotText(spot, "waterType", locale);
 
       return {
+        accessCategory: spot.accessCategory ?? "unknown",
         fish: getUserSpotFish(spot, locale),
         region: spot.region,
         searchText: [name, spot.name, spot.region, spot.community, spot.settlement, waterType, spot.waterType]
           .filter(Boolean)
           .join(" "),
         waterType,
+        updatedAt: spot.updatedAt,
       };
     },
     [locale],

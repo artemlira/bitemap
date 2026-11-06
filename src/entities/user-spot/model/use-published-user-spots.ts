@@ -3,15 +3,8 @@
 import { useEffect, useState } from "react";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import type { UserSpot } from "./types";
+import { normalizeUserSpot } from "./normalize";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
-
-function toUserSpot(id: string, data: Omit<UserSpot, "id" | "visibility"> & Partial<Pick<UserSpot, "visibility">>): UserSpot {
-  return {
-    ...data,
-    id,
-    visibility: data.visibility === "published" ? "published" : "private",
-  };
-}
 
 export function usePublishedUserSpots() {
   const [spots, setSpots] = useState<readonly UserSpot[]>([]);
@@ -27,7 +20,7 @@ export function usePublishedUserSpots() {
     return onSnapshot(
       publishedSpotsQuery,
       (snapshot) => {
-        setSpots(snapshot.docs.map((spot) => toUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)));
+        setSpots(snapshot.docs.map((spot) => normalizeUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)));
         setError("");
         setIsLoading(false);
       },
@@ -57,7 +50,7 @@ export function usePublishedUserSpotsByOwner(ownerId: string) {
     return onSnapshot(
       publishedSpotsQuery,
       (snapshot) => {
-        setSpots(snapshot.docs.map((spot) => toUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)));
+        setSpots(snapshot.docs.map((spot) => normalizeUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)));
         setError(false);
         setIsLoading(false);
       },
@@ -81,7 +74,7 @@ export function usePublishedUserSpot(spotId: string) {
     return onSnapshot(
       doc(getFirebaseFirestore(), "user-spots", spotId),
       (snapshot) => {
-        setSpot(snapshot.exists() ? toUserSpot(snapshot.id, snapshot.data() as Omit<UserSpot, "id">) : null);
+        setSpot(snapshot.exists() ? normalizeUserSpot(snapshot.id, snapshot.data() as Omit<UserSpot, "id">) : null);
         setError("");
         setIsLoading(false);
       },

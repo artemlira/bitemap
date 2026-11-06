@@ -1,15 +1,32 @@
 export type SpotTone = "lagoon" | "reeds" | "river" | "sunset";
 
+export type FishingSpotPhoto = {
+  src: string;
+  alt: { uk: string; en: string };
+  creator: string;
+  sourceUrl: string;
+  license: string;
+  licenseUrl: string;
+};
+
 export type FishingSpotEnglishTranslation = {
   access: string;
   description: string;
   fish: readonly string[];
   name: string;
   region: string;
+  settlement?: string;
   waterType: string;
 };
 
 export type FishingSpot = {
+  accessCategory?: "free" | "paid" | "restricted" | "unknown";
+  verificationStatus?: "verified" | "unverified";
+  /** ISO date (YYYY-MM-DD) when this catalog record was last edited. */
+  updatedAt?: string;
+  /** ISO date (YYYY-MM-DD) when facts were last checked against the source. Absent = never verified. */
+  verifiedAt?: string;
+  settlement?: string;
   latitude: number;
   longitude: number;
   id: string;
@@ -20,6 +37,8 @@ export type FishingSpot = {
   fish: readonly string[];
   description: string;
   access: string;
+  sourceUrl?: string;
+  photos?: readonly FishingSpotPhoto[];
   tone: SpotTone;
   translations: {
     en: FishingSpotEnglishTranslation;

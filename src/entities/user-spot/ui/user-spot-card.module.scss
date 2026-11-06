@@ -118,6 +118,15 @@
   font-weight: 750;
 }
 
+.dataStatus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-8 $space-12;
+  margin-top: $space-16;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
 .footer {
   display: flex;
   align-items: center;

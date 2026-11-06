@@ -3,16 +3,9 @@
 import { useEffect, useState } from "react";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import type { UserSpot } from "@/entities/user-spot";
+import { normalizeUserSpot } from "@/entities/user-spot";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 import { useAuth } from "@/shared/lib/auth";
-
-function toUserSpot(id: string, data: Omit<UserSpot, "id" | "visibility"> & Partial<Pick<UserSpot, "visibility">>): UserSpot {
-  return {
-    ...data,
-    id,
-    visibility: data.visibility === "published" ? "published" : "private",
-  };
-}
 
 type UserSpotsSnapshot = {
   ownerId: string | null;
@@ -46,7 +39,7 @@ export function useUserSpots() {
       (userSpotsSnapshot) => {
         setSnapshot({
           ownerId: userId,
-          spots: userSpotsSnapshot.docs.map((spot) => toUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)),
+          spots: userSpotsSnapshot.docs.map((spot) => normalizeUserSpot(spot.id, spot.data() as Omit<UserSpot, "id">)),
         });
         setError("");
       },
@@ -87,7 +80,7 @@ export function useUserSpot(spotId: string) {
         setSnapshot({
           ownerId: userId,
           spot: userSpotSnapshot.exists()
-            ? toUserSpot(userSpotSnapshot.id, userSpotSnapshot.data() as Omit<UserSpot, "id">)
+            ? normalizeUserSpot(userSpotSnapshot.id, userSpotSnapshot.data() as Omit<UserSpot, "id">)
             : null,
         });
         setError("");

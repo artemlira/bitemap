@@ -2,7 +2,7 @@
 
 import { Link } from "@/shared/lib/i18n";
 import { useTranslations } from "next-intl";
-import type { UserSpot, UserSpotFormValues } from "@/entities/user-spot";
+import { getUserSpotAccessNote, type UserSpot, type UserSpotFormValues } from "@/entities/user-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { ManageSpotImageActions } from "@/features/manage-spot-image";
 import { UserSpotForm, useUserSpot } from "@/features/manage-user-spot";
@@ -17,8 +17,9 @@ type UserSpotFormPageProps = {
 
 function toFormValues(spot: UserSpot): UserSpotFormValues {
   return {
-    access: spot.access,
-    accessEn: spot.translations?.en?.access ?? "",
+    accessCategory: spot.accessCategory ?? "unknown",
+    access: getUserSpotAccessNote(spot, "uk"),
+    accessEn: getUserSpotAccessNote(spot, "en"),
     description: spot.description,
     descriptionEn: spot.translations?.en?.description ?? "",
     fish: spot.fish.join(", "),

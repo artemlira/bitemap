@@ -18,7 +18,8 @@ type UserSpotFormProps = {
 };
 
 const defaultValues: UserSpotFormValues = {
-  access: "Вільний доступ",
+  access: "",
+  accessCategory: "unknown",
   description: "",
   fish: "",
   name: "",
@@ -48,9 +49,10 @@ const tones = [
 ] as const;
 
 const accessOptions = [
-  { value: "Вільний доступ", labelKey: "freeAccess" },
-  { value: "Платна водойма", labelKey: "paidAccess" },
-  { value: "Уточнюйте правила", labelKey: "checkRules" },
+  { value: "unknown", labelKey: "accessUnknown" },
+  { value: "free", labelKey: "accessFree" },
+  { value: "paid", labelKey: "accessPaid" },
+  { value: "restricted", labelKey: "accessRestricted" },
 ] as const;
 
 export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: UserSpotFormProps) {
@@ -162,6 +164,7 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
       fish: t("validationFish"),
       description: t("validationDescription"),
       location: t("validationLocation"),
+      locationOutsideUkraine: t("validationLocationOutsideUkraine"),
     });
     setErrors(nextErrors);
 
@@ -290,13 +293,18 @@ export function UserSpotForm({ initialValues = defaultValues, mode, spotId }: Us
           <span>{t("access")}</span>
           <select
             id="user-spot-access"
-            value={values.access}
-            onChange={(event) => updateValue("access", event.target.value)}
+            value={values.accessCategory}
+            onChange={(event) => updateValue("accessCategory", event.target.value)}
           >
             {accessOptions.map((access) => (
               <option key={access.value} value={access.value}>{t(access.labelKey)}</option>
             ))}
           </select>
+        </label>
+
+        <label className={styles.field} htmlFor="user-spot-access-notes">
+          <span>{t("accessNotes")}</span>
+          <input id="user-spot-access-notes" value={values.access} onChange={(event) => updateValue("access", event.target.value)} />
         </label>
 
         <label className={styles.field} htmlFor="user-spot-fish">

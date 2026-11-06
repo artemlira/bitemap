@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "emulators": "firebase emulators:start --only auth,firestore --project demo-bitemap",
-    "test": "tsc --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --outDir node_modules/.cache/bitemap-tests src/entities/weather-forecast/model/fishing-activity.ts && node --test tests/weather-forecast.test.mjs",
+    "test": "tsc --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --outDir node_modules/.cache/bitemap-tests src/entities/weather-forecast/model/fishing-activity.ts && node --test tests/weather-forecast.test.mjs && tsc --target ES2022 --module commonjs --moduleResolution node --skipLibCheck --rootDir src --outDir node_modules/.cache/bitemap-catalog-tests src/entities/fishing-spot/model/spot-data.ts src/entities/fishing-spot/model/validation.ts src/shared/lib/geo/ukraine-bounds.ts && node --test tests/fishing-spot-catalog.test.mjs",
     "test:e2e": "node scripts/run-emulator-tests.mjs e2e",
     "test:rules": "node scripts/run-emulator-tests.mjs rules"
   },

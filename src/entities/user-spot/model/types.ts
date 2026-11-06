@@ -1,5 +1,7 @@
 export type UserSpotTone = "lagoon" | "reeds" | "river" | "sunset";
 export type UserSpotVisibility = "private" | "published";
+export type UserSpotAccessCategory = "free" | "paid" | "restricted" | "unknown";
+export type UserSpotVerificationStatus = "community-reported" | "verified" | "unverified";
 
 export type UserSpotEnglishTranslation = Partial<{
   access: string;
@@ -10,6 +12,7 @@ export type UserSpotEnglishTranslation = Partial<{
 }>;
 
 export type UserSpot = {
+  accessCategory?: UserSpotAccessCategory;
   access: string;
   description: string;
   fish: string[];
@@ -26,6 +29,8 @@ export type UserSpot = {
   settlementId?: string;
   tone: UserSpotTone;
   visibility: UserSpotVisibility;
+  verificationStatus?: UserSpotVerificationStatus;
+  updatedAt?: Date;
   waterType: string;
   translations?: {
     en?: UserSpotEnglishTranslation;
@@ -33,6 +38,7 @@ export type UserSpot = {
 };
 
 export type UserSpotFormValues = {
+  accessCategory: UserSpotAccessCategory;
   access: string;
   description: string;
   fish: string;

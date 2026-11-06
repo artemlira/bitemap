@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
+import Image from "next/image";
 import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
@@ -43,10 +44,18 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
               <p className={styles.description}>{getFishingSpotText(spot, "description", locale)}</p>
               <FavoriteSpotButton spot={spot} />
             </div>
-            <div className={styles.waterVisual} data-tone={spot.tone} aria-hidden="true">
-              <span />
-              <span />
-              <span />
+            <div className={styles.waterVisual} data-tone={spot.tone}>
+              {spot.photos?.[0] ? (
+                <Image
+                  className={styles.heroPhoto}
+                  src={spot.photos[0].src}
+                  alt={spot.photos[0].alt[locale === "en" ? "en" : "uk"]}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 42vw"
+                  priority
+                />
+              ) : null}
+              {!spot.photos?.length ? <span aria-hidden="true" /> : null}
             </div>
           </div>
         </div>
@@ -69,9 +78,41 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           </div>
           <div>
             <dt>{t("access")}</dt>
-            <dd>{getFishingSpotText(spot, "access", locale)}</dd>
+            <dd>{t("accessUnknown")}</dd>
           </div>
         </dl>
+        <p className={styles.dataStatus}>
+          {spot.verificationStatus === "verified" ? t("verificationVerified") : t("verificationUnverified")}
+          {spot.sourceUrl ? (
+            <>
+              {" "}
+              <a href={spot.sourceUrl} target="_blank" rel="noreferrer">
+                {t("sourceLink")}
+              </a>
+            </>
+          ) : null}
+        </p>
+
+        {spot.photos?.length ? (
+          <section className={styles.editorialPhotos} aria-labelledby="editorial-photos-title">
+            <div className={styles.sectionHeading}>
+              <p className={styles.sectionLabel}>{t("editorialPhotosEyebrow")}</p>
+              <h2 id="editorial-photos-title">{t("editorialPhotosTitle")}</h2>
+            </div>
+            <div className={styles.editorialPhotoGrid}>
+              {spot.photos.map((photo) => (
+                <figure className={styles.editorialPhoto} key={photo.src}>
+                  <Image src={photo.src} alt={photo.alt[locale === "en" ? "en" : "uk"]} fill sizes="(max-width: 700px) 100vw, 50vw" />
+                  <figcaption>
+                    <a href={photo.sourceUrl} target="_blank" rel="noreferrer">{photo.creator}</a>
+                    {" · "}
+                    <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.license}</a>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <SpotLocationPanel
           id={spot.id}
@@ -86,11 +127,12 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <div>
             <p className={styles.sectionLabel}>{t("fishEyebrow")}</p>
             <h2>{t("fishTitle")}</h2>
+            <p className={styles.fishSourceNote}>{t("fishSourceNote")}</p>
           </div>
           <ul className={styles.fishList} aria-label={t("fishList")}>
-            {getFishingSpotFish(spot, locale).map((fish) => (
+            {getFishingSpotFish(spot, locale).length ? getFishingSpotFish(spot, locale).map((fish) => (
               <li key={fish}>{fish}</li>
-            ))}
+            )) : <li>{t("fishUnverified")}</li>}
           </ul>
         </div>
 

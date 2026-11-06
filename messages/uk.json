@@ -26,17 +26,12 @@
     "switchTo": "Перемкнути мову на {locale}"
   },
   "home": {
-    "eyebrow": "Риболовля ближче до природи",
-    "title": "Знайди своє",
-    "titleAccent": " місце для улову.",
+    "title": "Знайди свою воду",
     "lead": "BiteMap — мапа й спільнота для рибалок: знаходь водойми, плануй виїзди та ділися власним досвідом.",
     "findSpot": "Знайти водойму",
     "howItWorks": "Як це працює",
-    "discover": "Відкривай нове",
     "popular": "Популярні водойми",
-    "spotCount": "3 локації у добірці",
-    "start": "Усе для виїзду в одному місці",
-    "howItWorksTitle": "Від пошуку до власної історії риболовлі.",
+    "howItWorksTitle": "Від пошуку до власної історії риболовлі",
     "howItWorksLead": "BiteMap поєднує мапу, практичну інформацію про водойми та досвід спільноти — щоб легше обирати місце й ділитися перевіреними знахідками.",
     "stepExploreTitle": "Знайди місце",
     "stepExploreText": "Шукай водойми за назвою, областю, населеним пунктом, типом водойми або видами риби.",
@@ -46,10 +41,11 @@
     "stepShareTitle": "Поділися досвідом",
     "stepShareText": "Додавай свої водойми, фото й звіти про улов, умови та враження — це допомагає іншим рибалкам.",
     "openCommunity": "Відкрити спільноту",
-    "whatYouGet": "Що вже є у BiteMap",
-    "whatYouGetMap": "мапа та фільтри",
-    "whatYouGetDetails": "картки водойм і маршрути",
-    "whatYouGetCommunity": "фото, збереження й звіти спільноти"
+    "readoutLabel": "Курсор на мапі",
+    "searchLabel": "Пошук водойми",
+    "searchPlaceholder": "Назва, область або риба",
+    "searchAction": "Шукати",
+    "allSpots": "Усі водойми"
   },
   "spots": {
     "catalog": "Каталог водойм",
@@ -68,7 +64,19 @@
     "waterType": "Тип водойми",
     "allWaterTypes": "Усі типи",
     "fish": "Риба",
+    "fishUnverified": "Види риб ще не підтверджені",
+    "photoMissing": "Авторське фото цієї водойми ще не додали",
     "allFish": "Усі види",
+    "access": "Доступ",
+    "allAccess": "Будь-який доступ",
+    "accessFree": "Безкоштовний",
+    "accessPaid": "Платний",
+    "accessRestricted": "Обмежений",
+    "accessUnknown": "Доступ не вказано",
+    "sort": "Сортувати",
+    "sortRecommended": "За замовчуванням",
+    "sortName": "За назвою",
+    "sortUpdated": "Нещодавно оновлені",
     "reset": "Скинути",
     "search": "Пошук за локацією або регіоном",
     "searchPlaceholder": "Наприклад, Київська область або Світязь",
@@ -81,7 +89,11 @@
     "mapCount": "На мапі: {count}",
     "mapMissingCoordinates": "Ще {count} водойм без позначених координат — вони доступні у списку нижче.",
     "openMapSpot": "Відкрити водойму",
-    "clusterTitle": "Група водойм: {count}"
+    "clusterTitle": "Група водойм: {count}",
+    "verificationVerified": "Звірено з джерелом",
+    "verificationUnverified": "Не перевірено",
+    "updated": "Оновлено {date}",
+    "sourceLink": "Джерело"
   },
   "auth": {
     "login": {
@@ -125,9 +137,17 @@
     "waterType": "Тип водойми",
     "region": "Регіон",
     "access": "Доступ",
+    "accessUnknown": "Не вказано — перевір актуальні правила перед поїздкою",
+    "verificationUnverified": "Дані каталогу ще не перевірено.",
+    "verificationVerified": "Основні відомості звірено з джерелом.",
+    "sourceLink": "Відкрити джерело",
     "fishEyebrow": "Що можна зустріти",
     "fishTitle": "Риба у водоймі",
     "fishList": "Види риби",
+    "fishSourceNote": "Перелік з довідкових і рибальських джерел; наявність риби тут не гарантована.",
+    "fishUnverified": "Види риб для цієї водойми ще не підтверджені.",
+    "editorialPhotosEyebrow": "Світлини з відкритою ліцензією",
+    "editorialPhotosTitle": "Як виглядає ця водойма",
     "galleryEyebrow": "Фотографії спільноти",
     "galleryTitle": "Вода очима рибалок",
     "mvp": "Дані MVP",
@@ -286,7 +306,15 @@
     "edit": "Редагувати",
     "open": "Відкрити",
     "published": "Опубліковано для спільноти",
-    "private": "Приватна водойма"
+    "private": "Приватна водойма",
+    "accessFree": "Доступ: безкоштовний",
+    "accessPaid": "Доступ: платний",
+    "accessRestricted": "Доступ: обмежений",
+    "accessUnknown": "Доступ: не вказано",
+    "verificationCommunityReported": "Повідомлено учасником · не перевірено",
+    "verificationVerified": "Інформацію перевірено",
+    "verificationUnverified": "Інформацію не перевірено",
+    "updated": "Оновлено: {date}"
   },
   "share": {
     "share": "Поділитися",
@@ -517,6 +545,14 @@
     "waterType": "Тип водойми",
     "location": "Локація",
     "access": "Доступ",
+    "accessFree": "Безкоштовний",
+    "accessPaid": "Платний",
+    "accessRestricted": "Обмежений або закритий",
+    "accessUnknown": "Не вказано",
+    "verificationCommunityReported": "Повідомлено учасником · не перевірено",
+    "verificationVerified": "Інформацію перевірено",
+    "verificationUnverified": "Інформацію не перевірено",
+    "updated": "Оновлено: {date}",
     "fishEyebrow": "Що можна зустріти",
     "fishTitle": "Риба у водоймі",
     "fishList": "Види риби",
@@ -563,9 +599,11 @@
     "waterType": "Тип водойми",
     "waterTypePlaceholder": "Наприклад, озеро або річка",
     "access": "Доступ",
-    "freeAccess": "Вільний доступ",
-    "paidAccess": "Платна водойма",
-    "checkRules": "Уточнюйте правила",
+    "accessNotes": "Деталі доступу (необов’язково)",
+    "accessUnknown": "Невідомо — потрібно уточнити",
+    "accessFree": "Безкоштовний доступ",
+    "accessPaid": "Платний доступ",
+    "accessRestricted": "Обмежений або закритий доступ",
     "fish": "Риба",
     "fishPlaceholder": "Щука, окунь, короп",
     "tone": "Настрій картки",
@@ -607,7 +645,8 @@
     "currentLocationTimeout": "Визначення місцезнаходження триває надто довго. Спробуй ще раз або обери точку на карті.",
     "coordinates": "Координати",
     "coordinatesEmpty": "Точку ще не вибрано.",
-    "validationLocation": "Познач точку водойми на карті."
+    "validationLocation": "Познач точку водойми на карті.",
+    "validationLocationOutsideUkraine": "Координати поза межами України. Перевір, чи не переплутані широта й довгота."
   },
   "spotLocation": {
     "eyebrow": "Як дістатися",
@@ -644,7 +683,20 @@
     "communityActivity": "Середня оцінка активності: {value} з 4",
     "communityWaterTemperature": "Середня виміряна температура води: {value} °C ({count} вимірів)",
     "communityFish": {
-      "carp": "Короп", "pike": "Щука", "perch": "Окунь", "zander": "Судак", "bream": "Лящ", "catfish": "Сом", "roach": "Плітка", "crucian": "Карась", "tench": "Лин", "trout": "Форель", "chub": "Головень", "eel": "Вугор", "grassCarp": "Білий амур", "silverCarp": "Товстолоб"
+      "carp": "Короп",
+      "pike": "Щука",
+      "perch": "Окунь",
+      "zander": "Судак",
+      "bream": "Лящ",
+      "catfish": "Сом",
+      "roach": "Плітка",
+      "crucian": "Карась",
+      "tench": "Лин",
+      "trout": "Форель",
+      "chub": "Головень",
+      "eel": "Вугор",
+      "grassCarp": "Білий амур",
+      "silverCarp": "Товстолоб"
     },
     "activity": {
       "excellent": "Сприятливі",
@@ -704,7 +756,13 @@
     "signIn": "Увійти",
     "reasonLabel": "Причина",
     "detailsLabel": "Деталі (необов’язково)",
-    "reasons": { "spam": "Спам", "abuse": "Образи або неприйнятний вміст", "inaccurate": "Недостовірна інформація", "privacy": "Порушення приватності", "other": "Інше" },
+    "reasons": {
+      "spam": "Спам",
+      "abuse": "Образи або неприйнятний вміст",
+      "inaccurate": "Недостовірна інформація",
+      "privacy": "Порушення приватності",
+      "other": "Інше"
+    },
     "submit": "Надіслати скаргу",
     "sending": "Надсилаємо…",
     "submitted": "Дякуємо. Скаргу передано на перевірку.",
@@ -731,6 +789,12 @@
     "hideContent": "Приховати вміст",
     "saving": "Зберігаємо…",
     "actionError": "Не вдалося завершити дію. Перевір доступи та правила Firestore.",
-    "targetTypes": { "user-spot": "Водойма", "spot-image": "Фото", "fishing-report": "Звіт", "comment": "Коментар", "article": "Стаття" }
+    "targetTypes": {
+      "user-spot": "Водойма",
+      "spot-image": "Фото",
+      "fishing-report": "Звіт",
+      "comment": "Коментар",
+      "article": "Стаття"
+    }
   }
 }

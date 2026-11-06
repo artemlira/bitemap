@@ -26,17 +26,12 @@
     "switchTo": "Switch language to {locale}"
   },
   "home": {
-    "eyebrow": "Fishing closer to nature",
-    "title": "Find your",
-    "titleAccent": " next fishing spot.",
+    "title": "Find your water",
     "lead": "BiteMap is a map and community for anglers: discover fishing spots, plan trips and share your own experience.",
     "findSpot": "Find a spot",
     "howItWorks": "How it works",
-    "discover": "Discover something new",
     "popular": "Popular fishing spots",
-    "spotCount": "3 featured places",
-    "start": "Everything for a trip in one place",
-    "howItWorksTitle": "From discovery to your own fishing story.",
+    "howItWorksTitle": "From the first search to your own fishing story",
     "howItWorksLead": "BiteMap brings together a map, practical fishing-spot information and community experience, so it is easier to choose a place and share trusted finds.",
     "stepExploreTitle": "Find a place",
     "stepExploreText": "Search fishing spots by name, oblast, settlement, water body type or fish species.",
@@ -46,10 +41,11 @@
     "stepShareTitle": "Share your experience",
     "stepShareText": "Add your own fishing spots, photos and reports about catches, conditions and impressions to help other anglers.",
     "openCommunity": "Open community",
-    "whatYouGet": "What is already in BiteMap",
-    "whatYouGetMap": "map and filters",
-    "whatYouGetDetails": "fishing-spot pages and routes",
-    "whatYouGetCommunity": "photos, saved places and community reports"
+    "readoutLabel": "Cursor on map",
+    "searchLabel": "Search for a fishing spot",
+    "searchPlaceholder": "Name, region or fish",
+    "searchAction": "Search",
+    "allSpots": "All spots"
   },
   "spots": {
     "catalog": "Fishing spot catalogue",
@@ -68,7 +64,19 @@
     "waterType": "Water body type",
     "allWaterTypes": "All types",
     "fish": "Fish",
+    "fishUnverified": "Fish species not confirmed yet",
+    "photoMissing": "No licensed photo of this waterbody yet",
     "allFish": "All species",
+    "access": "Access",
+    "allAccess": "Any access",
+    "accessFree": "Free",
+    "accessPaid": "Paid",
+    "accessRestricted": "Restricted",
+    "accessUnknown": "Access not specified",
+    "sort": "Sort by",
+    "sortRecommended": "Default",
+    "sortName": "Name",
+    "sortUpdated": "Recently updated",
     "reset": "Reset",
     "search": "Search by location or region",
     "searchPlaceholder": "For example, Kyiv Oblast or Svityaz",
@@ -81,7 +89,11 @@
     "mapCount": "On the map: {count}",
     "mapMissingCoordinates": "{count} spots do not have coordinates yet; they are still available in the list below.",
     "openMapSpot": "Open fishing spot",
-    "clusterTitle": "Fishing spot group: {count}"
+    "clusterTitle": "Fishing spot group: {count}",
+    "verificationVerified": "Checked against source",
+    "verificationUnverified": "Unverified",
+    "updated": "Updated {date}",
+    "sourceLink": "Source"
   },
   "auth": {
     "login": {
@@ -125,9 +137,17 @@
     "waterType": "Water body type",
     "region": "Region",
     "access": "Access",
+    "accessUnknown": "Not specified — check current rules before your trip",
+    "verificationUnverified": "This directory information has not been verified yet.",
+    "verificationVerified": "Key details have been checked against a source.",
+    "sourceLink": "Open source",
     "fishEyebrow": "What you may find",
     "fishTitle": "Fish in this spot",
     "fishList": "Fish species",
+    "fishSourceNote": "Lists come from reference and angling sources; fish presence is not guaranteed.",
+    "fishUnverified": "Fish species for this waterbody have not been confirmed yet.",
+    "editorialPhotosEyebrow": "Open-license photographs",
+    "editorialPhotosTitle": "What this water looks like",
     "galleryEyebrow": "Community photos",
     "galleryTitle": "Fishing through anglers’ eyes",
     "mvp": "MVP data",
@@ -286,7 +306,15 @@
     "edit": "Edit",
     "open": "Open",
     "published": "Published for the community",
-    "private": "Private spot"
+    "private": "Private spot",
+    "accessFree": "Access: free",
+    "accessPaid": "Access: paid",
+    "accessRestricted": "Access: restricted",
+    "accessUnknown": "Access: not specified",
+    "verificationCommunityReported": "Reported by a member · unverified",
+    "verificationVerified": "Information verified",
+    "verificationUnverified": "Information not verified",
+    "updated": "Updated: {date}"
   },
   "share": {
     "share": "Share",
@@ -516,6 +544,14 @@
     "waterType": "Water body type",
     "location": "Location",
     "access": "Access",
+    "accessFree": "Free",
+    "accessPaid": "Paid",
+    "accessRestricted": "Restricted or closed",
+    "accessUnknown": "Not specified",
+    "verificationCommunityReported": "Reported by a member · unverified",
+    "verificationVerified": "Information verified",
+    "verificationUnverified": "Information not verified",
+    "updated": "Updated: {date}",
     "fishEyebrow": "What you may find",
     "fishTitle": "Fish in this spot",
     "fishList": "Fish species",
@@ -562,9 +598,11 @@
     "waterType": "Water body type",
     "waterTypePlaceholder": "For example, lake or river",
     "access": "Access",
-    "freeAccess": "Free access",
-    "paidAccess": "Paid fishing spot",
-    "checkRules": "Check the rules",
+    "accessNotes": "Access details (optional)",
+    "accessUnknown": "Unknown — needs checking",
+    "accessFree": "Free access",
+    "accessPaid": "Paid access",
+    "accessRestricted": "Restricted or closed access",
     "fish": "Fish",
     "fishPlaceholder": "Pike, perch, carp",
     "tone": "Card mood",
@@ -606,7 +644,8 @@
     "currentLocationTimeout": "Finding your location took too long. Try again or choose a point on the map.",
     "coordinates": "Coordinates",
     "coordinatesEmpty": "No point selected yet.",
-    "validationLocation": "Pin the fishing spot on the map."
+    "validationLocation": "Pin the fishing spot on the map.",
+    "validationLocationOutsideUkraine": "These coordinates are outside Ukraine. Check that latitude and longitude are not swapped."
   },
   "spotLocation": {
     "eyebrow": "Getting there",
@@ -643,7 +682,20 @@
     "communityActivity": "Average reported activity: {value} of 4",
     "communityWaterTemperature": "Average measured water temperature: {value} °C ({count} readings)",
     "communityFish": {
-      "carp": "Carp", "pike": "Pike", "perch": "Perch", "zander": "Zander", "bream": "Bream", "catfish": "Catfish", "roach": "Roach", "crucian": "Crucian carp", "tench": "Tench", "trout": "Trout", "chub": "Chub", "eel": "Eel", "grassCarp": "Grass carp", "silverCarp": "Silver carp"
+      "carp": "Carp",
+      "pike": "Pike",
+      "perch": "Perch",
+      "zander": "Zander",
+      "bream": "Bream",
+      "catfish": "Catfish",
+      "roach": "Roach",
+      "crucian": "Crucian carp",
+      "tench": "Tench",
+      "trout": "Trout",
+      "chub": "Chub",
+      "eel": "Eel",
+      "grassCarp": "Grass carp",
+      "silverCarp": "Silver carp"
     },
     "activity": {
       "excellent": "Favorable",
@@ -702,7 +754,13 @@
     "signIn": "Sign in",
     "reasonLabel": "Reason",
     "detailsLabel": "Details (optional)",
-    "reasons": { "spam": "Spam", "abuse": "Harassment or inappropriate content", "inaccurate": "Inaccurate information", "privacy": "Privacy concern", "other": "Other" },
+    "reasons": {
+      "spam": "Spam",
+      "abuse": "Harassment or inappropriate content",
+      "inaccurate": "Inaccurate information",
+      "privacy": "Privacy concern",
+      "other": "Other"
+    },
     "submit": "Submit report",
     "sending": "Sending…",
     "submitted": "Thanks. Your report has been sent for review.",
@@ -730,6 +788,12 @@
     "hideContent": "Hide content",
     "saving": "Saving…",
     "actionError": "Could not complete the action. Check permissions and Firestore rules.",
-    "targetTypes": { "user-spot": "Fishing spot", "spot-image": "Photo", "fishing-report": "Fishing report", "comment": "Comment", "article": "Article" }
+    "targetTypes": {
+      "user-spot": "Fishing spot",
+      "spot-image": "Photo",
+      "fishing-report": "Fishing report",
+      "comment": "Comment",
+      "article": "Article"
+    }
   }
 }

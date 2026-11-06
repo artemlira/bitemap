@@ -24,6 +24,7 @@ function toSpotPayload(values: UserSpotFormValues) {
   };
 
   return {
+    accessCategory: values.accessCategory,
     access: values.access,
     description: values.description.trim(),
     fish: values.fish
@@ -53,6 +54,7 @@ export async function createUserSpot(userId: string, values: UserSpotFormValues)
     createdAt: serverTimestamp(),
     ownerId: userId,
     updatedAt: serverTimestamp(),
+    verificationStatus: "community-reported",
   });
 }
 
