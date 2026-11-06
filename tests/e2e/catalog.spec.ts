@@ -5,7 +5,8 @@ import { expect, test } from "@playwright/test";
 test("the catalog lists waters, filters them by search and opens a water page", async ({ page }) => {
   await page.goto("/uk/spots");
 
-  await expect(page.getByRole("heading", { level: 3, name: "Синевир" })).toBeVisible();
+  // The first page of results shows the best documented waters; search finds any specific one.
+  await expect(page.getByRole("heading", { level: 3 }).first()).toBeVisible();
 
   await page.getByRole("searchbox", { name: /Пошук/ }).fill("Синевир");
   await expect(page.getByRole("heading", { level: 3, name: "Синевир" })).toBeVisible();
