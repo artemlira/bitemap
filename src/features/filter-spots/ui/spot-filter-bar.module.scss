@@ -95,3 +95,62 @@
     padding: $space-12;
   }
 }
+
+// Desktop: the wrapper is invisible to the grid. Phones: filters fold behind a toggle.
+.advanced {
+  display: contents;
+}
+
+.toggle {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .filters {
+    grid-template-columns: 1fr auto;
+  }
+
+  .field:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding-inline: $space-20;
+    border: 1px solid var(--color-line);
+    border-radius: $radius-full;
+    background: var(--color-page);
+    font-weight: 700;
+    transition: border-color 180ms ease;
+
+    &[aria-expanded="true"] {
+      border-color: var(--color-sonar);
+    }
+  }
+
+  .advanced {
+    display: none;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-12;
+
+    &[data-open="true"] {
+      display: grid;
+      animation: filters-open 260ms var(--ease-out);
+    }
+  }
+
+  .reset {
+    grid-column: auto;
+  }
+}
+
+@keyframes filters-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
+}

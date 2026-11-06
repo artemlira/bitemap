@@ -187,7 +187,7 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
 
           <aside className={styles.mapPane} aria-labelledby="spots-map-title">
             <h3 id="spots-map-title" className={styles.visuallyHidden}>{t("mapTitle")}</h3>
-            <SpotsMap spots={mapSpots} />
+            <SpotsMap key={view} spots={mapSpots} />
             <p className={styles.mapNote}>
               {t("mapCount", { count: mapSpots.length })}
               {mapSpots.length < filteredSpots.length

@@ -127,7 +127,8 @@
     "dataSource": "Catalog data: Wikidata (CC0), descriptions: Wikipedia (CC BY-SA 4.0), photos: Wikimedia Commons.",
     "viewLabel": "Catalog view",
     "viewList": "List",
-    "viewMap": "Map"
+    "viewMap": "Map",
+    "filters": "Filters"
   },
   "auth": {
     "login": {

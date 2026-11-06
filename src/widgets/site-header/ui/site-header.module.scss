@@ -173,14 +173,22 @@
     padding: $space-24;
     border: 1px solid rgb(255 253 248 / 18%);
     border-radius: $radius-lg;
-    background: var(--color-forest);
-    box-shadow: 0 18px 48px rgb(0 0 0 / 20%);
+    background: rgb(6 28 36 / 94%);
+    box-shadow: 0 18px 48px rgb(0 0 0 / 30%);
+    backdrop-filter: blur(18px);
+    transform-origin: top center;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
   }
 
   .mobileMenu[hidden] {
     display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mobileMenu:not([hidden]) {
+      animation: menu-in 260ms var(--ease-out);
+    }
   }
 
   .mobileNavigation,
@@ -246,5 +254,12 @@
   &:hover::after,
   &:focus-visible::after {
     transform: scaleX(1);
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.97);
   }
 }

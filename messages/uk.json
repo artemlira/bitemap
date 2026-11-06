@@ -127,7 +127,8 @@
     "dataSource": "Дані каталогу: Wikidata (CC0), опис: Вікіпедія (CC BY-SA 4.0), фото: Wikimedia Commons.",
     "viewLabel": "Вигляд каталогу",
     "viewList": "Список",
-    "viewMap": "Мапа"
+    "viewMap": "Мапа",
+    "filters": "Фільтри"
   },
   "auth": {
     "login": {
@@ -146,7 +147,7 @@
       "secondaryLead": "Вже маєш акаунт?",
       "heading": "Реєстрація"
     },
-    "account": "Pleso account",
+    "account": "Акаунт Плесо",
     "email": "Електронна пошта",
     "password": "Пароль",
     "confirmPassword": "Повтори пароль",
