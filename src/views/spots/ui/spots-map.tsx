@@ -16,10 +16,10 @@ const LeafletSpotsMap = dynamic(
   { loading: () => <div className={styles.map} aria-busy="true" />, ssr: false },
 );
 
-export function SpotsMap({ spots, refreshKey }: { spots: readonly MapSpot[]; refreshKey?: string }) {
+export function SpotsMap({ spots, refreshKey, onBoundsChange }: { spots: readonly MapSpot[]; refreshKey?: string; onBoundsChange?: (bounds: { south: number; west: number; north: number; east: number }) => void }) {
   return (
     <div className={styles.map}>
-      <LeafletSpotsMap spots={spots} refreshKey={refreshKey} />
+      <LeafletSpotsMap spots={spots} refreshKey={refreshKey} onBoundsChange={onBoundsChange} />
     </div>
   );
 }
