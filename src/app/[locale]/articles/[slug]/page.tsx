@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getFishingArticleBySlug, getFishingArticleTranslation, fishingArticles } from "@/entities/fishing-article";
+import { getWordPressArticle } from "@/entities/fishing-article/server";
 import { ArticleDetailsPage } from "@/views/article-details";
 
 export function generateStaticParams() {
@@ -43,5 +44,5 @@ export async function generateMetadata(props: PageProps<"/[locale]/articles/[slu
 
 export default async function Page(props: PageProps<"/[locale]/articles/[slug]">) {
   const { slug } = await props.params;
-  return <ArticleDetailsPage slug={slug} />;
+  return <ArticleDetailsPage slug={slug} extraArticle={await getWordPressArticle(slug)} />;
 }

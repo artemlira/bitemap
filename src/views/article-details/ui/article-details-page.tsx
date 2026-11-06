@@ -1,19 +1,21 @@
 "use client";
 
 import { Link } from "@/shared/lib/i18n";
-import { getFishingArticleTranslation, useFishingArticle } from "@/entities/fishing-article";
+import { getFishingArticleTranslation, useFishingArticle, type ManagedFishingArticle } from "@/entities/fishing-article";
 import { useLocale, useTranslations } from "next-intl";
 import DOMPurify from "isomorphic-dompurify";
 import { SiteHeader } from "@/widgets/site-header";
 import { ReportContentAction } from "@/features/content-report";
 import styles from "./article-details-page.module.scss";
 
-type ArticleDetailsPageProps = { slug: string };
+type ArticleDetailsPageProps = { slug: string; extraArticle?: ManagedFishingArticle };
 
-export function ArticleDetailsPage({ slug }: ArticleDetailsPageProps) {
+export function ArticleDetailsPage({ slug, extraArticle }: ArticleDetailsPageProps) {
   const locale = useLocale();
   const t = useTranslations("articles");
-  const { article, error, isLoading } = useFishingArticle(slug);
+  const { article: loadedArticle, error, isLoading: isLoadingOwn } = useFishingArticle(slug);
+  const article = extraArticle ?? loadedArticle;
+  const isLoading = !extraArticle && isLoadingOwn;
 
   if (isLoading && !article) {
     return <main className={styles.state} aria-live="polite">{t("loadingArticle")}</main>;
