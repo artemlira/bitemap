@@ -131,7 +131,7 @@ export function useActivityNotifications(userId: string | undefined, activities:
         }));
 
         const items = recentDrafts
-          .map(({ actorId, ...event }) => ({ ...event, actorName: event.actorName || names.get(actorId) || "BiteMap" }))
+          .map(({ actorId, ...event }) => ({ ...event, actorName: event.actorName || names.get(actorId) || "Pleso" }))
           .sort((a, b) => b.createdAt - a.createdAt)
           .slice(0, 60);
         if (isActive) {

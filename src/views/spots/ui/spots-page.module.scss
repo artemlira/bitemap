@@ -11,7 +11,7 @@
   border-radius: 0 0 $radius-xl $radius-xl;
   background:
     radial-gradient(circle at 82% -18%, rgb(121 188 203 / 42%), transparent 25rem),
-    linear-gradient(160deg, #031017 10%, #06303a 100%);
+    var(--gradient-water);
   color: #fffdf8;
 }
 

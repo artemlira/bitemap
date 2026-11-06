@@ -8,6 +8,7 @@ import { useAuth } from "@/shared/lib/auth";
 import { useAdminStatus } from "@/entities/admin";
 import { useTheme } from "@/shared/lib/theme";
 import { LanguageSwitcher } from "@/widgets/language-switcher";
+import { Logo } from "@/shared/ui/logo";
 import styles from "./site-header.module.scss";
 
 const subscribeToDocument = () => () => {};
@@ -92,9 +93,10 @@ export function SiteHeader() {
   } as CSSProperties;
 
   return (
+    <div className={styles.slot}>
     <header className={styles.header} ref={headerRef}>
       <Link className={styles.logo} href="/" aria-label={t("home")}>
-        Bite<span>Map</span>
+        <Logo name={t("brand")} />
       </Link>
 
       <nav className={styles.navigation} aria-label={t("main")}>
@@ -183,5 +185,6 @@ export function SiteHeader() {
         portalRoot,
       ) : null}
     </header>
+    </div>
   );
 }

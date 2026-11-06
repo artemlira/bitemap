@@ -6,7 +6,7 @@ import { noIndexMetadata } from "@/shared/lib/seo";
 export async function generateMetadata(props: PageProps<"/[locale]/admin/articles">): Promise<Metadata> {
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: "articleAdmin" });
-  return { title: `${t("title")} — BiteMap`, ...noIndexMetadata };
+  return { title: `${t("title")} — Pleso`, ...noIndexMetadata };
 }
 
 export default function Page() {

@@ -2,7 +2,7 @@
 @use "../../../shared/styles/abstracts/variables" as *;
 
 .page, .state { min-height: 100vh; }
-.hero { overflow: hidden; border-radius: 0 0 $radius-xl $radius-xl; background: linear-gradient(160deg, #031017 10%, #06303a 100%); color: #fffdf8; }
+.hero { overflow: hidden; border-radius: 0 0 $radius-xl $radius-xl; background: var(--gradient-water); color: #fffdf8; }
 .heroContent, .details, .state { @include container; }
 .breadcrumbs { display: flex; flex-wrap: wrap; gap: $space-8; margin-top: clamp($space-32, 6vw, $space-64); color: rgb(255 253 248 / 62%); font-size: 0.825rem; }
 .breadcrumbs a { color: inherit; }

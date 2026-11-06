@@ -1,16 +1,31 @@
 @use "../../../shared/styles/abstracts/mixins" as *;
 @use "../../../shared/styles/abstracts/variables" as *;
 
-.header {
-  @include container;
+// The slot keeps the space the header used to take in the page flow,
+// while the header itself floats above the content as a glass pill.
+.slot {
+  height: 5.5rem;
+}
 
-  position: relative;
+.header {
+  position: fixed;
   z-index: $z-header;
+  top: 0.9rem;
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $space-24;
-  padding-top: $space-24;
+  box-sizing: border-box;
+  width: min(100% - 1.5rem, $container-max);
+  padding: 0.55rem 0.7rem 0.55rem 1.1rem;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: $radius-full;
+  background: rgb(6 28 36 / 62%);
+  box-shadow: 0 10px 40px rgb(0 0 0 / 22%);
+  backdrop-filter: blur(18px) saturate(1.4);
+  transform: translateX(-50%);
+  transition: background 300ms ease, box-shadow 300ms ease;
 }
 
 .menuButton,
@@ -19,15 +34,7 @@
 }
 
 .logo {
-  color: #fffdf8;
-  font-family: var(--font-display), sans-serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-
-  span {
-    color: var(--color-sun);
-  }
+  color: #f5fbf8;
 }
 
 .navigation,
@@ -207,8 +214,8 @@
 }
 
 @include media-max(phone) {
-  .header {
-    padding-top: $space-16;
+  .slot {
+    height: 4.75rem;
   }
 
   .userName,

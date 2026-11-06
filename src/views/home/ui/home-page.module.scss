@@ -16,12 +16,12 @@
 
 .hero {
   position: relative;
-  min-height: min(860px, 94svh);
+  display: flex;
+  flex-direction: column;
+  min-height: min(900px, 100svh);
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 78% 40%, rgb(15 157 138 / 22%), transparent 55%),
-    linear-gradient(160deg, #031017 10%, #06303a 100%);
-  color: #e6f3f0;
+  background: #06202a;
+  color: #f5fbf8;
 }
 
 .heroContent {
@@ -30,16 +30,19 @@
   position: relative;
   z-index: 2;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: clamp(6rem, 14vw, 10rem);
-  padding-bottom: $space-96;
+  justify-content: center;
+  max-width: 40rem;
+  margin-inline: max(1rem, calc((100% - #{$container-max}) / 2));
+  padding-block: 2rem 4rem;
 }
 
 .hero h1 {
   max-width: 11ch;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.6rem, 7.2vw, 6.25rem);
+  font-size: clamp(2.4rem, 5.6vw, 5rem);
   font-weight: 600;
   letter-spacing: -0.045em;
   line-height: 1;
@@ -65,8 +68,8 @@
   transition: border-color 200ms ease, box-shadow 200ms ease;
 
   &:focus-within {
-    border-color: #8fe8d8;
-    box-shadow: 0 0 0 4px rgb(143 232 216 / 16%);
+    border-color: #5ee0c8;
+    box-shadow: 0 0 0 4px rgb(94 224 200 / 18%);
   }
 
   button {
@@ -74,13 +77,13 @@
     min-height: 3rem;
     padding-inline: $space-24;
     border-radius: $radius-full;
-    background: #ffc46b;
-    color: #031017;
+    background: #ff6b3d;
+    color: #fff;
     font-weight: 750;
     transition: transform 180ms var(--ease-out), background 180ms ease;
 
     @include hover {
-      background: #ffd491;
+      background: #ff8257;
       transform: translateY(-1px);
     }
   }
@@ -341,5 +344,203 @@
   .timeline::before,
   .timeline::after {
     left: 1rem;
+  }
+}
+
+// Scrolling strip of famous waters.
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: marquee-run 48s linear infinite;
+  }
+}
+
+.marqueeList {
+  display: flex;
+  flex: none;
+  list-style: none;
+
+  li {
+    padding: 1.1rem 2rem;
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &::after {
+      margin-left: 4rem;
+      color: var(--color-sun);
+      content: "\25E6";
+    }
+  }
+}
+
+@keyframes marquee-run {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+// Animated counters: the number counts up when the block scrolls into view.
+@property --count {
+  inherits: false;
+  initial-value: 0;
+  syntax: "<integer>";
+}
+
+.stats {
+  @include container;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-24;
+  padding-block: clamp($space-48, 7vw, $space-96) 0;
+}
+
+.stat {
+  display: grid;
+  gap: 0.35rem;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--color-sun);
+
+  span {
+    color: var(--color-muted);
+  }
+}
+
+.counter {
+  --count: var(--target);
+
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+  counter-reset: count var(--count);
+
+  &::before {
+    content: counter(count);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: count-up linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@keyframes count-up {
+  from {
+    --count: 0;
+  }
+}
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  margin: clamp($space-48, 8vw, 7rem) auto 0;
+  padding: clamp(4rem, 10vw, 8rem) 1.5rem;
+  background: var(--gradient-water);
+  color: #f5fbf8;
+  text-align: center;
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: $space-16;
+
+  h2 {
+    max-width: 18ch;
+    font-family: var(--font-display), sans-serif;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  p {
+    max-width: 34rem;
+    color: rgb(245 251 248 / 78%);
+  }
+}
+
+.ctaButton {
+  position: relative;
+  overflow: hidden;
+  margin-top: $space-16;
+  padding: 1rem 2.2rem;
+  border-radius: $radius-full;
+  background: #ff6b3d;
+  color: #fff;
+  font-weight: 750;
+  transition: transform 220ms var(--ease-out), box-shadow 220ms ease;
+
+  @include hover {
+    box-shadow: 0 14px 40px rgb(255 107 61 / 40%);
+    transform: translateY(-3px);
+  }
+}
+
+.ctaRings {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    width: 14rem;
+    height: 5rem;
+    border: 1.5px solid rgb(94 224 200 / 50%);
+    border-radius: 50%;
+    opacity: 0;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: cta-ring 6s ease-out infinite;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 4s;
+    }
+  }
+}
+
+@keyframes cta-ring {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.3);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(5);
+  }
+}
+
+@include media-max(tablet) {
+  .stats {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,18 +1,17 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { FishingSpotCard } from "@/entities/fishing-spot";
-import { getFeaturedFishingSpots } from "@/entities/fishing-spot/server";
+import { getCatalogStats, getFeaturedFishingSpots } from "@/entities/fishing-spot/server";
 import { Reveal } from "@/shared/ui/reveal";
 import { SiteHeader } from "@/widgets/site-header";
-import { createContourPaths } from "../lib/contour-paths";
-import { HeroMap } from "./hero-map";
+import { HeroWater } from "./hero-water";
 import styles from "./home-page.module.scss";
-
-const contourPaths = createContourPaths();
 
 export function HomePage() {
   const t = useTranslations("home");
   const locale = useLocale();
+  const stats = getCatalogStats();
+  const marquee = t.raw("marquee") as string[];
 
   const steps = [
     { title: t("stepExploreTitle"), text: t("stepExploreText"), action: t("stepExploreAction"), href: "/spots" as const },
@@ -20,10 +19,16 @@ export function HomePage() {
     { title: t("stepShareTitle"), text: t("stepShareText"), action: t("openCommunity"), href: "/community" as const },
   ];
 
+  const statItems = [
+    { value: stats.total, label: t("statsWater") },
+    { value: stats.regions, label: t("statsRegions") },
+    { value: stats.photos, label: t("statsPhotos") },
+  ];
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
-        <HeroMap paths={contourPaths} readoutLabel={t("readoutLabel")} />
+        <HeroWater />
         <SiteHeader />
 
         <div className={styles.heroContent} data-page-hero>
@@ -35,7 +40,7 @@ export function HomePage() {
               <span className={styles.visuallyHidden}>{t("searchLabel")}</span>
               <input name="query" type="search" placeholder={t("searchPlaceholder")} autoComplete="off" />
             </label>
-            <button type="submit">{t("searchAction")}</button>
+            <button type="submit" data-ripple>{t("searchAction")}</button>
           </form>
 
           <div className={styles.actions}>
@@ -49,6 +54,34 @@ export function HomePage() {
         </div>
       </section>
 
+      <section className={styles.marquee} aria-label={t("marqueeLabel")}>
+        <div className={styles.marqueeTrack} aria-hidden="true">
+          {[0, 1].map((copy) => (
+            <ul key={copy} className={styles.marqueeList}>
+              {marquee.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+          ))}
+        </div>
+        <ul className={styles.visuallyHidden}>
+          {marquee.map((name) => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className={styles.stats} aria-label={t("statsWater")}>
+        {statItems.map((item) => (
+          <div key={item.label} className={styles.stat}>
+            <strong className={styles.counter} style={{ "--target": item.value } as React.CSSProperties}>
+              <span className={styles.visuallyHidden}>{item.value}</span>
+            </strong>
+            <span>{item.label}</span>
+          </div>
+        ))}
+      </section>
+
       <section className={styles.spotsSection} id="popular-spots">
         <Reveal>
           <div className={styles.sectionHeading}>
@@ -59,13 +92,11 @@ export function HomePage() {
           </div>
         </Reveal>
 
-        <Reveal delay={90}>
-          <div className={styles.spotGrid} data-stagger>
-            {getFeaturedFishingSpots().map((spot) => (
-              <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
-            ))}
-          </div>
-        </Reveal>
+        <div className={styles.spotGrid} data-stagger>
+          {getFeaturedFishingSpots().map((spot) => (
+            <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
+          ))}
+        </div>
       </section>
 
       <section className={styles.stepsSection} id="how-it-works" aria-labelledby="how-it-works-title">
@@ -92,6 +123,21 @@ export function HomePage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className={styles.cta}>
+        <div className={styles.ctaRings} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className={styles.ctaContent}>
+          <h2>{t("ctaTitle")}</h2>
+          <p>{t("ctaText")}</p>
+          <Link className={styles.ctaButton} href="/my-spots/new" data-ripple>
+            {t("ctaAction")}
+          </Link>
+        </div>
       </section>
     </main>
   );

@@ -24,9 +24,20 @@ const PIN_OVERRIDES = {
 };
 const inUkraine = ({ latitude, longitude }) => latitude >= 44.3 && latitude <= 52.4 && longitude >= 22.1 && longitude <= 40.3;
 
+// Wikidata images are sometimes maps, satellite scenes or diagrams rather than photos.
+const NOT_A_PHOTO = /(map|mapa|карта|схема|scheme|plan|satellite|landsat|nasa|sentinel|locator|diagram|coat|герб|flag|прапор|logo|emblem|\.svg|\.png|\.gif|\.tif)/i;
+const cleanPhoto = (photo) => {
+  if (!photo) return null;
+  const file = decodeURIComponent(photo.pageUrl.split("/File:").pop() ?? "");
+  if (NOT_A_PHOTO.test(file)) return null;
+  const creator = /original uploader|^\s*$/i.test(photo.creator) || photo.creator.length > 70 ? "Wikimedia Commons" : photo.creator;
+  return { ...photo, creator };
+};
+
 const records = dataset.records
   .filter((record) => !isJunk(record))
   .map((record) => (PIN_OVERRIDES[record.id] ? { ...record, ...PIN_OVERRIDES[record.id] } : record))
+  .map((record) => ({ ...record, photo: cleanPhoto(record.photo) }))
   .filter(inUkraine);
 
 const types = ["lake", "reservoir", "river", "canal", "pond"];

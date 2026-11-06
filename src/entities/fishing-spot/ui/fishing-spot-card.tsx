@@ -27,7 +27,7 @@ export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
   const freshness = spot.verifiedAt ?? spot.updatedAt;
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-tilt>
       <figure className={styles.visual} data-tone={spot.tone} data-no-photo={!spot.photos?.[0]}>
         {spot.photos?.[0] ? (
           <Image

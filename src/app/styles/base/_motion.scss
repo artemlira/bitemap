@@ -136,3 +136,32 @@ body {
     transform: scaleX(1);
   }
 }
+
+// Ripple spawned by PointerEffects on [data-ripple] elements.
+[data-ripple] {
+  position: relative;
+  overflow: hidden;
+}
+
+.fx-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 38%);
+  pointer-events: none;
+  transform: scale(0);
+  animation: fx-ripple 620ms ease-out forwards;
+}
+
+@keyframes fx-ripple {
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+// Every route change mounts a new <main>, so it gets a short entrance of its own.
+@media (prefers-reduced-motion: no-preference) {
+  main {
+    animation: motion-fade 420ms ease-out;
+  }
+}

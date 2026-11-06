@@ -10,12 +10,31 @@
   border-radius: $radius-lg;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
-  transition: border-color 220ms ease, transform 320ms var(--ease-out), box-shadow 320ms ease;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0));
+  transition: border-color 220ms ease, transform 260ms var(--ease-out), box-shadow 320ms ease;
+
+  // A soft light follows the pointer across the card.
+  &::after {
+    position: absolute;
+    z-index: 3;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgb(94 224 200 / 16%), transparent 55%);
+    content: "";
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms ease;
+  }
 
   @include hover {
+    --lift: -0.4rem;
+
     border-color: var(--color-sonar);
-    box-shadow: 0 24px 60px rgb(15 157 138 / 18%);
-    transform: translateY(-0.4rem);
+    box-shadow: 0 24px 60px rgb(20 163 141 / 20%);
+
+    &::after {
+      opacity: 1;
+    }
   }
 }
 
