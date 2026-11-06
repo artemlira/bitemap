@@ -13,6 +13,23 @@ import styles from "./spots-page.module.scss";
 
 const PAGE_SIZE = 24;
 
+type MapBounds = { south: number; west: number; north: number; east: number };
+
+function distanceBetween(
+  from: { latitude: number; longitude: number },
+  to: { latitude: number; longitude: number },
+) {
+  const toRad = (value: number) => (value * Math.PI) / 180;
+  const dLat = toRad(to.latitude - from.latitude);
+  const dLon = toRad(to.longitude - from.longitude);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(from.latitude)) * Math.cos(toRad(to.latitude)) * Math.sin(dLon / 2) ** 2;
+  return Math.round(6371 * 2 * Math.asin(Math.sqrt(a)));
+}
+
+function isInsideBounds(point: { latitude: number; longitude: number }, bounds: MapBounds) {
+  return point.latitude >= bounds.south && point.latitude <= bounds.north && point.longitude >= bounds.west && point.longitude <= bounds.east;
+}
+
 type SpotsPageProps = {
   initialFilters: SpotFilters;
 };
@@ -110,6 +127,52 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
     [filteredSpots, locale],
   );
 
+  const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [locateState, setLocateState] = useState<"idle" | "loading" | "denied">("idle");
+  const [onlyInView, setOnlyInView] = useState(false);
+  const [bounds, setBounds] = useState<MapBounds | null>(null);
+
+  // "Near me" sorts by distance and "only on the map" keeps what is inside the current map view.
+  const listEntries = useMemo(() => {
+    let entries = filteredSpots.map((entry) => {
+      const coordinates = getSpotCoordinates(entry.spot);
+      return { entry, coordinates, distanceKm: origin && coordinates ? distanceBetween(origin, coordinates) : undefined };
+    });
+
+    if (onlyInView && bounds) {
+      entries = entries.filter(({ coordinates }) => coordinates && isInsideBounds(coordinates, bounds));
+    }
+
+    if (origin) {
+      entries = [...entries].sort((first, second) => (first.distanceKm ?? Infinity) - (second.distanceKm ?? Infinity));
+    }
+
+    return entries;
+  }, [bounds, filteredSpots, onlyInView, origin]);
+
+  function handleNearMe() {
+    if (origin) {
+      setOrigin(null);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setLocateState("denied");
+      return;
+    }
+
+    setLocateState("loading");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setOrigin({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+        setLocateState("idle");
+        setVisibleCount(PAGE_SIZE);
+      },
+      () => setLocateState("denied"),
+      { maximumAge: 60_000, timeout: 10_000 },
+    );
+  }
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -136,8 +199,16 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
 
         <div className={styles.summary}>
           <p className={styles.counter} aria-live="polite">
-            {isCommunityLoading || isCatalogLoading ? t("loading") : t("count", { count: filteredSpots.length })}
+            {isCommunityLoading || isCatalogLoading ? t("loading") : t("count", { count: listEntries.length })}
           </p>
+          <div className={styles.quickActions}>
+            <button type="button" aria-pressed={origin !== null} disabled={locateState === "loading"} onClick={handleNearMe}>
+              {locateState === "loading" ? t("locating") : t("nearMe")}
+            </button>
+            <button type="button" aria-pressed={onlyInView} onClick={() => setOnlyInView((value) => !value)}>
+              {t("onlyOnMap")}
+            </button>
+          </div>
           <div className={styles.viewToggle} role="group" aria-label={t("viewLabel")}>
             <button type="button" aria-pressed={view === "list"} onClick={() => setView("list")}>{t("viewList")}</button>
             <button type="button" aria-pressed={view === "map"} onClick={() => setView("map")}>{t("viewMap")}</button>
@@ -146,14 +217,15 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
 
         {error ? <p className={styles.error} role="alert">{t("communityLoadError")}</p> : null}
         {catalogError ? <p className={styles.error} role="alert">{t("catalogLoadError")}</p> : null}
+        {locateState === "denied" ? <p className={styles.error} role="alert">{t("locationDenied")}</p> : null}
 
         <div className={styles.workspace} data-view={view}>
           <div className={styles.listPane}>
-            {filteredSpots.length > 0 ? (
+            {listEntries.length > 0 ? (
               <div className={styles.grid} data-stagger>
-                {filteredSpots.slice(0, visibleCount).map((entry) => (
+                {listEntries.slice(0, visibleCount).map(({ entry, distanceKm }) => (
                   entry.kind === "catalog" ? (
-                    <FishingSpotCard key={`catalog-${entry.spot.id}`} spot={entry.spot} href={`/spots/${entry.spot.slug}`} />
+                    <FishingSpotCard key={`catalog-${entry.spot.id}`} spot={entry.spot} href={`/spots/${entry.spot.slug}`} distanceKm={distanceKm} />
                   ) : (
                     <UserSpotCard
                       key={`community-${entry.spot.id}`}
@@ -175,9 +247,9 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
               </div>
             )}
 
-            {filteredSpots.length > visibleCount ? (
+            {listEntries.length > visibleCount ? (
               <div className={styles.loadMore}>
-                <p>{t("shown", { shown: visibleCount, total: filteredSpots.length })}</p>
+                <p>{t("shown", { shown: visibleCount, total: listEntries.length })}</p>
                 <button type="button" data-ripple onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
                   {t("loadMore")}
                 </button>
@@ -187,7 +259,7 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
 
           <aside className={styles.mapPane} aria-labelledby="spots-map-title">
             <h3 id="spots-map-title" className={styles.visuallyHidden}>{t("mapTitle")}</h3>
-            <SpotsMap spots={mapSpots} refreshKey={view} />
+            <SpotsMap spots={mapSpots} refreshKey={view} onBoundsChange={setBounds} />
             <p className={styles.mapNote}>
               {t("mapCount", { count: mapSpots.length })}
               {mapSpots.length < filteredSpots.length

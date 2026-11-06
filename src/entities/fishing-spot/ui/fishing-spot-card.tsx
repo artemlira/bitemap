@@ -11,11 +11,13 @@ import styles from "./fishing-spot-card.module.scss";
 type FishingSpotCardProps = {
   spot: FishingSpot;
   href?: string;
+  /** Set when the catalog is sorted by distance from the visitor. */
+  distanceKm?: number;
 };
 
 const MAX_FISH = 3;
 
-export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
+export function FishingSpotCard({ spot, href, distanceKm }: FishingSpotCardProps) {
   const locale = useLocale();
   const t = useTranslations("spots");
   const settlement = getFishingSpotSettlement(spot, locale);
@@ -32,6 +34,7 @@ export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
   }[spot.accessCategory ?? "unknown"];
   const numberFormat = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
   const chips = [
+    distanceKm !== undefined ? t("distanceAway", { km: distanceKm }) : null,
     spot.facts?.lengthKm ? `${numberFormat.format(spot.facts.lengthKm)} ${t("unitKm")}` : null,
     spot.facts?.areaKm2 ? `${numberFormat.format(spot.facts.areaKm2)} ${t("unitKm2")}` : null,
     accessLabel || null,

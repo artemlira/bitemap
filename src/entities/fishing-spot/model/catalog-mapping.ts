@@ -12,14 +12,18 @@ export type CatalogBase = {
 };
 
 export type CatalogDetails = {
-  qid: string;
+  /** Wikidata id (wiki-sourced records). */
+  qid?: string;
+  /** OpenStreetMap reference like way/123 (osm-sourced records). */
+  osm?: string;
+  accessCategory?: "free" | "paid" | "restricted" | "unknown";
   facts?: FishingSpotFacts;
   fish?: string[];
   shape?: FishingSpotShape;
   locationApprox?: boolean;
-  description: { uk: string | null; en: string | null };
-  wikipedia: { uk: string | null; en: string | null };
-  photo: { src: string; creator: string; pageUrl: string; license: string; licenseUrl: string } | null;
+  description?: { uk: string | null; en: string | null };
+  wikipedia?: { uk: string | null; en: string | null };
+  photo?: { src: string; creator: string; pageUrl: string; license: string; licenseUrl: string } | null;
 };
 
 const WATER_TYPES: Record<WaterBodyType, { uk: string; en: string; tone: SpotTone }> = {
@@ -66,7 +70,7 @@ function describeFromFacts(type: WaterBodyType, facts: FishingSpotFacts | undefi
 }
 
 /** Builds the app-level spot from an open-data catalog record. */
-export type CatalogExtras = { facts?: FishingSpotFacts; fish?: string[] };
+export type CatalogExtras = { facts?: FishingSpotFacts; fish?: string[]; accessCategory?: CatalogDetails["accessCategory"] };
 
 export function buildFishingSpot(
   base: CatalogBase,
@@ -100,21 +104,25 @@ export function buildFishingSpot(
     facts,
     shape: details?.shape,
     locationApprox: details ? details.locationApprox : undefined,
-    fishSourceUrl: details?.fish?.length ? (details.wikipedia.uk ?? undefined) : undefined,
-    description: details?.description.uk ?? describeFromFacts(base.type, facts, "uk"),
+    fishSourceUrl: details?.fish?.length ? (details.wikipedia?.uk ?? undefined) : undefined,
+    description: details?.description?.uk ?? describeFromFacts(base.type, facts, "uk"),
     access: "Умови доступу не перевірені",
-    accessCategory: "unknown",
+    accessCategory: details?.accessCategory ?? extras?.accessCategory ?? "unknown",
     verificationStatus: "verified",
     verifiedAt: importedAt,
     updatedAt: importedAt,
-    sourceUrl: details ? `https://www.wikidata.org/wiki/${details.qid}` : undefined,
-    descriptionSourceUrl: details?.description.uk ? (details.wikipedia.uk ?? undefined) : undefined,
+    sourceUrl: details?.osm
+      ? `https://www.openstreetmap.org/${details.osm}`
+      : details?.qid
+        ? `https://www.wikidata.org/wiki/${details.qid}`
+        : undefined,
+    descriptionSourceUrl: details?.description?.uk ? (details.wikipedia?.uk ?? undefined) : undefined,
     photos: photo ? [photo] : undefined,
     tone: type.tone,
     translations: {
       en: {
         access: "Access conditions unverified",
-        description: details?.description.en ?? describeFromFacts(base.type, facts, "en") ?? "",
+        description: details?.description?.en ?? describeFromFacts(base.type, facts, "en") ?? "",
         fish: fishNames.map((name) => FISH_EN[name] ?? name),
         name: base.name.en ?? base.name.uk,
         region: base.region.en,

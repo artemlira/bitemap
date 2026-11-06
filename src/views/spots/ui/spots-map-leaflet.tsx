@@ -13,11 +13,21 @@ const clusterCellSize = 56;
 
 type SpotCluster = { key: string; latitude: number; longitude: number; spots: MapSpot[] };
 
-function ClusterZoom({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
+function ClusterZoom({
+  onZoomChange,
+  onBoundsChange,
+}: {
+  onZoomChange: (zoom: number) => void;
+  onBoundsChange?: (bounds: { south: number; west: number; north: number; east: number }) => void;
+}) {
   const map = useMap();
   useMapEvents({
     zoomend: () => onZoomChange(map.getZoom()),
-    moveend: () => onZoomChange(map.getZoom()),
+    moveend: () => {
+      onZoomChange(map.getZoom());
+      const bounds = map.getBounds();
+      onBoundsChange?.({ south: bounds.getSouth(), west: bounds.getWest(), north: bounds.getNorth(), east: bounds.getEast() });
+    },
   });
 
   return null;
@@ -70,7 +80,15 @@ function FitSpots({ spots, refreshKey }: { spots: readonly MapSpot[]; refreshKey
   return null;
 }
 
-export function SpotsMapLeaflet({ spots, refreshKey }: { spots: readonly MapSpot[]; refreshKey?: string }) {
+export function SpotsMapLeaflet({
+  spots,
+  refreshKey,
+  onBoundsChange,
+}: {
+  spots: readonly MapSpot[];
+  refreshKey?: string;
+  onBoundsChange?: (bounds: { south: number; west: number; north: number; east: number }) => void;
+}) {
   const t = useTranslations("spots");
   const [zoom, setZoom] = useState(6);
   const clusters = useMemo(() => clusterSpots(spots, zoom), [spots, zoom]);
@@ -82,7 +100,7 @@ export function SpotsMapLeaflet({ spots, refreshKey }: { spots: readonly MapSpot
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <FitSpots spots={spots} refreshKey={refreshKey} />
-      <ClusterZoom onZoomChange={setZoom} />
+      <ClusterZoom onZoomChange={setZoom} onBoundsChange={onBoundsChange} />
       {clusters.map((cluster) => (
         <Marker
           key={cluster.key}

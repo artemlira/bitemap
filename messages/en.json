@@ -130,7 +130,12 @@
     "viewMap": "Map",
     "filters": "Filters",
     "unitKm": "km",
-    "unitKm2": "km²"
+    "unitKm2": "km²",
+    "nearMe": "Near me",
+    "locating": "Locating you…",
+    "onlyOnMap": "Only on the map",
+    "locationDenied": "Could not get your location. Allow location access in the browser and try again.",
+    "distanceAway": "{km} km away"
   },
   "auth": {
     "login": {
