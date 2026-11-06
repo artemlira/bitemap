@@ -122,7 +122,7 @@ export function ActivityFeedPage() {
           <div className={styles.empty}><p className={styles.sectionLabel}>{t("emptyEyebrow")}</p><h3>{t("emptyTitle")}</h3><p>{t("emptyText")}</p><Link href="/community">{t("findAnglers")}</Link></div>
         ) : null}
         {user && !isLoading && !hasError && activities.length > 0 ? (
-          <ol className={styles.list} aria-label={t("listLabel")}>
+          <ol className={styles.list} aria-label={t("listLabel")} data-stagger>
             {activities.map((activity) => <li key={activity.id}><ActivityItem activity={activity} /></li>)}
           </ol>
         ) : null}

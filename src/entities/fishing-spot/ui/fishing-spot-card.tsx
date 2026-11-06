@@ -45,7 +45,7 @@ export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
             {" · "}
             <a href={spot.photos[0].licenseUrl} target="_blank" rel="noreferrer">{spot.photos[0].license}</a>
           </figcaption>
-        ) : <figcaption className={styles.photoCredit}>{t("photoMissing")}</figcaption>}
+        ) : null}
       </figure>
 
       <div className={styles.content}>

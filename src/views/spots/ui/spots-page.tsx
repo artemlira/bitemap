@@ -157,7 +157,7 @@ export function SpotsPage({ initialFilters }: SpotsPageProps) {
         {catalogError ? <p className={styles.error} role="alert">{t("catalogLoadError")}</p> : null}
 
         {filteredSpots.length > 0 ? (
-          <div className={styles.grid}>
+          <div className={styles.grid} data-stagger>
             {filteredSpots.slice(0, visibleCount).map((entry) => (
               entry.kind === "catalog" ? (
                 <FishingSpotCard key={`catalog-${entry.spot.id}`} spot={entry.spot} href={`/spots/${entry.spot.slug}`} />

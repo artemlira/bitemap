@@ -94,7 +94,9 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  background: var(--color-water-deep);
+  background:
+    repeating-radial-gradient(circle at 82% 18%, transparent 0 16px, rgb(143 232 216 / 16%) 16px 17px),
+    linear-gradient(160deg, #031017, #06303a);
 }
 
 .visual[data-no-photo="true"] .photoCredit {

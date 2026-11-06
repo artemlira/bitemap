@@ -1,0 +1,138 @@
+// Motion system: CSS only, GPU-friendly properties (opacity and transform), and nothing
+// runs for people who ask for reduced motion.
+
+@keyframes motion-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes motion-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes motion-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.35);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+body {
+  transition: background-color 320ms ease, color 320ms ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  // `backwards` fill (not `both`) keeps hover transforms on cards working after the entrance.
+  // Orchestrated entrance for page heroes: children arrive one after another.
+  [data-page-hero] {
+    animation: none;
+  }
+
+  [data-page-hero] > * {
+    animation: motion-rise 720ms var(--ease-out) backwards;
+  }
+
+  @for $i from 1 through 6 {
+    [data-page-hero] > :nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 90 + 120}ms;
+    }
+  }
+
+  // Lists of cards: items rise into place as they enter the viewport.
+  [data-stagger] > * {
+    animation: motion-rise 640ms var(--ease-out) backwards;
+  }
+
+  @for $i from 1 through 9 {
+    [data-stagger] > :nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 60}ms;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    [data-stagger] > * {
+      animation: motion-rise linear backwards;
+      animation-delay: 0ms;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+
+  // Reading progress bar tied to the page scroll (no JavaScript).
+  @supports (animation-timeline: scroll()) {
+    body::before {
+      position: fixed;
+      z-index: 50;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-sonar), var(--color-sun));
+      content: "";
+      pointer-events: none;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: motion-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  // Loading placeholders get a soft moving highlight.
+  [aria-busy="true"] {
+    position: relative;
+    overflow: hidden;
+    background-color: color-mix(in srgb, var(--color-water) 10%, var(--color-surface));
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 28%) 50%, transparent 70%);
+      content: "";
+      transform: translateX(-100%);
+      animation: motion-shimmer 1.4s ease-in-out infinite;
+    }
+  }
+
+  // Saving a spot gives the heart a quick pulse.
+  button[aria-pressed="true"] > span[aria-hidden="true"] {
+    display: inline-block;
+    animation: motion-pop 420ms var(--ease-out);
+  }
+
+  // Pressed feedback for every control that looks like a button or pill.
+  button:not(:disabled):active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes motion-progress {
+  to {
+    transform: scaleX(1);
+  }
+}

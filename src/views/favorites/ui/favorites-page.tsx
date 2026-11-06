@@ -64,7 +64,7 @@ export function FavoritesPage() {
             {t("loadingList")}
           </div>
         ) : favoriteSpots.length > 0 ? (
-          <div className={styles.grid}>
+          <div className={styles.grid} data-stagger>
             {favoriteSpots.map((spot) => (
               <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
             ))}

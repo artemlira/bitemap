@@ -60,7 +60,7 @@ export function HomePage() {
         </Reveal>
 
         <Reveal delay={90}>
-          <div className={styles.spotGrid}>
+          <div className={styles.spotGrid} data-stagger>
             {getFeaturedFishingSpots().map((spot) => (
               <FishingSpotCard key={spot.id} spot={spot} href={`/spots/${spot.slug}`} />
             ))}

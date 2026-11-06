@@ -216,3 +216,28 @@
     max-width: 8rem;
   }
 }
+
+// Navigation links draw an underline from the left on hover and focus.
+.navigation a {
+  position: relative;
+  padding-block: 0.25rem;
+
+  &::after {
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-sonar, #8fe8d8);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 280ms var(--ease-out);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
