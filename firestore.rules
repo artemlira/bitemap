@@ -78,12 +78,16 @@ service cloud.firestore {
         && data.fish is list
         && data.fish.size() > 0
         && data.fish.size() <= 12
+        && data.fish.toSet().size() == data.fish.size()
         && data.fish.hasOnly(['Щука', 'Короп', 'Сазан', 'Лящ', 'Плітка', 'Окунь', 'Судак', 'Сом', 'Карась', 'Лин', 'Жерех', 'Голавль', 'Краснопірка', 'Білий амур', 'Товстолоб', 'Форель', 'Харіус', 'Марена', 'Уклея', 'Йорж', 'В'юн', 'Бичок', 'Осетер', 'Вугор', 'Підуст', 'Чехоня', 'Білизна', 'Гольян', 'Лосось', 'Кефаль', 'Бабець', 'Пічкур', 'Скумбрія', 'Тарань'])
         && data.updatedAt == request.time;
     }
 
     match /spot-fish-votes/{voteId} {
-      allow read: if true;
+      // Reports are public like fishing reports (author and water are already public there), but
+      // list queries must be bounded so the collection cannot be scraped in one request.
+      allow get: if true;
+      allow list: if request.query.limit <= 500;
       allow create, update: if validFishVote(voteId);
       allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }

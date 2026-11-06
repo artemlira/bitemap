@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, limit, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 import { useAuth } from "@/shared/lib/auth";
 
@@ -22,14 +22,14 @@ export function useFishVotes(spotId: string) {
 
     async function loadVotes() {
       try {
-        const snapshot = await getDocs(query(collection(getFirebaseFirestore(), "spot-fish-votes"), where("spotId", "==", spotId)));
+        const snapshot = await getDocs(query(collection(getFirebaseFirestore(), "spot-fish-votes"), where("spotId", "==", spotId), limit(500)));
         const totals = new Map<string, number>();
         let mine: string[] = [];
 
         for (const entry of snapshot.docs) {
           const data = entry.data();
           const fish = Array.isArray(data.fish) ? (data.fish as string[]) : [];
-          for (const name of fish) totals.set(name, (totals.get(name) ?? 0) + 1);
+          for (const name of new Set(fish)) totals.set(name, (totals.get(name) ?? 0) + 1);
           if (data.userId === userId) mine = fish;
         }
 
