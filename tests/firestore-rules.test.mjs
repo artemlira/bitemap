@@ -5,7 +5,7 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from "@firebase/rules-unit-testing";
-import { doc, getDoc, getDocs, collection, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, limit, query, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 
 const projectId = "demo-bitemap";
 const testUser = { uid: "angler-1" };
@@ -201,11 +201,13 @@ test("fish reports are public to read, bound to the signed-in angler and limited
 
   await assertFails(setDoc(doc(anonymous, `spot-fish-votes/lake-1__${testUser.uid}`), vote()));
   await assertSucceeds(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote()));
-  await assertSucceeds(getDocs(collection(anonymous, "spot-fish-votes")));
+  await assertFails(getDocs(collection(anonymous, "spot-fish-votes")));
+  await assertSucceeds(getDocs(query(collection(anonymous, "spot-fish-votes"), limit(50))));
 
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${otherUser.uid}`), vote({ userId: otherUser.uid })));
   await assertFails(setDoc(doc(angler, "spot-fish-votes/wrong-id"), vote()));
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["Дракон"] })));
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: [] })));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["Щука", "Щука"] })));
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ extra: true })));
 });
