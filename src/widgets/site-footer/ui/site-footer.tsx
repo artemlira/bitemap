@@ -16,6 +16,7 @@ export async function SiteFooter() {
 
   const links = [
     { href: "/spots", label: nav("spots") },
+    { href: "/regions", label: nav("regions") },
     { href: "/community", label: nav("community") },
     { href: "/articles", label: nav("articles") },
     { href: "/#how-it-works", label: nav("howItWorks") },

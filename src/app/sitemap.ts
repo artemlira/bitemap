@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { fishingArticles } from "@/entities/fishing-article";
-import { getAllFishingSpotSlugs } from "@/entities/fishing-spot/server";
+import { getAllFishingSpotSlugs, getRegions } from "@/entities/fishing-spot/server";
 import { isSearchIndexingEnabled } from "@/shared/lib/seo";
 
 const siteUrl = "https://bitemap.artemlira.com";
@@ -42,6 +42,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
           },
         },
         changeFrequency: "monthly",
+        priority: 0.7,
+      });
+    }
+
+    for (const region of getRegions()) {
+      entries.push({
+        url: `${siteUrl}/${locale}/regions/${region.slug}`,
+        alternates: {
+          languages: {
+            uk: `${siteUrl}/uk/regions/${region.slug}`,
+            en: `${siteUrl}/en/regions/${region.slug}`,
+            "x-default": `${siteUrl}/uk/regions/${region.slug}`,
+          },
+        },
+        changeFrequency: "weekly",
         priority: 0.7,
       });
     }

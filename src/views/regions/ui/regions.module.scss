@@ -1,0 +1,170 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.page {
+  min-height: 100vh;
+}
+
+.hero {
+  color: #f5fbf8;
+}
+
+.heroContent,
+.content {
+  @include container;
+}
+
+.heroContent {
+  max-width: 860px;
+  padding-top: clamp($space-48, 8vw, 6rem);
+
+  p {
+    max-width: 38rem;
+    margin-top: $space-16;
+    color: rgb(245 251 248 / 78%);
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.eyebrow {
+  margin-top: 0;
+}
+
+.content {
+  padding-block: clamp($space-48, 7vw, $space-96) 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: $space-16;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0));
+  transition: transform 260ms var(--ease-out), border-color 200ms ease, box-shadow 260ms ease;
+
+  strong {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  @include hover {
+    --lift: -4px;
+
+    border-color: var(--color-sonar);
+    box-shadow: 0 16px 40px rgb(20 163 141 / 16%);
+  }
+}
+
+// A bar that fills to the region's share of the largest region.
+.bar {
+  display: block;
+  height: 4px;
+  margin-top: 0.6rem;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--color-line);
+
+  &::after {
+    display: block;
+    width: var(--fill);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-sonar), var(--color-sun));
+    content: "";
+    transform-origin: left;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: bar-grow 900ms var(--ease-out) backwards;
+    }
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-16 $space-32;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    gap: 0.2rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-sun);
+  }
+
+  strong {
+    font-family: var(--font-display), sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  span {
+    color: var(--color-muted);
+  }
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: $space-24;
+  margin-top: clamp($space-48, 6vw, $space-64);
+}
+
+.allLink {
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--color-water);
+  color: var(--color-water);
+  font-weight: 700;
+}
+
+.spots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: $space-20;
+  margin-top: $space-24;
+}
+
+@include media-max(phone) {
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
