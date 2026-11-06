@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Onest, Unbounded } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "@/shared/lib/auth";
@@ -8,9 +8,14 @@ import { ThemeProvider } from "@/shared/lib/theme";
 import { PublicProfileSynchronizer } from "@/entities/user";
 import "@/app/styles/main.scss";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const bodyFont = Onest({
+  variable: "--font-body",
+  subsets: ["latin", "cyrillic"],
+});
+
+const displayFont = Unbounded({
+  variable: "--font-display",
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +40,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale}
-      className={geistSans.variable}
+      className={`${bodyFont.variable} ${displayFont.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

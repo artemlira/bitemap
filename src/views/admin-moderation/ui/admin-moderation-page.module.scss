@@ -2,7 +2,7 @@
 @use "../../../shared/styles/abstracts/variables" as *;
 
 .page { min-height: 100vh; }
-.hero { overflow: hidden; border-radius: 0 0 $radius-xl $radius-xl; background: linear-gradient(145deg, var(--color-water-deep), var(--color-water)); color: #fffdf8; }
+.hero { overflow: hidden; border-radius: 0 0 $radius-xl $radius-xl; background: linear-gradient(160deg, #031017 10%, #06303a 100%); color: #fffdf8; }
 .heroContent,
 .content { @include container; }
 .heroContent { padding-block: clamp($space-48, 8vw, $space-96); }

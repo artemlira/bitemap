@@ -20,9 +20,10 @@
 
 .logo {
   color: #fffdf8;
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.08em;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
 
   span {
     color: var(--color-sun);
