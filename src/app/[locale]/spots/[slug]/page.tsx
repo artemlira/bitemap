@@ -10,9 +10,9 @@ export async function generateMetadata(
   const { locale, slug } = await props.params;
   const spot = getFishingSpotBySlug(slug);
 
-  if (!spot) return { title: "Pleso" };
+  if (!spot) return { title: "Rybomapa" };
 
-  const title = `${getFishingSpotText(spot, "name", locale)} — Pleso`;
+  const title = `${getFishingSpotText(spot, "name", locale)} — Rybomapa`;
   const description = [getFishingSpotText(spot, "waterType", locale), getFishingSpotText(spot, "region", locale), getFishingSpotText(spot, "description", locale)].filter(Boolean).join(". ");
   const url = `/${locale}/spots/${slug}`;
 
@@ -31,7 +31,7 @@ export async function generateMetadata(
       title,
       description,
       type: "website",
-      siteName: "Pleso",
+      siteName: "Rybomapa",
       url,
       images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: title }],
     },

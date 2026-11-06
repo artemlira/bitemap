@@ -21,17 +21,17 @@ const displayFont = Unbounded({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bitemap.artemlira.com"),
-  title: "Мапа водойм для риболовлі в Україні — Плесо",
+  title: "Мапа водойм для риболовлі в Україні — Рибомапа",
   description: "Знаходьте водойми, ведіть щоденник уловів і плануйте риболовлю.",
   ...siteRobotsMetadata,
   openGraph: {
     type: "website",
-    siteName: "Pleso",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Плесо — мапа водойм для риболовлі" }],
+    siteName: "Rybomapa",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Рибомапа — мапа водойм для риболовлі" }],
   },
   twitter: {
     card: "summary_large_image",
-    images: [{ url: "/opengraph-image", alt: "Плесо — мапа водойм для риболовлі" }],
+    images: [{ url: "/opengraph-image", alt: "Рибомапа — мапа водойм для риболовлі" }],
   },
 };
 

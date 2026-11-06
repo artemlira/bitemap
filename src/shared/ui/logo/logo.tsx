@@ -4,7 +4,7 @@ type LogoProps = {
   name: string;
 };
 
-/** Mark: a fishing float resting on rings of calm water ("плесо"). */
+/** Mark: a fishing float resting on rings of water. */
 export function Logo({ name }: LogoProps) {
   return (
     <span className={styles.logo}>

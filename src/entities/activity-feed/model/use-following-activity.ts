@@ -62,7 +62,7 @@ export function useFollowingActivity() {
           const data = profile.exists() ? profile.data() : {};
           return [id, {
             id,
-            name: typeof data.displayName === "string" && data.displayName.trim() ? data.displayName : "Pleso angler",
+            name: typeof data.displayName === "string" && data.displayName.trim() ? data.displayName : "Rybomapa angler",
             photoURL: typeof data.photoURL === "string" ? data.photoURL : null,
           }];
         }));
