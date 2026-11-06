@@ -194,7 +194,7 @@ test("fish reports are public to read, bound to the signed-in angler and limited
   const vote = (overrides = {}) => ({
     spotId: "lake-1",
     userId: testUser.uid,
-    fish: ["Щука", "Короп"],
+    fish: ["pike", "carp"],
     updatedAt: serverTimestamp(),
     ...overrides,
   });
@@ -206,8 +206,8 @@ test("fish reports are public to read, bound to the signed-in angler and limited
 
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${otherUser.uid}`), vote({ userId: otherUser.uid })));
   await assertFails(setDoc(doc(angler, "spot-fish-votes/wrong-id"), vote()));
-  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["Дракон"] })));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["dragon"] })));
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: [] })));
-  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["Щука", "Щука"] })));
+  await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ fish: ["pike", "pike"] })));
   await assertFails(setDoc(doc(angler, `spot-fish-votes/lake-1__${testUser.uid}`), vote({ extra: true })));
 });

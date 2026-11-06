@@ -9,8 +9,50 @@ export const FISH_EN: Record<string, string> = {
   "Кефаль": "Mullet", "Бабець": "Bullhead", "Пічкур": "Gudgeon", "Скумбрія": "Mackerel", "Тарань": "Dried roach",
 };
 
-export const FISH_SPECIES = Object.keys(FISH_EN);
+// Votes store ASCII codes (Firestore rules cannot contain Cyrillic string literals).
+export const FISH_CODES: Record<string, string> = {
+  "Щука": "pike",
+  "Короп": "carp",
+  "Сазан": "wild-carp",
+  "Лящ": "bream",
+  "Плітка": "roach",
+  "Окунь": "perch",
+  "Судак": "zander",
+  "Сом": "catfish",
+  "Карась": "crucian",
+  "Лин": "tench",
+  "Жерех": "asp",
+  "Голавль": "chub",
+  "Краснопірка": "rudd",
+  "Білий амур": "grass-carp",
+  "Товстолоб": "silver-carp",
+  "Форель": "trout",
+  "Харіус": "grayling",
+  "Марена": "barbel",
+  "Уклея": "bleak",
+  "Йорж": "ruffe",
+  "В'юн": "weatherfish",
+  "Бичок": "goby",
+  "Осетер": "sturgeon",
+  "Вугор": "eel",
+  "Підуст": "nase",
+  "Чехоня": "sabrefish",
+  "Білизна": "white-asp",
+  "Гольян": "minnow",
+  "Лосось": "salmon",
+  "Кефаль": "mullet",
+  "Бабець": "bullhead",
+  "Пічкур": "gudgeon",
+  "Скумбрія": "mackerel",
+  "Тарань": "taran",
+};
 
-export function getFishLabel(name: string, locale: string) {
+export const FISH_SPECIES = Object.values(FISH_CODES);
+
+const NAME_BY_CODE = Object.fromEntries(Object.entries(FISH_CODES).map(([name, code]) => [code, name]));
+
+/** Display label for a stored species code (falls back to the code). */
+export function getFishLabel(code: string, locale: string) {
+  const name = NAME_BY_CODE[code] ?? code;
   return locale === "en" ? (FISH_EN[name] ?? name) : name;
 }
