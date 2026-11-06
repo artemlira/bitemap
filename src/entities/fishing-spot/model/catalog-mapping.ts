@@ -1,4 +1,4 @@
-import type { FishingSpot, FishingSpotPhoto, SpotTone } from "./types";
+import type { FishingSpot, FishingSpotFacts, FishingSpotPhoto, SpotTone } from "./types";
 
 export type WaterBodyType = "lake" | "reservoir" | "river" | "canal" | "pond";
 
@@ -13,6 +13,8 @@ export type CatalogBase = {
 
 export type CatalogDetails = {
   qid: string;
+  facts?: FishingSpotFacts;
+  fish?: string[];
   description: { uk: string | null; en: string | null };
   wikipedia: { uk: string | null; en: string | null };
   photo: { src: string; creator: string; pageUrl: string; license: string; licenseUrl: string } | null;
@@ -27,6 +29,39 @@ const WATER_TYPES: Record<WaterBodyType, { uk: string; en: string; tone: SpotTon
 };
 
 export const catalogWaterTypes = WATER_TYPES;
+
+const FISH_EN: Record<string, string> = {
+  "Щука": "Pike", "Короп": "Carp", "Сазан": "Wild carp", "Лящ": "Bream", "Плітка": "Roach", "Окунь": "Perch",
+  "Судак": "Zander", "Сом": "Catfish", "Карась": "Crucian carp", "Лин": "Tench", "Жерех": "Asp", "Голавль": "Chub",
+  "Краснопірка": "Rudd", "Білий амур": "Grass carp", "Товстолоб": "Silver carp", "Форель": "Trout", "Харіус": "Grayling",
+  "Марена": "Barbel", "Уклея": "Bleak", "Йорж": "Ruffe", "В'юн": "Weatherfish", "Бичок": "Goby", "Осетер": "Sturgeon",
+  "Вугор": "Eel", "Підуст": "Nase", "Чехоня": "Sabrefish", "Білизна": "Asp (white)", "Гольян": "Minnow", "Лосось": "Salmon",
+  "Кефаль": "Mullet", "Бабець": "Bullhead", "Пічкур": "Gudgeon", "Скумбрія": "Mackerel", "Тарань": "Dried roach",
+};
+
+const num = (value: number) => value.toLocaleString("uk-UA", { maximumFractionDigits: 1 });
+const numEn = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 1 });
+
+/** A plain sentence built only from known facts, used when no article text exists. */
+function describeFromFacts(type: WaterBodyType, facts: FishingSpotFacts | undefined, lang: "uk" | "en"): string {
+  const label = WATER_TYPES[type][lang];
+  if (!facts) return "";
+  const parts: string[] = [];
+  if (lang === "uk") {
+    if (facts.lengthKm) parts.push(`завдовжки ${num(facts.lengthKm)} км`);
+    if (facts.areaKm2) parts.push(`площею ${num(facts.areaKm2)} км²`);
+    if (facts.maxDepthM) parts.push(`із максимальною глибиною ${num(facts.maxDepthM)} м`);
+    if (facts.basin) parts.push(`у басейні: ${facts.basin.uk}`);
+    if (facts.flowsInto) parts.push(`впадає в: ${facts.flowsInto.uk}`);
+  } else {
+    if (facts.lengthKm) parts.push(`${numEn(facts.lengthKm)} km long`);
+    if (facts.areaKm2) parts.push(`covering ${numEn(facts.areaKm2)} km²`);
+    if (facts.maxDepthM) parts.push(`up to ${numEn(facts.maxDepthM)} m deep`);
+    if (facts.basin) parts.push(`in the ${facts.basin.en} basin`);
+    if (facts.flowsInto) parts.push(`flowing into ${facts.flowsInto.en}`);
+  }
+  return parts.length ? `${label}, ${parts.join(", ")}.` : "";
+}
 
 /** Builds the app-level spot from an open-data catalog record. */
 export function buildFishingSpot(
@@ -54,8 +89,10 @@ export function buildFishingSpot(
     waterType: type.uk,
     latitude: base.latitude,
     longitude: base.longitude,
-    fish: [],
-    description: details?.description.uk ?? "",
+    fish: details?.fish ?? [],
+    facts: details?.facts,
+    fishSourceUrl: details?.fish?.length ? (details.wikipedia.uk ?? undefined) : undefined,
+    description: details?.description.uk ?? describeFromFacts(base.type, details?.facts, "uk"),
     access: "Умови доступу не перевірені",
     accessCategory: "unknown",
     verificationStatus: "verified",
@@ -68,8 +105,8 @@ export function buildFishingSpot(
     translations: {
       en: {
         access: "Access conditions unverified",
-        description: details?.description.en ?? details?.description.uk ?? "",
-        fish: [],
+        description: details?.description.en ?? describeFromFacts(base.type, details?.facts, "en") ?? "",
+        fish: (details?.fish ?? []).map((name) => FISH_EN[name] ?? name),
         name: base.name.en ?? base.name.uk,
         region: base.region.en,
         waterType: type.en,

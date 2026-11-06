@@ -19,7 +19,23 @@ export type FishingSpotEnglishTranslation = {
   waterType: string;
 };
 
+export type LocalizedPair = { uk: string; en: string };
+
+/** Open-data facts (Wikidata). Every field is optional: show only what is known. */
+export type FishingSpotFacts = {
+  lengthKm?: number;
+  areaKm2?: number;
+  maxDepthM?: number;
+  elevationM?: number;
+  basin?: LocalizedPair;
+  flowsInto?: LocalizedPair;
+  district?: LocalizedPair;
+};
+
 export type FishingSpot = {
+  facts?: FishingSpotFacts;
+  /** Article that names the listed fish (Wikipedia). */
+  fishSourceUrl?: string;
   accessCategory?: "free" | "paid" | "restricted" | "unknown";
   verificationStatus?: "verified" | "unverified";
   /** ISO date (YYYY-MM-DD) when this catalog record was last edited. */

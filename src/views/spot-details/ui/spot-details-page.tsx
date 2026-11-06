@@ -2,7 +2,8 @@
 
 import { Link } from "@/shared/lib/i18n";
 import Image from "next/image";
-import { getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
+import { catalogWaterTypes, getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
+import type { NearbySpot } from "@/entities/fishing-spot/server";
 import { SpotImageGallery } from "@/entities/spot-image";
 import { SpotLocationPanel } from "@/entities/spot-location";
 import { useLocale, useTranslations } from "next-intl";
@@ -18,11 +19,28 @@ import styles from "./spot-details-page.module.scss";
 
 type SpotDetailsPageProps = {
   spot: FishingSpot;
+  nearby?: readonly NearbySpot[];
 };
 
-export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
+export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
   const locale = useLocale();
   const t = useTranslations("spotDetails");
+  const lang = locale === "en" ? "en" : "uk";
+  const facts = spot.facts;
+  const factTiles = [
+    { label: t("waterType"), value: getFishingSpotText(spot, "waterType", locale) },
+    { label: t("region"), value: getFishingSpotText(spot, "region", locale) },
+    facts?.district ? { label: t("factDistrict"), value: facts.district[lang] } : null,
+    facts?.lengthKm ? { label: t("factLength"), value: t("unitKm", { value: facts.lengthKm.toLocaleString(locale) }) } : null,
+    facts?.areaKm2 ? { label: t("factArea"), value: t("unitKm2", { value: facts.areaKm2.toLocaleString(locale) }) } : null,
+    facts?.maxDepthM ? { label: t("factDepth"), value: t("unitM", { value: facts.maxDepthM.toLocaleString(locale) }) } : null,
+    facts?.elevationM ? { label: t("factElevation"), value: t("unitM", { value: facts.elevationM.toLocaleString(locale) }) } : null,
+    facts?.basin ? { label: t("factBasin"), value: facts.basin[lang] } : null,
+    facts?.flowsInto ? { label: t("factFlowsInto"), value: facts.flowsInto[lang] } : null,
+    { label: t("access"), value: t("accessUnknown") },
+  ].filter((tile): tile is { label: string; value: string } => tile !== null);
+  const fish = getFishingSpotFish(spot, locale);
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -75,18 +93,12 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
         </div>
 
         <dl className={styles.facts} data-stagger>
-          <div>
-            <dt>{t("waterType")}</dt>
-            <dd>{getFishingSpotText(spot, "waterType", locale)}</dd>
-          </div>
-          <div>
-            <dt>{t("region")}</dt>
-            <dd>{getFishingSpotText(spot, "region", locale)}</dd>
-          </div>
-          <div>
-            <dt>{t("access")}</dt>
-            <dd>{t("accessUnknown")}</dd>
-          </div>
+          {factTiles.map((tile) => (
+            <div key={tile.label}>
+              <dt>{tile.label}</dt>
+              <dd>{tile.value}</dd>
+            </div>
+          ))}
         </dl>
         <p className={styles.dataStatus}>
           {spot.verificationStatus === "verified" ? t("verificationVerified") : t("verificationUnverified")}
@@ -134,14 +146,54 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <div>
             <p className={styles.sectionLabel}>{t("fishEyebrow")}</p>
             <h2>{t("fishTitle")}</h2>
-            <p className={styles.fishSourceNote}>{t("fishSourceNote")}</p>
+            {fish.length > 0 ? (
+              <p className={styles.fishSourceNote}>
+                {t("fishFromArticle")}
+                {spot.fishSourceUrl ? (
+                  <>
+                    {" "}
+                    <a href={spot.fishSourceUrl} target="_blank" rel="noreferrer">{t("sourceLink")}</a>
+                  </>
+                ) : null}
+              </p>
+            ) : null}
           </div>
-          <ul className={styles.fishList} aria-label={t("fishList")}>
-            {getFishingSpotFish(spot, locale).length ? getFishingSpotFish(spot, locale).map((fish) => (
-              <li key={fish}>{fish}</li>
-            )) : <li>{t("fishUnverified")}</li>}
-          </ul>
+          {fish.length > 0 ? (
+            <ul className={styles.fishList} aria-label={t("fishList")} data-stagger>
+              {fish.map((name) => (
+                <li key={name}>{name}</li>
+              ))}
+            </ul>
+          ) : (
+            <div className={styles.fishEmpty}>
+              <h3>{t("fishEmptyTitle")}</h3>
+              <p>{t("fishEmptyText")}</p>
+              <a href="#spot-reports" data-ripple>{t("fishEmptyAction")}</a>
+            </div>
+          )}
         </div>
+
+        {nearby.length > 0 ? (
+          <section className={styles.nearby} aria-labelledby="nearby-title">
+            <div className={styles.sectionHeading}>
+              <p className={styles.sectionLabel}>{t("nearbyEyebrow")}</p>
+              <h2 id="nearby-title">{t("nearbyTitle")}</h2>
+            </div>
+            <ul className={styles.nearbyList} data-stagger>
+              {nearby.map((item) => (
+                <li key={item.id}>
+                  <Link href={`/spots/${item.id}`} data-tilt>
+                    <strong>{item.name[lang]}</strong>
+                    <span>
+                      {catalogWaterTypes[item.type as keyof typeof catalogWaterTypes]?.[lang]} · {item.region[lang]}
+                    </span>
+                    <em>{t("nearbyDistance", { km: item.distanceKm })}</em>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <section className={styles.gallery} aria-labelledby="spot-gallery-title">
           <div className={styles.sectionHeading}>
@@ -162,13 +214,13 @@ export function SpotDetailsPage({ spot }: SpotDetailsPageProps) {
           <SpotImageUpload targetType="catalog" targetId={spot.id} />
         </section>
 
-        <SpotReports targetType="catalog" targetId={spot.id} />
+        <div id="spot-reports">
+          <SpotReports targetType="catalog" targetId={spot.id} />
+        </div>
 
         <aside className={styles.note}>
-          <p>{t("mvp")}</p>
-          <span>
-            {t("mvpText")}
-          </span>
+          <p>{t("sourcesTitle")}</p>
+          <span>{t("sourcesNote")}</span>
         </aside>
       </section>
     </main>

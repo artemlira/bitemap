@@ -25,6 +25,33 @@ export function getFeaturedFishingSpots(): readonly FishingSpot[] {
   });
 }
 
+export type NearbySpot = { id: string; name: { uk: string; en: string }; type: string; region: { uk: string; en: string }; distanceKm: number };
+
+const toRad = (value: number) => (value * Math.PI) / 180;
+
+/** Closest catalog waters to a spot (great-circle distance), without the spot itself. */
+export function getNearbyFishingSpots(slug: string, count = 6): NearbySpot[] {
+  const origin = byId.get(slug);
+  if (!origin) return [];
+  return records
+    .filter((record) => record.id !== slug)
+    .map((record) => {
+      const dLat = toRad(record.latitude - origin.latitude);
+      const dLon = toRad(record.longitude - origin.longitude);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(origin.latitude)) * Math.cos(toRad(record.latitude)) * Math.sin(dLon / 2) ** 2;
+      return { record, distanceKm: 6371 * 2 * Math.asin(Math.sqrt(a)) };
+    })
+    .sort((first, second) => first.distanceKm - second.distanceKm)
+    .slice(0, count)
+    .map(({ record, distanceKm }) => ({
+      id: record.id,
+      name: { uk: record.name.uk, en: record.name.en ?? record.name.uk },
+      type: record.type,
+      region: record.region,
+      distanceKm: Math.round(distanceKm),
+    }));
+}
+
 export function getCatalogStats() {
   return {
     total: records.length,

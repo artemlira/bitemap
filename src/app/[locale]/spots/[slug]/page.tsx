@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFishingSpotText } from "@/entities/fishing-spot";
-import { getFishingSpotBySlug } from "@/entities/fishing-spot/server";
+import { getFishingSpotBySlug, getNearbyFishingSpots } from "@/entities/fishing-spot/server";
 import { SpotDetailsPage } from "@/views/spot-details";
 
 export async function generateMetadata(
@@ -52,5 +52,5 @@ export default async function SpotPage(props: PageProps<"/[locale]/spots/[slug]"
     notFound();
   }
 
-  return <SpotDetailsPage spot={spot} />;
+  return <SpotDetailsPage spot={spot} nearby={getNearbyFishingSpots(slug)} />;
 }
