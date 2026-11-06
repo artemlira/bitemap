@@ -46,7 +46,7 @@ export function UserSpotCard({
       </div>
       <div className={styles.content}>
         <p className={styles.region}>{spot.settlement ? `${spot.region} · ${spot.settlement}` : spot.region}</p>
-        <h2>{getUserSpotText(spot, "name", locale)}</h2>
+        <h3>{getUserSpotText(spot, "name", locale)}</h3>
         {showVisibility ? <p className={styles.visibility}>{spot.visibility === "published" ? t("published") : t("private")}</p> : null}
         <p className={styles.description}>{getUserSpotText(spot, "description", locale)}</p>
         <p className={styles.fish}>{getUserSpotFish(spot, locale).join(" · ")}</p>

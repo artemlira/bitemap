@@ -47,10 +47,12 @@ function clusterSpots(spots: readonly MapSpot[], zoom: number): SpotCluster[] {
   }));
 }
 
-function FitSpots({ spots }: { spots: readonly MapSpot[] }) {
+function FitSpots({ spots, refreshKey }: { spots: readonly MapSpot[]; refreshKey?: string }) {
   const map = useMap();
 
   useEffect(() => {
+    // Re-measure when the pane becomes visible (mobile list/map toggle), then fit the results.
+    map.invalidateSize();
     if (spots.length === 0) {
       map.setView(ukraineCenter, 6);
       return;
@@ -63,12 +65,12 @@ function FitSpots({ spots }: { spots: readonly MapSpot[] }) {
 
     const bounds = latLngBounds(spots.map(({ latitude, longitude }) => [latitude, longitude]));
     map.fitBounds(bounds, { maxZoom: 9, padding: [32, 32] });
-  }, [map, spots]);
+  }, [map, spots, refreshKey]);
 
   return null;
 }
 
-export function SpotsMapLeaflet({ spots }: { spots: readonly MapSpot[] }) {
+export function SpotsMapLeaflet({ spots, refreshKey }: { spots: readonly MapSpot[]; refreshKey?: string }) {
   const t = useTranslations("spots");
   const [zoom, setZoom] = useState(6);
   const clusters = useMemo(() => clusterSpots(spots, zoom), [spots, zoom]);
@@ -79,7 +81,7 @@ export function SpotsMapLeaflet({ spots }: { spots: readonly MapSpot[] }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <FitSpots spots={spots} />
+      <FitSpots spots={spots} refreshKey={refreshKey} />
       <ClusterZoom onZoomChange={setZoom} />
       {clusters.map((cluster) => (
         <Marker

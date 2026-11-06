@@ -71,7 +71,7 @@ export function FishingSpotCard({ spot, href }: FishingSpotCardProps) {
 
       <div className={styles.content}>
         <p className={styles.region}>{settlement && settlement !== region ? `${region} · ${settlement}` : region}</p>
-        <h2>{title}</h2>
+        <h3>{title}</h3>
         {description ? <p className={styles.description}>{description}</p> : null}
 
         {chips.length > 0 || fish.length > 0 ? (

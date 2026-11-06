@@ -9,11 +9,12 @@ import { useEffect } from "react";
  */
 export function PointerEffects() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     let frame = 0;
 
     function handleMove(event: PointerEvent) {
+      if (reducedMotion.matches) return;
       const target = (event.target as Element | null)?.closest<HTMLElement>("[data-tilt]");
       if (!target) return;
       const { clientX, clientY } = event;
@@ -38,6 +39,7 @@ export function PointerEffects() {
     }
 
     function handleDown(event: PointerEvent) {
+      if (reducedMotion.matches) return;
       const target = (event.target as Element | null)?.closest<HTMLElement>("[data-ripple]");
       if (!target) return;
       const bounds = target.getBoundingClientRect();

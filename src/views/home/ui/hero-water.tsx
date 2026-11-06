@@ -24,7 +24,7 @@ export function HeroWater() {
 
   function spawnRipple(x: number, y: number, large: boolean) {
     const layer = ripplesRef.current;
-    if (!layer) return;
+    if (!layer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (layer.childElementCount > 14) layer.firstElementChild?.remove();
 
     const ripple = document.createElement("span");
@@ -37,7 +37,7 @@ export function HeroWater() {
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
     const scene = sceneRef.current;
-    if (!scene) return;
+    if (!scene || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const bounds = scene.getBoundingClientRect();
     const x = event.clientX - bounds.left;
     const y = event.clientY - bounds.top;

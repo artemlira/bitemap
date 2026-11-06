@@ -88,6 +88,9 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
       menuButtonRef.current?.focus();
     }
 
+    // The menu is portalled to <body>, so move focus into it for keyboard users.
+    document.getElementById("site-header-menu")?.querySelector<HTMLElement>("a")?.focus();
+
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [isMenuOpen]);

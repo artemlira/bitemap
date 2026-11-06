@@ -29,17 +29,17 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
   const lang = locale === "en" ? "en" : "uk";
   const facts = spot.facts;
   const factTiles = [
-    { label: t("waterType"), value: getFishingSpotText(spot, "waterType", locale) },
-    { label: t("region"), value: getFishingSpotText(spot, "region", locale) },
-    facts?.district ? { label: t("factDistrict"), value: facts.district[lang] } : null,
-    facts?.lengthKm ? { label: t("factLength"), value: t("unitKm", { value: facts.lengthKm.toLocaleString(locale) }) } : null,
-    facts?.areaKm2 ? { label: t("factArea"), value: t("unitKm2", { value: facts.areaKm2.toLocaleString(locale) }) } : null,
-    facts?.maxDepthM ? { label: t("factDepth"), value: t("unitM", { value: facts.maxDepthM.toLocaleString(locale) }) } : null,
-    facts?.elevationM ? { label: t("factElevation"), value: t("unitM", { value: facts.elevationM.toLocaleString(locale) }) } : null,
-    facts?.basin ? { label: t("factBasin"), value: facts.basin[lang] } : null,
-    facts?.flowsInto ? { label: t("factFlowsInto"), value: facts.flowsInto[lang] } : null,
-    { label: t("access"), value: t("accessUnknown") },
-  ].filter((tile): tile is { label: string; value: string } => tile !== null);
+    { id: "waterType", label: t("waterType"), value: getFishingSpotText(spot, "waterType", locale) },
+    { id: "region", label: t("region"), value: getFishingSpotText(spot, "region", locale) },
+    facts?.district ? { id: "district", label: t("factDistrict"), value: facts.district[lang] } : null,
+    facts?.lengthKm ? { id: "length", label: t("factLength"), value: t("unitKm", { value: facts.lengthKm.toLocaleString(locale) }) } : null,
+    facts?.areaKm2 ? { id: "area", label: t("factArea"), value: t("unitKm2", { value: facts.areaKm2.toLocaleString(locale) }) } : null,
+    facts?.maxDepthM ? { id: "depth", label: t("factDepth"), value: t("unitM", { value: facts.maxDepthM.toLocaleString(locale) }) } : null,
+    facts?.elevationM ? { id: "elevation", label: t("factElevation"), value: t("unitM", { value: facts.elevationM.toLocaleString(locale) }) } : null,
+    facts?.basin ? { id: "basin", label: t("factBasin"), value: facts.basin[lang] } : null,
+    facts?.flowsInto ? { id: "flowsInto", label: t("factFlowsInto"), value: facts.flowsInto[lang] } : null,
+    { id: "access", label: t("access"), value: t("accessUnknown") },
+  ].filter((tile): tile is { id: string; label: string; value: string } => tile !== null);
   const fish = getFishingSpotFish(spot, locale);
 
   return (
@@ -107,7 +107,7 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
 
         <dl className={styles.facts} data-stagger>
           {factTiles.map((tile) => (
-            <div key={tile.label}>
+            <div key={tile.id}>
               <dt>{tile.label}</dt>
               <dd>{tile.value}</dd>
             </div>

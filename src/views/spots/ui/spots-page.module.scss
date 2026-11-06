@@ -26,8 +26,7 @@
   padding-bottom: clamp($space-64, 11vw, 9rem);
 }
 
-.eyebrow,
-.sectionLabel {
+.eyebrow {
   color: var(--color-sun);
   font-size: 0.75rem;
   font-weight: 800;
@@ -54,20 +53,6 @@
   padding-block: clamp($space-64, 9vw, 8rem);
 }
 
-.catalogHeading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: $space-24;
-}
-
-.catalogHeading h2 {
-  margin-top: $space-12;
-  font-size: clamp(2.3rem, 5vw, 4.5rem);
-  letter-spacing: -0.075em;
-  line-height: 0.95;
-}
-
 .counter {
   flex: none;
   color: var(--color-water);
@@ -82,26 +67,6 @@
   margin-top: $space-32;
 }
 
-.mapSection {
-  display: grid;
-  gap: $space-16;
-  margin-top: $space-32;
-}
-
-.mapHeading {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: $space-16;
-}
-
-.mapHeading h3 {
-  margin-top: $space-8;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  letter-spacing: -0.055em;
-}
-
-.mapHeading > p,
 .mapNote {
   color: var(--color-muted);
   font-size: 0.875rem;
@@ -168,18 +133,8 @@
     border-radius: 0 0 $radius-lg $radius-lg;
   }
 
-  .catalogHeading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .grid {
     grid-template-columns: 1fr;
-  }
-
-  .mapHeading {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 

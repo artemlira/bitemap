@@ -702,3 +702,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    width: auto;
+    flex-wrap: wrap;
+  }
+
+  .marqueeList:nth-child(2) {
+    display: none;
+  }
+
+  .marqueeList {
+    flex-wrap: wrap;
+  }
+}

@@ -115,9 +115,7 @@ export function HomePage() {
       <section className={styles.stats} aria-label={t("statsWater")}>
         {statItems.map((item) => (
           <div key={item.label} className={styles.stat}>
-            <strong className={styles.counter} style={{ "--target": item.value } as React.CSSProperties}>
-              <span className={styles.visuallyHidden}>{item.value}</span>
-            </strong>
+            <strong className={styles.counter} role="img" aria-label={String(item.value)} style={{ "--target": item.value } as React.CSSProperties} />
             <span>{item.label}</span>
           </div>
         ))}
