@@ -40,6 +40,14 @@ const records = dataset.records
   .map((record) => ({ ...record, photo: cleanPhoto(record.photo) }))
   .filter(inUkraine);
 
+// Rank so the default catalog order shows the most useful records first.
+const score = (record) =>
+  (record.photo ? 4 : 0) + (record.description?.uk ? 2 : 0) + (record.fish?.length ? 2 : 0) +
+  (record.facts?.lengthKm || record.facts?.areaKm2 ? 1 : 0) + (record.shape ? 1 : 0) +
+  (["lake", "reservoir"].includes(record.type) ? 1 : 0);
+records.sort((a, b) => score(b) - score(a) || a.name.uk.localeCompare(b.name.uk, "uk"));
+
+const fishNames = [...new Set(records.flatMap((record) => record.fish ?? []))].sort((a, b) => a.localeCompare(b, "uk"));
 const types = ["lake", "reservoir", "river", "canal", "pond"];
 const regions = [];
 const regionIndex = (region) => {
@@ -56,9 +64,12 @@ const items = records.map((record) => [
   regionIndex(record.region),
   record.latitude,
   record.longitude,
+  record.facts?.lengthKm ?? 0,
+  record.facts?.areaKm2 ?? 0,
+  (record.fish ?? []).map((name) => fishNames.indexOf(name)),
 ]);
 
 await writeFile(FULL, `${JSON.stringify({ importedAt: dataset.importedAt, records })}\n`);
 await mkdir(new URL("../public/data/", import.meta.url), { recursive: true });
-await writeFile(INDEX, `${JSON.stringify({ importedAt: dataset.importedAt, types, regions, items })}\n`);
-console.log(`Kept ${records.length} of ${dataset.records.length}; index ${JSON.stringify({ types, regions, items }).length} bytes`);
+await writeFile(INDEX, `${JSON.stringify({ importedAt: dataset.importedAt, types, regions, fishNames, items })}\n`);
+console.log(`Kept ${records.length} of ${dataset.records.length}; index ${JSON.stringify({ types, regions, fishNames, items }).length} bytes`);

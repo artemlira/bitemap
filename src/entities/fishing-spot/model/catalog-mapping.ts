@@ -1,4 +1,4 @@
-import type { FishingSpot, FishingSpotFacts, FishingSpotPhoto, SpotTone } from "./types";
+import type { FishingSpot, FishingSpotFacts, FishingSpotPhoto, FishingSpotShape, SpotTone } from "./types";
 
 export type WaterBodyType = "lake" | "reservoir" | "river" | "canal" | "pond";
 
@@ -15,6 +15,8 @@ export type CatalogDetails = {
   qid: string;
   facts?: FishingSpotFacts;
   fish?: string[];
+  shape?: FishingSpotShape;
+  locationApprox?: boolean;
   description: { uk: string | null; en: string | null };
   wikipedia: { uk: string | null; en: string | null };
   photo: { src: string; creator: string; pageUrl: string; license: string; licenseUrl: string } | null;
@@ -64,11 +66,16 @@ function describeFromFacts(type: WaterBodyType, facts: FishingSpotFacts | undefi
 }
 
 /** Builds the app-level spot from an open-data catalog record. */
+export type CatalogExtras = { facts?: FishingSpotFacts; fish?: string[] };
+
 export function buildFishingSpot(
   base: CatalogBase,
   importedAt: string,
   details?: CatalogDetails,
+  extras?: CatalogExtras,
 ): FishingSpot {
+  const facts = details?.facts ?? extras?.facts;
+  const fishNames = details?.fish ?? extras?.fish ?? [];
   const type = WATER_TYPES[base.type];
   const photo: FishingSpotPhoto | undefined = details?.photo
     ? {
@@ -89,10 +96,12 @@ export function buildFishingSpot(
     waterType: type.uk,
     latitude: base.latitude,
     longitude: base.longitude,
-    fish: details?.fish ?? [],
-    facts: details?.facts,
+    fish: fishNames,
+    facts,
+    shape: details?.shape,
+    locationApprox: details ? details.locationApprox : undefined,
     fishSourceUrl: details?.fish?.length ? (details.wikipedia.uk ?? undefined) : undefined,
-    description: details?.description.uk ?? describeFromFacts(base.type, details?.facts, "uk"),
+    description: details?.description.uk ?? describeFromFacts(base.type, facts, "uk"),
     access: "Умови доступу не перевірені",
     accessCategory: "unknown",
     verificationStatus: "verified",
@@ -105,8 +114,8 @@ export function buildFishingSpot(
     translations: {
       en: {
         access: "Access conditions unverified",
-        description: details?.description.en ?? describeFromFacts(base.type, details?.facts, "en") ?? "",
-        fish: (details?.fish ?? []).map((name) => FISH_EN[name] ?? name),
+        description: details?.description.en ?? describeFromFacts(base.type, facts, "en") ?? "",
+        fish: fishNames.map((name) => FISH_EN[name] ?? name),
         name: base.name.en ?? base.name.uk,
         region: base.region.en,
         waterType: type.en,

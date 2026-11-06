@@ -180,122 +180,285 @@
 }
 
 .stepsSection {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp($space-32, 7vw, $space-96);
+  display: block;
   padding-top: 0;
 }
 
 .stepsIntro {
-  align-self: start;
-  position: sticky;
-  top: $space-48;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: end;
+  gap: clamp($space-24, 6vw, $space-64);
 }
 
 .stepsLead {
-  max-width: 28rem;
-  margin-top: $space-24;
+  max-width: 30rem;
   color: var(--color-muted);
   font-size: 1.05rem;
 }
 
-.timeline {
+// Journey: a wavy line links three steps; it draws itself and lights each node as you scroll.
+.journey {
   position: relative;
-  display: grid;
-  gap: clamp($space-48, 8vw, $space-96);
-  padding-left: $space-64;
-  list-style: none;
+  margin-top: clamp($space-32, 5vw, $space-64);
+}
 
-  // The rail fills as the section scrolls through the viewport (progressive enhancement).
-  &::before,
-  &::after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 1.2rem;
-    width: 2px;
-    border-radius: 2px;
-    content: "";
+.journeyPath {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 7rem;
+  overflow: visible;
+  fill: none;
+  stroke: var(--color-sonar);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+
+  path {
+    vector-effect: non-scaling-stroke;
   }
 
-  &::before {
-    background: var(--color-line);
+  .journeyTrack {
+    stroke: var(--color-line);
+    stroke-dasharray: 2 9;
   }
 
-  &::after {
-    background: linear-gradient(var(--color-sonar), var(--color-sun));
-    transform-origin: top;
-  }
+  .journeyDraw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 6px rgb(94 224 200 / 45%));
 
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      &::after {
-        animation: rail-fill linear both;
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        stroke-dashoffset: 1;
+        animation: journey-draw linear both;
         animation-timeline: view();
-        animation-range: entry 20% cover 70%;
+        animation-range: entry 25% cover 55%;
       }
     }
   }
 }
 
-@keyframes rail-fill {
-  from {
-    transform: scaleY(0);
-  }
-
+@keyframes journey-draw {
   to {
-    transform: scaleY(1);
+    stroke-dashoffset: 0;
   }
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-20;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .step {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 3.4rem $space-24 $space-24;
+  border: 1px solid var(--color-line);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  transition: transform 300ms var(--ease-out), border-color 200ms ease, box-shadow 300ms ease;
+
+  @include hover {
+    border-color: var(--color-sonar);
+    box-shadow: 0 24px 60px rgb(20 163 141 / 16%);
+    transform: translateY(-6px);
+  }
 }
 
-.stepMarker {
+// The node sits on the line (centred above each card) and lights up when reached.
+.stepNode {
   position: absolute;
-  top: 0.15rem;
-  left: -$space-64;
+  top: -1.5rem;
+  left: 50%;
+  z-index: 1;
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -1.5rem;
   border: 2px solid var(--color-sonar);
   border-radius: 50%;
   background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-display), sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: node-light linear both;
+      animation-timeline: view();
+      animation-range: entry 20% entry 90%;
+    }
+  }
+}
+
+@keyframes node-light {
+  from {
+    border-color: var(--color-line);
+    box-shadow: none;
+    color: var(--color-muted);
+    transform: scale(0.8);
+  }
+
+  to {
+    border-color: var(--color-sun);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-sun) 18%, transparent);
+    transform: scale(1);
+  }
+}
+
+.stepIcon {
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: $space-16;
+  overflow: visible;
+  fill: none;
+  stroke: var(--color-water);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+
+  .accent {
+    stroke: var(--color-sun);
+  }
+
+  .fillAccent {
+    fill: var(--color-sun);
+    stroke: none;
+  }
+
+  .fillSonar {
+    fill: color-mix(in srgb, var(--color-sonar) 22%, transparent);
+  }
 }
 
 .stepBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
   h3 {
     font-family: var(--font-display), sans-serif;
-    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.15;
   }
 
   p {
-    max-width: 30rem;
     margin-top: $space-12;
     color: var(--color-muted);
   }
 }
 
 .stepLink {
-  display: inline-block;
-  margin-top: $space-16;
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid var(--color-water);
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: $space-20;
   color: var(--color-water);
   font-weight: 700;
-  transition: border-color 180ms ease;
+
+  span {
+    display: inline-block;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid var(--color-water);
+    transition: border-color 180ms ease;
+  }
 
   @include hover {
-    border-color: var(--color-sun);
+    span {
+      border-color: var(--color-sun);
+    }
+  }
+}
+
+// Small looping motions on the icons.
+@media (prefers-reduced-motion: no-preference) {
+  .pin {
+    animation: pin-bounce 2.4s ease-in-out infinite;
+  }
+
+  .rays {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: rays-turn 18s linear infinite;
+  }
+
+  .jumpFish {
+    animation: fish-jump 4.5s ease-in-out infinite;
+  }
+
+  .splash {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: splash-ring 4.5s ease-out infinite;
+  }
+}
+
+@keyframes pin-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes rays-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fish-jump {
+  0%,
+  55%,
+  100% {
+    transform: translate(0, 8px) rotate(30deg);
+    opacity: 0;
+  }
+
+  65% {
+    transform: translate(0, -4px) rotate(-10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate(6px, -8px) rotate(25deg);
+    opacity: 1;
+  }
+
+  92% {
+    transform: translate(10px, 8px) rotate(70deg);
+    opacity: 0;
+  }
+}
+
+@keyframes splash-ring {
+  0%,
+  88% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  92% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
   }
 }
 
@@ -304,12 +467,21 @@
     grid-template-columns: 1fr;
   }
 
-  .stepsSection {
+  .stepsIntro {
     grid-template-columns: 1fr;
   }
 
-  .stepsIntro {
-    position: static;
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 3.2rem;
+  }
+
+  .journeyPath {
+    display: none;
+  }
+
+  .step {
+    padding-top: 3rem;
   }
 }
 
@@ -331,20 +503,6 @@
     padding-inline: $space-16;
   }
 
-  .timeline {
-    padding-left: $space-48;
-  }
-
-  .stepMarker {
-    left: -$space-48;
-    width: 2.1rem;
-    height: 2.1rem;
-  }
-
-  .timeline::before,
-  .timeline::after {
-    left: 1rem;
-  }
 }
 
 // Scrolling strip of famous waters.

@@ -7,6 +7,47 @@ import { SiteHeader } from "@/widgets/site-header";
 import { HeroWater } from "./hero-water";
 import styles from "./home-page.module.scss";
 
+// Wavy line through the three step nodes (x = 200, 600, 1000 of 1200).
+const JOURNEY_PATH = "M0 70C100 30 160 30 200 60S300 100 400 70 500 30 600 60 700 100 800 70 900 30 1000 60 1100 100 1200 70";
+
+function ExploreIcon() {
+  return (
+    <svg className={styles.stepIcon} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M6 16l16-6 20 6 16-6v38l-16 6-20-6-16 6z" className={styles.fillSonar} />
+      <path d="M22 10v38M42 16v38" />
+      <g className={styles.pin}>
+        <path d="M32 6c-6 0-10 4.4-10 9.6C22 22.6 32 34 32 34s10-11.400 10-18.400C42 10.400 38 6 32 6z" className={styles.accent} />
+        <circle cx="32" cy="15.500" r="3.500" className={styles.fillAccent} />
+      </g>
+    </svg>
+  );
+}
+
+function PlanIcon() {
+  return (
+    <svg className={styles.stepIcon} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <g className={styles.rays}>
+        <path d="M32 6v6M32 52v6M6 32h6M52 32h6M13.600 13.600l4.200 4.200M46.200 46.200l4.200 4.200M13.600 50.400l4.200-4.200M46.200 17.800l4.200-4.200" className={styles.accent} />
+      </g>
+      <circle cx="32" cy="32" r="11" className={styles.fillSonar} />
+      <path d="M20 44c3-3 6 3 9 0s6 3 9 0 6 3 9 0" />
+    </svg>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg className={styles.stepIcon} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M6 44c6-4 10 4 16 0s10 4 16 0 10 4 16 0" />
+      <ellipse cx="44" cy="44" rx="14" ry="4" className={`${styles.splash} ${styles.accent}`} />
+      <g className={styles.jumpFish}>
+        <path d="M18 32c6-8 16-8 22 0-6 8-16 8-22 0zM38 32l8-6v12z" className={styles.accent} />
+        <circle cx="24" cy="31" r="1.400" className={styles.fillAccent} />
+      </g>
+    </svg>
+  );
+}
+
 export function HomePage() {
   const t = useTranslations("home");
   const locale = useLocale();
@@ -14,9 +55,9 @@ export function HomePage() {
   const marquee = t.raw("marquee") as string[];
 
   const steps = [
-    { title: t("stepExploreTitle"), text: t("stepExploreText"), action: t("stepExploreAction"), href: "/spots" as const },
-    { title: t("stepPlanTitle"), text: t("stepPlanText") },
-    { title: t("stepShareTitle"), text: t("stepShareText"), action: t("openCommunity"), href: "/community" as const },
+    { title: t("stepExploreTitle"), text: t("stepExploreText"), action: t("stepExploreAction"), href: "/spots" as const, icon: <ExploreIcon /> },
+    { title: t("stepPlanTitle"), text: t("stepPlanText"), icon: <PlanIcon /> },
+    { title: t("stepShareTitle"), text: t("stepShareText"), action: t("openCommunity"), href: "/community" as const, icon: <ShareIcon /> },
   ];
 
   const statItems = [
@@ -105,24 +146,32 @@ export function HomePage() {
           <p className={styles.stepsLead}>{t("howItWorksLead")}</p>
         </div>
 
-        <ol className={styles.timeline}>
-          {steps.map((step, index) => (
-            <li key={step.title} className={styles.step}>
-              <span className={styles.stepMarker} aria-hidden="true">
-                {index + 1}
-              </span>
-              <div className={styles.stepBody}>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-                {step.href ? (
-                  <Link className={styles.stepLink} href={step.href}>
-                    {step.action}
-                  </Link>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div className={styles.journey}>
+          <svg className={styles.journeyPath} viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path className={styles.journeyTrack} d={JOURNEY_PATH} />
+            <path className={styles.journeyDraw} d={JOURNEY_PATH} pathLength={1} />
+          </svg>
+
+          <ol className={styles.steps}>
+            {steps.map((step, index) => (
+              <li key={step.title} className={styles.step}>
+                <span className={styles.stepNode} aria-hidden="true">
+                  {index + 1}
+                </span>
+                {step.icon}
+                <div className={styles.stepBody}>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                  {step.href ? (
+                    <Link className={styles.stepLink} href={step.href}>
+                      <span>{step.action}</span>
+                    </Link>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
       <section className={styles.cta}>

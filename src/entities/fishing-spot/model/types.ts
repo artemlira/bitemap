@@ -32,7 +32,13 @@ export type FishingSpotFacts = {
   district?: LocalizedPair;
 };
 
+/** Simplified OpenStreetMap geometry: rings for lakes, polylines for rivers ([lat, lon] pairs). */
+export type FishingSpotShape = { kind: "area" | "line"; lines: [number, number][][] };
+
 export type FishingSpot = {
+  shape?: FishingSpotShape;
+  /** True when no OpenStreetMap match exists and the pin comes straight from Wikidata. */
+  locationApprox?: boolean;
   facts?: FishingSpotFacts;
   /** Article that names the listed fish (Wikipedia). */
   fishSourceUrl?: string;

@@ -45,7 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <body>
+      <body id="top">
         <AuthProvider>
           <PublicProfileSynchronizer />
           <PointerEffects />

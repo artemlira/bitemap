@@ -1,0 +1,133 @@
+@use "../../../shared/styles/abstracts/mixins" as *;
+@use "../../../shared/styles/abstracts/variables" as *;
+
+.footer {
+  position: relative;
+  margin-top: clamp(3rem, 8vw, 6rem);
+  padding-top: 4.5rem;
+  overflow: hidden;
+  background: var(--gradient-water);
+  color: rgb(245 251 248 / 82%);
+}
+
+// The page-coloured wave on top makes the footer rise out of the page like a shoreline.
+.wave {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 200%;
+  max-width: none;
+  height: 3rem;
+  fill: var(--color-page);
+  transform: scaleY(-1);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: footer-wave 30s linear infinite;
+  }
+}
+
+.inner {
+  @include container;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
+  gap: clamp($space-32, 6vw, $space-64);
+  padding-block: $space-48 $space-32;
+}
+
+.brand {
+  display: grid;
+  align-content: start;
+  gap: $space-16;
+  color: #f5fbf8;
+
+  p {
+    max-width: 22rem;
+    color: rgb(245 251 248 / 70%);
+  }
+}
+
+.column {
+  h2 {
+    margin-bottom: $space-16;
+    color: #5ee0c8;
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+
+  ul {
+    display: grid;
+    gap: $space-8;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    background: linear-gradient(currentcolor, currentcolor) 0 100% / 0 1px no-repeat;
+    transition: background-size 280ms var(--ease-out), color 200ms ease;
+
+    @include hover {
+      background-size: 100% 1px;
+      color: #fff;
+    }
+  }
+
+  span {
+    color: rgb(245 251 248 / 55%);
+    font-size: 0.85rem;
+  }
+}
+
+.bottom {
+  @include container;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-12 $space-24;
+  padding-block: $space-24 $space-32;
+  border-top: 1px solid rgb(245 251 248 / 14%);
+  color: rgb(245 251 248 / 60%);
+  font-size: 0.85rem;
+
+  p:nth-child(2) {
+    flex: 1 1 18rem;
+    max-width: 36rem;
+  }
+}
+
+.top {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(245 251 248 / 26%);
+  border-radius: 999px;
+  color: #f5fbf8;
+  transition: background 200ms ease, transform 200ms var(--ease-out);
+
+  @include hover {
+    background: rgb(94 224 200 / 14%);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes footer-wave {
+  to {
+    transform: scaleY(-1) translate3d(-50%, 0, 0);
+  }
+}
+
+@include media-max(tablet) {
+  .inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@include media-max(phone) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}

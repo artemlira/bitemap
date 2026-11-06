@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/shared/lib/i18n";
+import { SiteFooter } from "@/widgets/site-footer";
 
 type LocaleLayoutProps = LayoutProps<"/[locale]">;
 
@@ -39,5 +40,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  return <NextIntlClientProvider>{children}</NextIntlClientProvider>;
+  return (
+    <NextIntlClientProvider>
+      {children}
+      <SiteFooter />
+    </NextIntlClientProvider>
+  );
 }

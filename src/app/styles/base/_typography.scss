@@ -28,3 +28,10 @@ p {
 html {
   scrollbar-color: var(--color-water) var(--color-page);
 }
+
+// Never let a stray wide element create a horizontal scrollbar. `clip` (unlike `hidden`)
+// keeps position: sticky working.
+html,
+body {
+  overflow-x: clip;
+}

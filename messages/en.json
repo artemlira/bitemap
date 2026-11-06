@@ -128,7 +128,9 @@
     "viewLabel": "Catalog view",
     "viewList": "List",
     "viewMap": "Map",
-    "filters": "Filters"
+    "filters": "Filters",
+    "unitKm": "km",
+    "unitKm2": "km²"
   },
   "auth": {
     "login": {
@@ -207,7 +209,10 @@
     "fishEmptyText": "Open sources do not list fish for this water. Been here? Add a report or a photo so the next angler knows more.",
     "fishEmptyAction": "Add a report",
     "sourcesNote": "Sources: Wikidata (CC0) for name, type, coordinates and facts; Wikipedia (CC BY-SA 4.0) for the description and fish; Wikimedia Commons for photos.",
-    "sourcesTitle": "Where this data comes from"
+    "sourcesTitle": "Where this data comes from",
+    "outlineNote": "Outline: © OpenStreetMap",
+    "noPhotoTitle": "No photo of this water yet",
+    "noPhotoAction": "Add a photo"
   },
   "reports": {
     "eyebrow": "Community experience",
@@ -710,7 +715,9 @@
     "buildRoute": "Build a route",
     "openOnMap": "Open on map",
     "missingCoordinates": "The author has not added exact coordinates for this fishing spot yet.",
-    "openApproximateLocation": "Open approximate location"
+    "openApproximateLocation": "Open approximate location",
+    "approxNote": "The pin is approximate: open data has no exact outline for this water.",
+    "shapeNote": "Outline from OpenStreetMap; the pin sits on the water."
   },
   "spotWeather": {
     "eyebrow": "Conditions at the spot",
@@ -851,5 +858,12 @@
       "comment": "Comment",
       "article": "Article"
     }
+  },
+  "footer": {
+    "tagline": "A map of waters and a community for Ukrainian anglers. Find a spot, check the weather and share your catch.",
+    "sections": "Sections",
+    "data": "Data sources",
+    "disclaimer": "Check current fishing rules and shore access before you go: data on the site can be out of date.",
+    "backToTop": "Back to top"
   }
 }

@@ -2,6 +2,7 @@
 
 import { Link } from "@/shared/lib/i18n";
 import Image from "next/image";
+import { WaterSilhouette } from "@/entities/fishing-spot/ui/water-silhouette";
 import { catalogWaterTypes, getFishingSpotFish, getFishingSpotText, type FishingSpot } from "@/entities/fishing-spot";
 import type { NearbySpot } from "@/entities/fishing-spot/server";
 import { SpotImageGallery } from "@/entities/spot-image";
@@ -80,7 +81,19 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
                   priority
                 />
               ) : null}
-              {!spot.photos?.length ? <span aria-hidden="true" /> : null}
+              {!spot.photos?.length && spot.shape ? (
+                <>
+                  <WaterSilhouette shape={spot.shape} className={styles.silhouette} />
+                  <p className={styles.visualNote}>{t("outlineNote")}</p>
+                </>
+              ) : null}
+              {!spot.photos?.length && !spot.shape ? (
+                <div className={styles.noPhoto}>
+                  <span className={styles.noPhotoRings} aria-hidden="true" />
+                  <p>{t("noPhotoTitle")}</p>
+                  <a href="#spot-gallery" data-ripple>{t("noPhotoAction")}</a>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -137,6 +150,8 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
           id={spot.id}
           latitude={spot.latitude}
           longitude={spot.longitude}
+          shape={spot.shape}
+          isApproximate={spot.locationApprox}
           locationLabel={`${getFishingSpotText(spot, "name", locale)}, ${getFishingSpotText(spot, "region", locale)}`}
         />
 
@@ -195,7 +210,7 @@ export function SpotDetailsPage({ spot, nearby = [] }: SpotDetailsPageProps) {
           </section>
         ) : null}
 
-        <section className={styles.gallery} aria-labelledby="spot-gallery-title">
+        <section className={styles.gallery} id="spot-gallery" aria-labelledby="spot-gallery-title">
           <div className={styles.sectionHeading}>
             <p className={styles.sectionLabel}>{t("galleryEyebrow")}</p>
             <h2 id="spot-gallery-title">{t("galleryTitle")}</h2>

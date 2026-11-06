@@ -41,198 +41,164 @@
 .visual {
   position: relative;
   display: flex;
-  flex: 0 0 12rem;
-  align-items: end;
+  flex: 0 0 11rem;
+  align-items: flex-end;
   overflow: hidden;
   margin: 0;
-  padding: $space-20;
-  color: rgb(255 253 248 / 68%);
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 800;
+  padding: $space-12 $space-16;
+  color: rgb(255 253 248 / 86%);
+  font-size: 0.78rem;
+  font-weight: 650;
 
   &::after {
     position: absolute;
     z-index: 1;
-    background: linear-gradient(180deg, rgb(8 32 40 / 8%), rgb(8 32 40 / 58%));
+    background: linear-gradient(180deg, transparent 40%, rgb(4 24 31 / 55%));
     content: "";
     inset: 0;
+    pointer-events: none;
   }
 
   .waterType,
   .photoCredit {
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
 }
 
 .photo {
   object-fit: cover;
-  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 500ms var(--ease-out);
 }
 
 .card:hover .photo {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .waterType {
-  text-shadow: 0 1px 8px rgb(0 0 0 / 42%);
+  padding: 0.2rem 0.65rem;
+  border-radius: $radius-full;
+  background: rgb(4 24 31 / 55%);
+  backdrop-filter: blur(6px);
 }
 
 .photoCredit {
   margin-left: auto;
-  padding: $space-8;
+  padding: 0.25rem 0.6rem;
   border-radius: $radius-full;
-  background: rgb(8 32 40 / 65%);
-  font-size: 0.625rem;
-  letter-spacing: 0;
-  text-transform: none;
+  background: rgb(4 24 31 / 60%);
+  font-size: 0.62rem;
+  font-weight: 500;
 }
 
 .photoCredit a {
   color: #fff;
 }
 
-.visual[data-tone="lagoon"] {
-  background: linear-gradient(145deg, #799aa2, #1a586b 65%, #0c2b3b);
-}
-
-.visual[data-tone="sunset"] {
-  background: linear-gradient(145deg, #d7a35d, #6b724a 48%, #1c4850);
-}
-
-.visual[data-tone="river"] {
-  background: linear-gradient(145deg, #94a78d, #3d715a 48%, #123c50);
-}
-
-.visual[data-tone="reeds"] {
-  background: linear-gradient(145deg, #c8b66f, #7d8f54 44%, #234c48);
-}
-
+// Without a photo the visual shrinks to a strip: a contour pattern, or the real outline of the water.
 .visual[data-no-photo="true"] {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
+  flex-basis: 6.5rem;
   background:
-    repeating-radial-gradient(circle at 82% 18%, transparent 0 16px, rgb(143 232 216 / 16%) 16px 17px),
-    linear-gradient(160deg, #031017, #06303a);
+    repeating-radial-gradient(circle at 84% 20%, transparent 0 14px, rgb(94 224 200 / 14%) 14px 15px),
+    linear-gradient(160deg, #06202a, #0b4048);
 }
 
-.visual[data-no-photo="true"] .photoCredit {
-  margin-left: 0;
+.silhouette {
+  position: absolute;
+  z-index: 0;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 55%;
+  height: calc(100% - 1rem);
 }
 
 .content {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: $space-20;
+  padding: $space-16 $space-20 $space-20;
 }
 
 .region {
   color: var(--color-muted);
-  font-size: 0.825rem;
+  font-size: 0.82rem;
 }
 
 .content h2 {
-  margin-top: $space-8;
-  color: var(--color-ink);
+  margin-top: 0.3rem;
   font-family: var(--font-display), sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.25;
 }
 
+// The whole card is one link: the title's link stretches over it.
+.link {
+  color: var(--color-ink);
+
+  &::after {
+    position: absolute;
+    z-index: 2;
+    content: "";
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::after {
+      border-radius: $radius-lg;
+      outline: 3px solid var(--color-focus);
+      outline-offset: -3px;
+    }
+  }
+}
+
 .description {
-  margin-top: $space-12;
+  display: -webkit-box;
+  margin-top: $space-8;
+  overflow: hidden;
   color: var(--color-muted);
-  font-size: 0.925rem;
+  font-size: 0.9rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
-.fish {
-  margin-top: $space-16;
-  color: var(--color-water);
-  font-size: 0.8rem;
-  font-weight: 750;
-}
-
-.badges {
+.chips {
   display: flex;
   flex-wrap: wrap;
-  gap: $space-8;
-  margin: $space-16 0 0;
-  padding: 0;
+  gap: 0.4rem;
+  margin: auto 0 0;
+  padding: $space-16 0 0;
   list-style: none;
 }
 
-.badge {
+.chip,
+.fishChip {
   padding: 0.2rem 0.65rem;
-  border: 1px solid var(--color-line);
   border-radius: $radius-full;
-  color: var(--color-muted);
-  font-size: 0.72rem;
-  font-weight: 650;
-
-  &[data-access="free"] {
-    border-color: var(--color-forest);
-    color: var(--color-forest);
-  }
-
-  &[data-access="paid"] {
-    border-color: var(--color-sun);
-    color: var(--color-ink);
-  }
-
-  &[data-access="restricted"] {
-    border-color: var(--color-focus);
-    color: var(--color-focus);
-  }
-
-  &[data-verified="true"] {
-    border-color: var(--color-sonar);
-    color: var(--color-sonar);
-  }
-}
-
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-12;
-  margin-top: auto;
-  padding-top: $space-24;
-  color: var(--color-muted);
   font-size: 0.75rem;
   font-weight: 650;
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: $space-8;
+.chip {
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
 }
 
-.footer a {
-  min-height: 2.35rem;
-  padding: 0 $space-12;
-  border-radius: $radius-full;
-  background: var(--color-water);
-  color: #fffdf8;
-  font-size: 0.8rem;
-  font-weight: 800;
-  line-height: 2.35rem;
-  transition: background 180ms ease, transform 180ms ease;
-
-  @include hover {
-    background: var(--color-water-deep);
-    transform: translateY(-1px);
-  }
+.fishChip {
+  background: color-mix(in srgb, var(--color-sonar) 14%, transparent);
+  color: var(--color-water);
 }
 
 @media (max-width: 600px) {
   .visual {
     flex-basis: 9rem;
+  }
+
+  .visual[data-no-photo="true"] {
+    flex-basis: 5.5rem;
   }
 }
