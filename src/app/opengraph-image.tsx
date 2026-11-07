@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Rybomapa — a map and community for anglers";
+export const alt = "BiteMap — a map and community for anglers";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -21,7 +21,7 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 48, fontWeight: 800, letterSpacing: "-2px" }}>
-          Rybomapa<span style={{ color: "#ff6b3d" }}>.</span>
+          BiteMap<span style={{ color: "#ff6b3d" }}>.</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ color: "#5ee0c8", fontSize: 22, fontWeight: 700, letterSpacing: 4 }}>

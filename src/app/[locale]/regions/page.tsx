@@ -7,7 +7,7 @@ export async function generateMetadata(props: PageProps<"/[locale]/regions">): P
   const { locale } = await props.params;
   const t = await getTranslations({ locale, namespace: "regions" });
   return {
-    title: `${t("title")} — Rybomapa`,
+    title: `${t("title")} — BiteMap`,
     description: t("lead"),
     alternates: { canonical: `/${locale}/regions`, languages: { uk: "/uk/regions", en: "/en/regions" } },
   };
