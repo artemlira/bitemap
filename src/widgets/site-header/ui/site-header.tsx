@@ -23,6 +23,9 @@ type SiteHeaderProps = {
 
 export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
+  const accountButtonRef = useRef<HTMLButtonElement>(null);
   const portalRoot = useSyncExternalStore(subscribeToDocument, getPortalRoot, getServerPortalRoot);
   const [menuPosition, setMenuPosition] = useState({ left: 0, top: 0, width: 0 });
   const headerRef = useRef<HTMLElement>(null);
@@ -39,22 +42,27 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
     { href: "/articles", label: t("articles") },
     { href: "/#how-it-works", label: t("howItWorks") },
   ];
-  const navigationItems = [
-        ...navigation,
-        ...(user ? [{ href: "/feed", label: t("feed") }] : []),
-        ...(isAdmin ? [{ href: "/admin/articles", label: t("manageArticles") }] : []),
-        ...(isAdmin ? [{ href: "/admin/moderation", label: t("moderation") }] : []),
-        ...(user ? [
+  // Personal and admin links live in the account dropdown on desktop and in the flat mobile menu.
+  const accountItems = user
+    ? [
+        { href: "/feed", label: t("feed") },
         { href: "/favorites", label: t("favorites") },
         { href: "/my-spots", label: t("mySpots") },
-        ] : []),
-      ];
+        ...(isAdmin
+          ? [
+              { href: "/admin/articles", label: t("manageArticles") },
+              { href: "/admin/moderation", label: t("moderation") },
+            ]
+          : []),
+      ]
+    : [];
+  const navigationItems = [...navigation, ...accountItems];
 
   useLayoutEffect(() => {
     if (!isMenuOpen) return;
 
     function updateMenuPosition() {
-      if (window.innerWidth > 1040) {
+      if (window.innerWidth > 1200) {
         setIsMenuOpen(false);
         return;
       }
@@ -96,6 +104,35 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (!isAccountOpen) return;
+
+    function closeOnOutsideClick(event: PointerEvent) {
+      if (accountRef.current?.contains(event.target as Node)) return;
+      setIsAccountOpen(false);
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setIsAccountOpen(false);
+      accountButtonRef.current?.focus();
+    }
+
+    // The account dropdown is hidden once the burger menu takes over.
+    function closeWhenCollapsed() {
+      if (window.innerWidth <= 1200) setIsAccountOpen(false);
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    window.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeWhenCollapsed);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeWhenCollapsed);
+    };
+  }, [isAccountOpen]);
+
   const mobileMenuStyle = {
     "--mobile-menu-left": `${menuPosition.left}px`,
     "--mobile-menu-top": `${menuPosition.top}px`,
@@ -111,7 +148,7 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
       </Link>
 
       <nav className={styles.navigation} aria-label={t("main")}>
-        {navigationItems.map((item) => (
+        {navigation.map((item) => (
           <Link key={item.href} href={item.href}>
             {item.label}
           </Link>
@@ -121,7 +158,26 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
       <div className={styles.controls}>
         {user ? (
           <>
-            <Link className={styles.userName} href={`/anglers/${user.uid}`}>{userName}</Link>
+            <div className={styles.account} ref={accountRef}>
+              <button
+                className={styles.accountButton}
+                ref={accountButtonRef}
+                type="button"
+                aria-expanded={isAccountOpen}
+                aria-controls="site-header-account"
+                onClick={() => setIsAccountOpen((open) => !open)}
+              >
+                <span className={styles.accountName}>{userName}</span>
+                <span aria-hidden="true" className={styles.accountCaret} data-open={isAccountOpen} />
+              </button>
+              <div className={styles.accountPanel} id="site-header-account" hidden={!isAccountOpen}>
+                {[{ href: `/anglers/${user.uid}`, label: t("profile") }, ...accountItems].map((item) => (
+                  <Link key={item.href} href={item.href} onClick={() => setIsAccountOpen(false)}>
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
             <button className={styles.signOutButton} type="button" onClick={() => void signOut()}>
               {t("signOut")}
             </button>
