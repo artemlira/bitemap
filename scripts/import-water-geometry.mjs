@@ -14,7 +14,7 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const FULL = new URL("../src/entities/fishing-spot/data/water-bodies.json", import.meta.url);
 const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
-const UA = { "User-Agent": "Rybomapa/1.0 (https://bitemap.artemlira.com)", "Content-Type": "application/x-www-form-urlencoded" };
+const UA = { "User-Agent": "BiteMap/1.0 (https://bitemap.artemlira.com)", "Content-Type": "application/x-www-form-urlencoded" };
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function overpass(query) {

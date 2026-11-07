@@ -11,11 +11,11 @@ export async function generateMetadata(props: PageProps<"/[locale]/articles/[slu
   const { locale, slug } = await props.params;
   const article = getFishingArticleBySlug(slug);
 
-  if (!article) return { title: "Rybomapa" };
+  if (!article) return { title: "BiteMap" };
 
   const content = getFishingArticleTranslation(article, locale);
   return {
-    title: `${content.title} — Rybomapa`,
+    title: `${content.title} — BiteMap`,
     description: content.excerpt,
     alternates: {
       canonical: `/${locale}/articles/${slug}`,
@@ -26,16 +26,16 @@ export async function generateMetadata(props: PageProps<"/[locale]/articles/[slu
       },
     },
     openGraph: {
-      title: `${content.title} — Rybomapa`,
+      title: `${content.title} — BiteMap`,
       description: content.excerpt,
       type: "article",
-      siteName: "Rybomapa",
+      siteName: "BiteMap",
       url: `/${locale}/articles/${slug}`,
       images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${content.title} — Rybomapa`,
+      title: `${content.title} — BiteMap`,
       description: content.excerpt,
       images: ["/opengraph-image"],
     },

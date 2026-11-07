@@ -18,7 +18,7 @@ export async function generateMetadata(props: PageProps<"/[locale]/spots">): Pro
       description: t("lead"),
       url: `/${locale}/spots`,
       type: "website",
-      siteName: "Rybomapa",
+      siteName: "BiteMap",
       images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
     },
     twitter: {

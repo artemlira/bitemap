@@ -6,10 +6,10 @@ import { RegionPage } from "@/views/regions";
 export async function generateMetadata(props: PageProps<"/[locale]/regions/[slug]">): Promise<Metadata> {
   const { locale, slug } = await props.params;
   const region = getRegionBySlug(slug, 0);
-  if (!region) return { title: "Rybomapa" };
+  if (!region) return { title: "BiteMap" };
   const name = region.summary.name[locale === "en" ? "en" : "uk"];
   return {
-    title: `${name} — Rybomapa`,
+    title: `${name} — BiteMap`,
     alternates: { canonical: `/${locale}/regions/${slug}`, languages: { uk: `/uk/regions/${slug}`, en: `/en/regions/${slug}` } },
   };
 }
