@@ -23,7 +23,8 @@
     "enableDarkTheme": "Увімкнути темну тему",
     "enableLightTheme": "Увімкнути світлу тему",
     "brand": "BiteMap",
-    "regions": "Області"
+    "regions": "Області",
+    "alerts": "Потребує уваги: {count}"
   },
   "languageSwitcher": {
     "switchTo": "Перемкнути мову на {locale}"
@@ -865,7 +866,20 @@
       "fishing-report": "Звіт",
       "comment": "Коментар",
       "article": "Стаття"
-    }
+    },
+    "tabReports": "Скарги",
+    "tabSpots": "Нові водойми",
+    "tabsLabel": "Розділи модерації",
+    "spotsTitle": "Нові водойми · {count}",
+    "spotsLabel": "Додано спільнотою",
+    "spotsEmpty": "Нових водойм від спільноти ще немає.",
+    "spotsLoadError": "Не вдалося завантажити нові водойми.",
+    "spotAdded": "Додано {date}",
+    "spotAuthor": "Автор: {name}",
+    "spotNew": "Нова",
+    "openSpot": "Відкрити водойму",
+    "hideSpot": "Сховати водойму",
+    "unnamedSpot": "Без назви"
   },
   "footer": {
     "tagline": "Мапа водойм і спільнота рибалок України. Знаходь місце, дивись погоду й ділися уловами.",

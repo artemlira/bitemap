@@ -121,6 +121,27 @@
   white-space: nowrap;
 }
 
+.alertBadge {
+  min-width: 1.15rem;
+  padding: 0 0.3rem;
+  border-radius: $radius-full;
+  background: var(--color-sun);
+  color: #04181f;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.15rem;
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .accountCaret {
   width: 0.4rem;
   height: 0.4rem;

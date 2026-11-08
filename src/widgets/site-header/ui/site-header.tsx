@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/shared/lib/i18n";
 import { useAuth } from "@/shared/lib/auth";
 import { useAdminStatus } from "@/entities/admin";
+import { useModerationAlerts } from "@/features/moderation-alerts";
 import { useTheme } from "@/shared/lib/theme";
 import { LanguageSwitcher } from "@/widgets/language-switcher";
 import { Logo } from "@/shared/ui/logo";
@@ -33,6 +34,7 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
   const { isAdmin } = useAdminStatus();
+  const alerts = useModerationAlerts(isAdmin);
   const t = useTranslations("navigation");
   const userName = user?.displayName ?? user?.email?.split("@")[0];
   const navigation = [
@@ -51,7 +53,7 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
         ...(isAdmin
           ? [
               { href: "/admin/articles", label: t("manageArticles") },
-              { href: "/admin/moderation", label: t("moderation") },
+              { href: "/admin/moderation", label: alerts.total > 0 ? `${t("moderation")} · ${alerts.total}` : t("moderation") },
             ]
           : []),
       ]
@@ -168,6 +170,12 @@ export function SiteHeader({ backdrop = true }: SiteHeaderProps) {
                 onClick={() => setIsAccountOpen((open) => !open)}
               >
                 <span className={styles.accountName}>{userName}</span>
+                {alerts.total > 0 ? (
+                  <>
+                    <span aria-hidden="true" className={styles.alertBadge}>{alerts.total}</span>
+                    <span className={styles.srOnly}>{t("alerts", { count: alerts.total })}</span>
+                  </>
+                ) : null}
                 <span aria-hidden="true" className={styles.accountCaret} data-open={isAccountOpen} />
               </button>
               <div className={styles.accountPanel} id="site-header-account" hidden={!isAccountOpen}>

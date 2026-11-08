@@ -13,6 +13,10 @@
 .content { padding-block: clamp($space-48, 8vw, $space-96); }
 .toolbar { display: flex; align-items: end; justify-content: space-between; gap: $space-20; }
 .toolbar h2 { margin-top: $space-12; color: var(--color-ink); font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -0.07em; }
+.tabs { display: flex; flex-wrap: wrap; gap: $space-8; margin-bottom: $space-24; }
+.tab { min-height: 2.8rem; padding-inline: $space-20; border: 1px solid var(--color-line); border-radius: $radius-full; background: transparent; color: var(--color-ink); font-size: 0.9rem; font-weight: 800; cursor: pointer; }
+.tab[aria-pressed="true"] { border-color: transparent; background: var(--color-water); color: #fffdf8; }
+.spotName { margin-top: $space-16; color: var(--color-ink); font-size: 1.3rem; letter-spacing: -0.03em; }
 .primary,
 .button { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; padding-inline: $space-16; border: 1px solid var(--color-line); border-radius: $radius-full; background: transparent; color: var(--color-ink); font-size: 0.85rem; font-weight: 800; }
 .primary { border-color: transparent; background: var(--color-water); color: #fffdf8; }
