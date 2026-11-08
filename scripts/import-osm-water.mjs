@@ -3,18 +3,21 @@
  * Adds named lakes, ponds and reservoirs from OpenStreetMap (ODbL, © OpenStreetMap contributors)
  * that Wikidata does not know about: src/entities/fishing-spot/data/osm-water.json.
  *
- * - One Overpass query per oblast, so every record gets its region from the boundary, not a guess.
+ * - The oblast is split into small bounding-box tiles, each queried inside the oblast area, so every record
+ *   gets its region from the boundary (not a guess) and the public Overpass servers can answer.
  * - OSM `fee` / `access` tags become the access category (fee=yes -> paid, fee=no -> free,
  *   access=private -> restricted). Nothing is inferred when the tags are absent.
  * - Objects already in the Wikidata dataset (same wikidata id, or same name within 2 km) are skipped.
  *
- * Usage: node scripts/import-osm-water.mjs [oblastCode ...]   (then node scripts/build-catalog-index.mjs)
+ * Usage: node scripts/import-osm-water.mjs [oblastCode ...]   (oblasts already imported are skipped; --force redoes them)
+ *          (then node scripts/build-catalog-index.mjs)
  */
 import { readFile, writeFile } from "node:fs/promises";
 
 const OUT = new URL("../src/entities/fishing-spot/data/osm-water.json", import.meta.url);
 const MAIN = new URL("../src/entities/fishing-spot/data/water-bodies.json", import.meta.url);
-const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
+const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://z.overpass-api.de/api/interpreter"];
+const TILE = 0.5; // degrees: oblast-wide queries time out on the public servers, small tiles do not
 const HEADERS = { "User-Agent": "BiteMap/1.0 (https://bitemap.artemlira.com)", "Content-Type": "application/x-www-form-urlencoded" };
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,23 +33,29 @@ const OBLASTS = {
   "UA-59": ["Сумська область", "Sumy Oblast"], "UA-61": ["Тернопільська область", "Ternopil Oblast"],
   "UA-63": ["Харківська область", "Kharkiv Oblast"], "UA-65": ["Херсонська область", "Kherson Oblast"],
   "UA-68": ["Хмельницька область", "Khmelnytskyi Oblast"], "UA-71": ["Черкаська область", "Cherkasy Oblast"],
-  "UA-73": ["Чернівецька область", "Chernivtsi Oblast"], "UA-74": ["Чернігівська область", "Chernihiv Oblast"],
+  "UA-77": ["Чернівецька область", "Chernivtsi Oblast"], "UA-74": ["Чернігівська область", "Chernihiv Oblast"],
 };
 
 const CYR = { а: "a", б: "b", в: "v", г: "h", ґ: "g", д: "d", е: "e", є: "ie", ж: "zh", з: "z", и: "y", і: "i", ї: "i", й: "i", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "kh", ц: "ts", ч: "ch", ш: "sh", щ: "shch", ь: "", ю: "iu", я: "ia", "'": "", "’": "" };
 const slugify = (text) => [...text.toLowerCase()].map((c) => CYR[c] ?? c).join("").normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
 async function overpass(query) {
-  for (let attempt = 0; attempt < 6; attempt += 1) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
     try {
       const response = await fetch(ENDPOINTS[attempt % ENDPOINTS.length], { method: "POST", headers: HEADERS, body: `data=${encodeURIComponent(query)}` });
       if (response.ok) return (await response.json()).elements;
     } catch {
       /* next endpoint */
     }
-    await sleep(10000 * (attempt + 1));
+    await sleep(5000 * (attempt + 1));
   }
   return null;
+}
+
+async function boundsOf(code) {
+  const elements = await overpass(`[out:json][timeout:60];rel["ISO3166-2"="${code}"]["boundary"="administrative"];out bb;`);
+  const bounds = elements?.find((element) => element.bounds)?.bounds;
+  return bounds ?? null;
 }
 
 function typeOf(tags) {
@@ -82,7 +91,8 @@ for (const record of main) {
   byName.set(record.name.uk.toLowerCase(), list);
 }
 
-const wanted = process.argv.slice(2);
+const force = process.argv.includes("--force");
+const wanted = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const codes = wanted.length ? wanted : Object.keys(OBLASTS);
 let existing = { importedAt: "", records: [] };
 try {
@@ -90,16 +100,43 @@ try {
 } catch {
   /* first run */
 }
-const records = existing.records.filter((record) => !codes.includes(record.oblast));
+const partial = new Set(existing.records.filter((record) => record.partial).map((record) => record.oblast));
+const done = new Set(existing.records.map((record) => record.oblast).filter((code) => !partial.has(code)));
+const redo = force ? codes : codes.filter((code) => !done.has(code));
+const records = existing.records.filter((record) => !redo.includes(record.oblast));
 const used = new Set(records.map((record) => record.id));
+// A lake on an oblast border is returned for both oblasts: keep it once.
+const usedOsm = new Set(records.map((record) => record.osm));
 
-for (const code of codes) {
-  const query = `[out:json][timeout:300][maxsize:1073741824];area["ISO3166-2"="${code}"]->.a;(way["natural"="water"]["name"](area.a);relation["natural"="water"]["name"](area.a););out center tags;`;
-  const elements = await overpass(query);
-  if (!elements) {
-    console.log(code, "failed");
+for (const code of redo) {
+  const bounds = await boundsOf(code);
+  if (!bounds) {
+    console.log(code, "no bounds");
     continue;
   }
+  const seen = new Set();
+  const elements = [];
+  let failedTiles = 0;
+  for (let south = bounds.minlat; south < bounds.maxlat; south += TILE) {
+    for (let west = bounds.minlon; west < bounds.maxlon; west += TILE) {
+      const box = `${south.toFixed(4)},${west.toFixed(4)},${Math.min(south + TILE, bounds.maxlat).toFixed(4)},${Math.min(west + TILE, bounds.maxlon).toFixed(4)}`;
+      const query = `[out:json][timeout:120];area["ISO3166-2"="${code}"]->.a;(way["natural"="water"]["name"](${box})(area.a);relation["natural"="water"]["name"](${box})(area.a););out center tags;`;
+      const found = await overpass(query);
+      if (!found) {
+        failedTiles += 1;
+        continue;
+      }
+      for (const element of found) {
+        const key = `${element.type}/${element.id}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          elements.push(element);
+        }
+      }
+      await sleep(1500);
+    }
+  }
+  if (failedTiles) console.log(code, `warning: ${failedTiles} tiles failed, rerun with --force to retry`);
   let added = 0;
   for (const element of elements) {
     const tags = element.tags ?? {};
@@ -111,6 +148,8 @@ for (const code of codes) {
     if ((byName.get(name.toLowerCase()) ?? []).some((point) => km(point, center) < 2)) continue;
 
     const osmRef = `${element.type}/${element.id}`;
+    if (usedOsm.has(osmRef)) continue;
+    usedOsm.add(osmRef);
     let id = `${slugify(name) || "water"}-${element.type[0]}${element.id}`;
     if (used.has(id)) id = `${id}-x`;
     used.add(id);
@@ -128,7 +167,8 @@ for (const code of codes) {
     added += 1;
   }
   console.log(code, OBLASTS[code][0], `${elements.length} found, ${added} added`);
+  // A partially failed oblast is not marked done: its records are kept but it is retried next run.
+  if (failedTiles) records.forEach((record) => { if (record.oblast === code) record.partial = true; });
   await writeFile(OUT, `${JSON.stringify({ importedAt: new Date().toISOString().slice(0, 10), records })}\n`);
-  await sleep(8000);
 }
 console.log("Done:", records.length, "records");
