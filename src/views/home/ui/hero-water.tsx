@@ -74,7 +74,8 @@ export function HeroWater() {
       <svg className={styles.fishLayer} aria-hidden="true" focusable="false">
         <defs>
           <symbol id="hero-fish" viewBox="0 0 56 22">
-            <path d="M0 11C11 0 28 0 40 11 28 22 11 22 0 11Zm38 0 16-10v20Z" />
+            {/* Head on the right: the symbol faces the direction of the default (left-to-right) swim. */}
+            <path transform="matrix(-1 0 0 1 56 0)" d="M0 11C11 0 28 0 40 11 28 22 11 22 0 11Zm38 0 16-10v20Z" />
           </symbol>
         </defs>
       </svg>
