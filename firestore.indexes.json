@@ -9,6 +9,14 @@
         { "fieldPath": "targetType", "order": "ASCENDING" },
         { "fieldPath": "tripDate", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "user-spots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "visibility", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

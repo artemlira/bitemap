@@ -23,7 +23,8 @@
     "enableDarkTheme": "Enable dark theme",
     "enableLightTheme": "Enable light theme",
     "brand": "BiteMap",
-    "regions": "Regions"
+    "regions": "Regions",
+    "alerts": "Needs attention: {count}"
   },
   "languageSwitcher": {
     "switchTo": "Switch language to {locale}"
@@ -864,7 +865,20 @@
       "fishing-report": "Fishing report",
       "comment": "Comment",
       "article": "Article"
-    }
+    },
+    "tabReports": "Reports",
+    "tabSpots": "New waters",
+    "tabsLabel": "Moderation sections",
+    "spotsTitle": "New waters · {count}",
+    "spotsLabel": "Added by the community",
+    "spotsEmpty": "No community waters have been added yet.",
+    "spotsLoadError": "Could not load new waters.",
+    "spotAdded": "Added {date}",
+    "spotAuthor": "Author: {name}",
+    "spotNew": "New",
+    "openSpot": "Open water",
+    "hideSpot": "Hide water",
+    "unnamedSpot": "Untitled"
   },
   "footer": {
     "tagline": "A map of waters and a community for Ukrainian anglers. Find a spot, check the weather and share your catch.",

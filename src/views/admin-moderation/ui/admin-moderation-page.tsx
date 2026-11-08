@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useLocale, useTranslations } from "next-intl";
 import { useAdminStatus } from "@/entities/admin";
 import { Link } from "@/shared/lib/i18n";
 import { SiteHeader } from "@/widgets/site-header";
 import { getFirebaseFirestore } from "@/shared/api/firebase";
 import { moderateContentReport, subscribeToOpenContentReports, type ContentReport } from "@/features/content-report/api/content-reports";
+import { markSpotsSeen, readSpotsSeenAt, useNewUserSpots } from "@/features/moderation-alerts";
 import styles from "./admin-moderation-page.module.scss";
 
 function getTargetHref(report: ContentReport) {
@@ -28,6 +29,9 @@ export function AdminModerationPage() {
   const [actionError, setActionError] = useState("");
   const [reporterNames, setReporterNames] = useState<Readonly<Record<string, string>>>({});
   const locale = useLocale();
+  const [tab, setTab] = useState<"reports" | "spots">("reports");
+  const [spotsSeenAt, setSpotsSeenAt] = useState(0);
+  const newSpots = useNewUserSpots(isAdmin);
 
   useEffect(() => {
     if (!isAdmin || isAdminLoading) return;
@@ -42,9 +46,9 @@ export function AdminModerationPage() {
   }, [isAdmin, isAdminLoading]);
 
   useEffect(() => {
-    if (!isAdmin || reports.length === 0) return;
+    if (!isAdmin || (reports.length === 0 && newSpots.spots.length === 0)) return;
     let isActive = true;
-    const reporterIds = [...new Set(reports.map((report) => report.reporterId))];
+    const reporterIds = [...new Set([...reports.map((report) => report.reporterId), ...newSpots.spots.map((spot) => spot.ownerId)])].filter(Boolean);
 
     void Promise.all(reporterIds.map(async (reporterId) => {
       try {
@@ -59,7 +63,26 @@ export function AdminModerationPage() {
     });
 
     return () => { isActive = false; };
-  }, [isAdmin, reports]);
+  }, [isAdmin, reports, newSpots.spots]);
+
+  useEffect(() => {
+    if (!isAdmin || tab !== "spots") return;
+    // The "new" marks stay for this visit; the header badge clears once the admin leaves the tab.
+    return () => markSpotsSeen();
+  }, [isAdmin, tab]);
+
+  async function handleHideSpot(spotId: string) {
+    if (busyId) return;
+    setBusyId(spotId);
+    setActionError("");
+    try {
+      await updateDoc(doc(getFirebaseFirestore(), "user-spots", spotId), { visibility: "private", moderationStatus: "hidden" });
+    } catch {
+      setActionError(t("actionError"));
+    } finally {
+      setBusyId(null);
+    }
+  }
 
   async function handleAction(report: ContentReport, action: "dismiss" | "hide") {
     if (!user || busyId) return;
@@ -89,12 +112,21 @@ export function AdminModerationPage() {
         {!isAdminLoading && !user ? <aside className={styles.notice}><h2>{t("signInTitle")}</h2><p>{t("signInPrompt")}</p><Link className={styles.primary} href="/login">{t("signIn")}</Link></aside> : null}
         {!isAdminLoading && user && !isAdmin ? <aside className={styles.notice}><h2>{t("accessTitle")}</h2><p>{t("accessPrompt")}</p><code>{user.uid}</code></aside> : null}
         {!isAdminLoading && isAdmin ? <>
+          <div className={styles.tabs} role="group" aria-label={t("tabsLabel")}>
+            <button className={styles.tab} type="button" aria-pressed={tab === "reports"} onClick={() => setTab("reports")}>
+              {t("tabReports")} · {reports.length}
+            </button>
+            <button className={styles.tab} type="button" aria-pressed={tab === "spots"} onClick={() => { setSpotsSeenAt(readSpotsSeenAt()); setTab("spots"); }}>
+              {t("tabSpots")} · {newSpots.spots.length}
+            </button>
+          </div>
+          {actionError ? <p className={styles.error} role="alert">{actionError}</p> : null}
+          {tab === "reports" ? <>
           <div className={styles.toolbar}>
             <div><p className={styles.sectionLabel}>{t("queueLabel")}</p><h2 id="moderation-list-title">{t("openTitle", { count: reports.length })}</h2></div>
             <Link className={styles.primary} href="/admin/articles">{t("articlesAdmin")}</Link>
           </div>
           {hasError ? <p className={styles.error} role="alert">{t("loadError")}</p> : null}
-          {actionError ? <p className={styles.error} role="alert">{actionError}</p> : null}
           {isLoading ? <p className={styles.empty} aria-live="polite">{t("loading")}</p> : null}
           {!isLoading && !hasError && reports.length === 0 ? <p className={styles.empty}>{t("emptyQueue")}</p> : null}
           <ol className={styles.list}>
@@ -116,6 +148,32 @@ export function AdminModerationPage() {
               </li>;
             })}
           </ol>
+          </> : <>
+          <div className={styles.toolbar}>
+            <div><p className={styles.sectionLabel}>{t("spotsLabel")}</p><h2 id="moderation-list-title">{t("spotsTitle", { count: newSpots.spots.length })}</h2></div>
+          </div>
+          {newSpots.hasError ? <p className={styles.error} role="alert">{t("spotsLoadError")}</p> : null}
+          {newSpots.isLoading ? <p className={styles.empty} aria-live="polite">{t("loading")}</p> : null}
+          {!newSpots.isLoading && !newSpots.hasError && newSpots.spots.length === 0 ? <p className={styles.empty}>{t("spotsEmpty")}</p> : null}
+          <ol className={styles.list}>
+            {newSpots.spots.map((spot) => {
+              const date = spot.createdAt ? new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(spot.createdAt) : t("justNow");
+              const isNew = (spot.createdAt?.getTime() ?? 0) > spotsSeenAt;
+              return <li className={styles.card} key={spot.id}>
+                <div className={styles.cardHeader}>
+                  <div>{isNew ? <span className={styles.badge}>{t("spotNew")}</span> : null}{spot.waterType ? <span className={styles.badge}>{spot.waterType}</span> : null}</div>
+                  <time dateTime={spot.createdAt?.toISOString()}>{t("spotAdded", { date })}</time>
+                </div>
+                <h3 className={styles.spotName}>{spot.name || t("unnamedSpot")}</h3>
+                <p className={styles.meta}>{[spot.region, t("spotAuthor", { name: reporterNames[spot.ownerId] || t("unknownReporter") })].filter(Boolean).join(" · ")}</p>
+                <div className={styles.actions}>
+                  <Link className={styles.button} href={`/community/${spot.id}`} rel="noreferrer" target="_blank">{t("openSpot")}</Link>
+                  <button className={`${styles.button} ${styles.danger}`} type="button" disabled={busyId !== null} onClick={() => void handleHideSpot(spot.id)}>{busyId === spot.id ? t("saving") : t("hideSpot")}</button>
+                </div>
+              </li>;
+            })}
+          </ol>
+          </>}
         </> : null}
       </section>
     </main>
